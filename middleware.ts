@@ -4,7 +4,7 @@ import { createServerClient } from '@supabase/ssr';
 
 
 export async function middleware(request: NextRequest) {
-  const response = await updateSession(request);
+  const response = NextResponse.next()
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
       },
     }
   )
-  
+
   const {
     data: { user },
   } = await supabase.auth.getUser()
@@ -39,7 +39,7 @@ export async function middleware(request: NextRequest) {
     profile = data
   }
 
-  if (!user) {
+  if (!user && !pathname.startsWith('/auth')) {
     return NextResponse.redirect(new URL('/auth', request.url))
   }
 
@@ -47,11 +47,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
 
-   if (user && pathname.startsWith('/admin') && profile?.role !== 'admin') {
+  if (user && pathname.startsWith('/admin') && profile?.role !== 'admin') {
     return NextResponse.redirect(new URL('/unauthorized', request.url))
   }
 
-  return await updateSession(request)
+  await updateSession(request)
+  return response
 }
 
 export const config = {

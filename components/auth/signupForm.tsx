@@ -70,7 +70,7 @@ export function SignupForm() {
     }
     return (
         <Form {...signupForm}>
-            <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4">
+            <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} noValidate className="space-y-4">
                 <FormField
                     control={signupForm.control}
                     name="email"
@@ -82,6 +82,7 @@ export function SignupForm() {
                                     <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                     <Input
                                         type="email"
+                                        autoComplete='none'
                                         placeholder="Enter your email"
                                         className="pl-10"
                                         {...field}
@@ -157,6 +158,11 @@ export function SignupForm() {
                         'Create Account'
                     )}
                 </Button>
+                {error && (
+                    <div className="text-red-600 text-sm">
+                        {error}
+                    </div>
+                )}
             </form>
         </Form>
     )

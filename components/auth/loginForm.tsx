@@ -34,28 +34,27 @@ export default function LoginForm() {
         },
     })
 
-      const onLoginSubmit = async (data: LoginFormData) => {
+    const onLoginSubmit = async (data: LoginFormData) => {
         setIsLoading(true)
         setError(null)
-        
-        try {
-          const formData = new FormData()
-          formData.append('email', data.email)
-          formData.append('password', data.password)
-    
-          const result = await login(formData)
-          
-          // Handle login result if your action returns error info
-          if (result?.error) {
-            setError(result.error)
-          }
-        } catch (error: any) {
-          setError(error.message || 'An error occurred during login')
-        } finally {
-          setIsLoading(false)
-        }
-      }
 
+        try {
+            const formData = new FormData()
+            formData.append('email', data.email)
+            formData.append('password', data.password)
+
+            const result = await login(formData)
+
+            // Handle login result if your action returns error info
+            if (result?.error) {
+                setError(result.error)
+            }
+        } catch (error: any) {
+            setError(error.message || 'An error occurred during login')
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     return (
         <Form {...loginForm}>
@@ -65,11 +64,12 @@ export default function LoginForm() {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel htmlFor='email'>Email</FormLabel>
                             <FormControl>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                     <Input
+                                        id="email"
                                         type="email"
                                         placeholder="Enter your email"
                                         className="pl-10"
@@ -88,11 +88,12 @@ export default function LoginForm() {
                     name="password"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Password</FormLabel>
+                            <FormLabel htmlFor='password'>Password</FormLabel>
                             <FormControl>
                                 <div className="relative">
                                     <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                     <Input
+                                        id="password"
                                         type="password"
                                         placeholder="Enter your password"
                                         className="pl-10"

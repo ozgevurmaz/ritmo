@@ -7,7 +7,7 @@ import { createClient } from '@/lib/supabase/server'
 
 const signupSchema = z.object({
   email: z.string().email(),
-  password: z.string().min(6),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
 })
 
 export async function login(formData: FormData) {
