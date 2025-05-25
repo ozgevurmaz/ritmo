@@ -30,7 +30,7 @@ export async function login(formData: FormData) {
   if (error) return { error: error.message }
 
   revalidatePath('/', 'layout')
-  redirect('/account')
+  redirect('/')
 }
 
 export async function signup(formData: FormData) {

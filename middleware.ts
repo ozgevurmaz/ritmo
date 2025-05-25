@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { updateSession } from '@/lib/supabase/middleware'
 import { createServerClient } from '@supabase/ssr';
-
+import { getRedirectPath } from '@/lib/middleware/logic';
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
@@ -39,16 +39,10 @@ export async function middleware(request: NextRequest) {
     profile = data
   }
 
-  if (!user && !pathname.startsWith('/auth')) {
-    return NextResponse.redirect(new URL('/auth', request.url))
-  }
+  const redirectPath = getRedirectPath(user, pathname, profile);
 
-  if (user && pathname.startsWith('/auth')) {
-    return NextResponse.redirect(new URL('/', request.url))
-  }
-
-  if (user && pathname.startsWith('/admin') && profile?.role !== 'admin') {
-    return NextResponse.redirect(new URL('/unauthorized', request.url))
+  if (redirectPath) {
+    return NextResponse.redirect(new URL(redirectPath, request.url));
   }
 
   await updateSession(request)
