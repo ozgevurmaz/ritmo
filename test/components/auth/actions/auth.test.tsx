@@ -28,7 +28,7 @@ describe('login action', () => {
         const result = await login(formData)
 
         expect(result?.error).toBe('Invalid data')
-        expect(result?.issues?.email).toContain('Invalid email')
+        expect(result?.issues?.email).toContain('Please enter a valid email address')
     })
 })
 

@@ -8,33 +8,13 @@ import { signup } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Loader2, Mail, Lock } from 'lucide-react'
-
-const signupSchema = z.object({
-    email: z
-        .string()
-        .min(1, 'Email is required')
-        .email('Please enter a valid email address'),
-    password: z
-        .string()
-        .min(1, 'Password is required')
-        .min(8, 'Password must be at least 8 characters long')
-        .regex(
-            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
-            'Password must contain at least one uppercase letter, one lowercase letter, and one number'
-        ),
-    confirmPassword: z
-        .string()
-        .min(1, 'Please confirm your password'),
-}).refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords don't match",
-    path: ["confirmPassword"],
-})
+import { Loader2, Mail } from 'lucide-react'
+import { PasswordInput } from '@/components/auth/passwordInput'
+import { signupSchema } from '@/lib/zod/auth/auth'
 
 type SignupFormData = z.infer<typeof signupSchema>
 
 export function SignupForm() {
-
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -44,7 +24,7 @@ export function SignupForm() {
             email: '',
             password: '',
             confirmPassword: '',
-        },
+        }
     })
 
     const onSignupSubmit = async (data: SignupFormData) => {
@@ -55,6 +35,7 @@ export function SignupForm() {
             const formData = new FormData()
             formData.append('email', data.email)
             formData.append('password', data.password)
+            formData.append('confirmPassword', data.confirmPassword)
 
             const result = await signup(formData)
 
@@ -68,9 +49,10 @@ export function SignupForm() {
             setIsLoading(false)
         }
     }
+
     return (
         <Form {...signupForm}>
-            <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} noValidate className="space-y-4">
+            <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4" noValidate>
                 <FormField
                     control={signupForm.control}
                     name="email"
@@ -95,53 +77,14 @@ export function SignupForm() {
                     )}
                 />
 
-                <FormField
+                {/* Replace the individual password fields with the PasswordInput component */}
+                <PasswordInput
                     control={signupForm.control}
                     name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                    <Input
-                                        type="password"
-                                        placeholder="Create a strong password"
-                                        className="pl-10"
-                                        {...field}
-                                        disabled={isLoading}
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                            <p className="text-xs text-gray-500">
-                                Must be 8+ characters with uppercase, lowercase, and number
-                            </p>
-                        </FormItem>
-                    )}
-                />
-
-                <FormField
-                    control={signupForm.control}
-                    name="confirmPassword"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>Confirm Password</FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                    <Input
-                                        type="password"
-                                        placeholder="Confirm your password"
-                                        className="pl-10"
-                                        {...field}
-                                        disabled={isLoading}
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    confirmName="confirmPassword"
+                    requireConfirmation={true}
+                    disabled={isLoading}
+                    showValidation={true}
                 />
 
                 <Button
@@ -158,6 +101,7 @@ export function SignupForm() {
                         'Create Account'
                     )}
                 </Button>
+
                 {error && (
                     <div className="text-red-600 text-sm">
                         {error}

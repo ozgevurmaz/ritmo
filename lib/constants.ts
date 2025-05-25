@@ -6,6 +6,10 @@ import {
   Compass,
   BookOpen,
   BarChart,
+  UsersRound,
+  Settings,
+  PiggyBank,
+  BookHeart,
 } from 'lucide-react';
 
 // Dummy data imports
@@ -146,10 +150,13 @@ export const slogans = [
   "Align with your rhythm. Elevate your life.",
   "Your rhythm. Your growth."
 ];
-export const CURRENT_USER = {
+export const CURRENT_USER : UserType = {
   name: "David Chen",
+  email: "test@example.com",
   username: "david_c",
+  role:"client",
   avatar: null,
+  streak: 4,
   notifications: 3,
   messages: 2
 };
@@ -158,9 +165,11 @@ export const CURRENT_USER = {
 export const NAV_LINKS = [
   { name: 'Home', icon: Home, href: '/' },
   { name: 'Planner', icon: CalendarClock, href: '/planner' },
+  { name: 'Social', icon: UsersRound, href: '/planner' },
+  { name: 'Todos', icon: Flame, href: '/todos' },
   { name: 'Habits', icon: Flame, href: '/habits' },
   { name: 'Goals', icon: Target, href: '/goals' },
-  { name: 'Analytics', icon: BarChart, href: '/analytics' },
-  { name: 'Community', icon: Compass, href: '/community' },
-  { name: 'Library', icon: BookOpen, href: '/library' }
+  { name: 'Discover', icon: Compass, href: '/discover' },
+  { name: 'Motivation', icon: PiggyBank, href: '/discover' },
+  { name: 'Logs', icon: BookHeart, href: '/logs' },
 ];

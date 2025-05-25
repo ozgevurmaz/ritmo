@@ -8,17 +8,11 @@ import { login } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Loader2, Mail, Lock} from 'lucide-react'
+import { Loader2, Mail } from 'lucide-react'
 
-const loginSchema = z.object({
-    email: z
-        .string()
-        .min(1, 'Email is required')
-        .email('Please enter a valid email address'),
-    password: z
-        .string()
-        .min(1, 'Password is required'),
-})
+import Link from 'next/link'
+import { loginSchema } from '@/lib/zod/auth/auth'
+import { PasswordInput } from './passwordInput'
 
 type LoginFormData = z.infer<typeof loginSchema>
 
@@ -26,7 +20,7 @@ export default function LoginForm() {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
-    const loginForm = useForm<LoginFormData>({
+    const form = useForm<LoginFormData>({
         resolver: zodResolver(loginSchema),
         defaultValues: {
             email: '',
@@ -34,7 +28,7 @@ export default function LoginForm() {
         },
     })
 
-    const onLoginSubmit = async (data: LoginFormData) => {
+    const onSubmit = async (data: LoginFormData) => {
         setIsLoading(true)
         setError(null)
 
@@ -45,7 +39,6 @@ export default function LoginForm() {
 
             const result = await login(formData)
 
-            // Handle login result if your action returns error info
             if (result?.error) {
                 setError(result.error)
             }
@@ -57,19 +50,18 @@ export default function LoginForm() {
     }
 
     return (
-        <Form {...loginForm}>
-            <form onSubmit={loginForm.handleSubmit(onLoginSubmit)} className="space-y-4">
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
                 <FormField
-                    control={loginForm.control}
+                    control={form.control}
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel htmlFor='email'>Email</FormLabel>
+                            <FormLabel>Email</FormLabel>
                             <FormControl>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                                     <Input
-                                        id="email"
                                         type="email"
                                         placeholder="Enter your email"
                                         className="pl-10"
@@ -83,35 +75,24 @@ export default function LoginForm() {
                     )}
                 />
 
-                <FormField
-                    control={loginForm.control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel htmlFor='password'>Password</FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
-                                    <Input
-                                        id="password"
-                                        type="password"
-                                        placeholder="Enter your password"
-                                        className="pl-10"
-                                        {...field}
-                                        disabled={isLoading}
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
+                <div className="space-y-2">
+                    <PasswordInput
+                        control={form.control}
+                        name="password"
+                        disabled={isLoading}
+                    />
 
-                <Button
-                    type="submit"
-                    className="w-full"
-                    disabled={isLoading}
-                >
+                    <div className="text-right">
+                        <Link
+                            href="/auth/forgot-password"
+                            className="text-sm text-blue-600 hover:underline"
+                        >
+                            Forgot your password?
+                        </Link>
+                    </div>
+                </div>
+
+                <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -121,7 +102,20 @@ export default function LoginForm() {
                         'Sign In'
                     )}
                 </Button>
+
+                {error && (
+                    <div className="text-red-600 text-sm">
+                        {error}
+                    </div>
+                )}
             </form>
+
+            <div className="text-center text-sm text-gray-600">
+                Don't have an account?{' '}
+                <Link href="/auth/signup" className="text-blue-600 hover:underline">
+                    Sign up
+                </Link>
+            </div>
         </Form>
     )
 }

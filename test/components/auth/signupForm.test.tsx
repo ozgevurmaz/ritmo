@@ -1,4 +1,3 @@
-// __tests__/signupForm.test.tsx
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { SignupForm } from '@/components/auth/signupForm'
@@ -17,7 +16,7 @@ describe('SignupForm', () => {
 
     it('renders form fields correctly', () => {
         const emailInput = screen.getByPlaceholderText(/enter your email/i)
-        const passwordInput = screen.getByPlaceholderText(/create a strong password/i)
+        const passwordInput = screen.getByPlaceholderText(/create a password/i)
         const confirmPasswordInput = screen.getByPlaceholderText(/confirm your password/i)
         const submitButton = screen.getByRole('button', { name: /create account/i })
 
@@ -53,7 +52,7 @@ describe('SignupForm', () => {
     })
 
     it('shows password length error', async () => {
-        const passwordInput = screen.getByPlaceholderText(/create a strong password/i)
+        const passwordInput = screen.getByPlaceholderText(/create a password/i)
         const submitButton = screen.getByRole('button', { name: /create account/i })
 
         await userEvent.type(passwordInput, 'abc')
@@ -65,21 +64,47 @@ describe('SignupForm', () => {
         })
     })
 
-    it('shows password strength error', async () => {
-        const passwordInput = screen.getByPlaceholderText(/create a strong password/i)
+    it('shows password strength lowercase error', async () => {
+        const passwordInput = screen.getByPlaceholderText(/create a password/i)
         const submitButton = screen.getByRole('button', { name: /create account/i })
 
-        await userEvent.type(passwordInput, 'abcdefgh')
+        await userEvent.type(passwordInput, 'ABCD1234')
         await userEvent.click(submitButton)
 
         await waitFor(() => {
-            const errorEl = screen.getByText(/password must contain at least one uppercase letter, one lowercase letter, and one number/i)
+            const errorEl = screen.getByText(/password must contain at least one lowercase letter/i)
+            expect(errorEl).toBeInTheDocument()
+        })
+    })
+
+    it('shows password strength uppercase error', async () => {
+        const passwordInput = screen.getByPlaceholderText(/create a password/i)
+        const submitButton = screen.getByRole('button', { name: /create account/i })
+
+        await userEvent.type(passwordInput, 'abcdefg1')
+        await userEvent.click(submitButton)
+
+        await waitFor(() => {
+            const errorEl = screen.getByText(/password must contain at least one uppercase letter/i)
+            expect(errorEl).toBeInTheDocument()
+        })
+    })
+
+    it('shows password strength number error', async () => {
+        const passwordInput = screen.getByPlaceholderText(/create a password/i)
+        const submitButton = screen.getByRole('button', { name: /create account/i })
+
+        await userEvent.type(passwordInput, 'Abcdefgh')
+        await userEvent.click(submitButton)
+
+        await waitFor(() => {
+            const errorEl = screen.getByText(/password must contain at least one number/i)
             expect(errorEl).toBeInTheDocument()
         })
     })
 
     it("shows confirm password mismatch error", async () => {
-        const passwordInput = screen.getByPlaceholderText(/create a strong password/i)
+        const passwordInput = screen.getByPlaceholderText(/create a password/i)
         const confirmPasswordInput = screen.getByPlaceholderText(/confirm your password/i)
         const submitButton = screen.getByRole('button', { name: /create account/i })
 
@@ -92,4 +117,27 @@ describe('SignupForm', () => {
             expect(errorEl).toBeInTheDocument()
         })
     })
+
+    it('disables button and shows loader on submit', async () => {
+        const mockLogin = signup as jest.Mock
+        mockLogin.mockImplementation(() =>
+            new Promise((resolve) => setTimeout(() => resolve({}), 1000))
+        )
+
+        const emailInput = screen.getByPlaceholderText(/enter your email/i)
+        const passwordInput = screen.getByPlaceholderText(/create a password/i)
+        const confirmPasswordInput = screen.getByPlaceholderText(/confirm your password/i)
+        const submitButton = screen.getByRole('button', { name: /create account/i })
+
+        await userEvent.type(emailInput, 'test@example.com')
+        await userEvent.type(passwordInput, 'Password123')
+        await userEvent.type(confirmPasswordInput, 'Password123')
+        await userEvent.click(submitButton)
+
+        await waitFor(() => {
+            expect(submitButton).toBeDisabled()
+            expect(submitButton.textContent?.toLowerCase()).toContain('creating account')
+        }, { timeout: 2000 })
+    })
+
 })

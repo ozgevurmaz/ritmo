@@ -2,13 +2,8 @@
 
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
-import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
-
-const signupSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8, 'Password must be at least 8 characters long'),
-})
+import { loginSchema, signupSchema } from '@/lib/zod/auth/auth'
 
 export async function login(formData: FormData) {
   const supabase = await createClient()
@@ -18,7 +13,7 @@ export async function login(formData: FormData) {
     password: formData.get('password'),
   }
 
-  const result = signupSchema.safeParse(raw)
+  const result = loginSchema.safeParse(raw)
   if (!result.success) {
     return { error: 'Invalid data', issues: result.error.flatten().fieldErrors }
   }
@@ -37,8 +32,9 @@ export async function signup(formData: FormData) {
   const supabase = await createClient()
 
   const raw = {
-    email: formData.get('email'),
-    password: formData.get('password'),
+    email: String(formData.get('email') || ''),
+    password: String(formData.get('password') || ''),
+    confirmPassword: String(formData.get('confirmPassword') || ''),
   }
 
   const result = signupSchema.safeParse(raw)
@@ -68,4 +64,35 @@ export async function signup(formData: FormData) {
 
   revalidatePath('/', 'layout')
   redirect('/account')
+}
+
+export async function resetPasswordForEmail(formData: FormData) {
+  const supabase = await createClient()
+
+  const email = formData.get('email') as string
+
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `/auth/reset-password`,
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  return { success: true }
+}
+
+export async function updatePassword(formData: FormData) {
+  const supabase = await createClient()
+  const password = formData.get('password') as string
+
+  const { error } = await supabase.auth.updateUser({
+    password: password,
+  })
+
+  if (error) {
+    return { error: error.message }
+  }
+
+  redirect('/auth')
 }
