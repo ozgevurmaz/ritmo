@@ -1,4 +1,4 @@
-import NavbarWrapper from "@/components/client/NavbarWrapper";
+import NavbarWrapper from "@/context/NavbarWrapper";
 import { Toaster } from "sonner";
 
 export default function RootLayout({

@@ -51,7 +51,7 @@ export default function LoginForm() {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-foreground" noValidate>
                 <FormField
                     control={form.control}
                     name="email"
@@ -60,11 +60,11 @@ export default function LoginForm() {
                             <FormLabel>Email</FormLabel>
                             <FormControl>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-foreground" />
                                     <Input
                                         type="email"
                                         placeholder="Enter your email"
-                                        className="pl-10"
+                                        className="pl-10 bg-muted"
                                         {...field}
                                         disabled={isLoading}
                                     />
@@ -85,14 +85,14 @@ export default function LoginForm() {
                     <div className="text-right">
                         <Link
                             href="/auth/forgot-password"
-                            className="text-sm text-blue-600 hover:underline"
+                            className="text-sm text-blue-700 hover:underline"
                         >
                             Forgot your password?
                         </Link>
                     </div>
                 </div>
 
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full font-semibold" disabled={isLoading}>
                     {isLoading ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -104,15 +104,15 @@ export default function LoginForm() {
                 </Button>
 
                 {error && (
-                    <div className="text-red-600 text-sm">
+                    <div className="text-accent text-sm">
                         {error}
                     </div>
                 )}
             </form>
 
-            <div className="text-center text-sm text-gray-600">
+            <div className="text-center text-sm text-muted-foreground">
                 Don't have an account?{' '}
-                <Link href="/auth/signup" className="text-blue-600 hover:underline">
+                <Link href="/auth/signup" className="text-blue-700 hover:underline">
                     Sign up
                 </Link>
             </div>

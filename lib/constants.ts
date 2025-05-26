@@ -1,15 +1,20 @@
 import {
   Home,
-  CalendarClock,
   Target,
-  Flame,
-  Compass,
-  BookOpen,
-  BarChart,
-  UsersRound,
   Settings,
-  PiggyBank,
-  BookHeart,
+  Calendar,
+  Users,
+  CheckSquare,
+  RotateCcw,
+  Search,
+  Zap,
+  FileText,
+  FileEdit,
+  Trophy,
+  Package,
+  MessageSquare,
+  Gamepad2,
+  LayoutDashboard,
 } from 'lucide-react';
 
 // Dummy data imports
@@ -150,11 +155,12 @@ export const slogans = [
   "Align with your rhythm. Elevate your life.",
   "Your rhythm. Your growth."
 ];
-export const CURRENT_USER : UserType = {
+export const CURRENT_USER: UserType = {
+  id: "123",
   name: "David Chen",
   email: "test@example.com",
   username: "david_c",
-  role:"client",
+  role: "client",
   avatar: null,
   streak: 4,
   notifications: 3,
@@ -164,12 +170,23 @@ export const CURRENT_USER : UserType = {
 {/* Nav links */ }
 export const NAV_LINKS = [
   { name: 'Home', icon: Home, href: '/' },
-  { name: 'Planner', icon: CalendarClock, href: '/planner' },
-  { name: 'Social', icon: UsersRound, href: '/planner' },
-  { name: 'Todos', icon: Flame, href: '/todos' },
-  { name: 'Habits', icon: Flame, href: '/habits' },
+  { name: 'Planner', icon: Calendar, href: '/planner' },
+  { name: 'Social', icon: Users, href: '/planner' },
+  { name: 'Todos', icon: CheckSquare, href: '/todos' },
+  { name: 'Habits', icon: RotateCcw, href: '/habits' },
   { name: 'Goals', icon: Target, href: '/goals' },
-  { name: 'Discover', icon: Compass, href: '/discover' },
-  { name: 'Motivation', icon: PiggyBank, href: '/discover' },
-  { name: 'Logs', icon: BookHeart, href: '/logs' },
+  { name: 'Discover', icon: Search, href: '/discover' },
+  { name: 'Motivation', icon: Zap, href: '/discover' },
+  { name: 'Logs', icon: FileText, href: '/logs' },
+];
+
+export const ADMIN_NAV_LINKS = [
+  { icon: LayoutDashboard, name: 'Dashboard', href: '/admin/dashboard' },
+  { icon: Users, name: 'Users', href: '/admin/users' },
+  { icon: FileText, name: 'Content', href: '/admin/content' },
+  { icon: Trophy, name: 'Challenges', href: '/admin/challenges' },
+  { icon: Package, name: 'Packs', href: '/admin/packs' },
+  { icon: MessageSquare, name: 'Communications', href: '/admin/communications' },
+  { icon: Gamepad2, name: 'Gamifications', href: '/admin/gamifications' },
+  { icon: Settings, name: 'Settings', href: '/admin/settings' },
 ];

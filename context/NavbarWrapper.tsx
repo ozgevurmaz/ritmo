@@ -1,8 +1,10 @@
 'use client'
 
 import { ReactNode } from 'react';
-import { Navbar } from './Navbar/Navbar';
-import { Sidebar } from './Navbar/Sidebar';
+
+import { Sidebar } from '../components/Navbar/Sidebar';
+import { Navbar } from '../components/Navbar/Navbar';
+
 
 export function NavbarWrapper({ children }: { children: ReactNode }) {
   return (

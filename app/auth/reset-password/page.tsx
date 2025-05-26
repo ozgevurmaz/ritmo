@@ -29,7 +29,7 @@ export default function ResetPasswordPage() {
             confirmPassword: "",
         },
     });
-
+console.log("HASH:", window.location.hash);
     // Validate the reset token on component mount
     useEffect(() => {
         const validateToken = async () => {
@@ -42,7 +42,7 @@ export default function ResetPasswordPage() {
             const type = hashParams.get('type');
 
             if (type === 'recovery' && accessToken && refreshToken) {
-                // Set the session with the tokens from the URL
+                // Set the session with the tokens from the URL 
                 const { error } = await supabase.auth.setSession({
                     access_token: accessToken,
                     refresh_token: refreshToken,

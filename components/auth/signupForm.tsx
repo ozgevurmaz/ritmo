@@ -61,7 +61,7 @@ export function SignupForm() {
                             <FormLabel>Email</FormLabel>
                             <FormControl>
                                 <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-foreground" />
                                     <Input
                                         type="email"
                                         autoComplete='none'
@@ -89,7 +89,7 @@ export function SignupForm() {
 
                 <Button
                     type="submit"
-                    className="w-full"
+                    className="w-full font-semibold "
                     disabled={isLoading}
                 >
                     {isLoading ? (
@@ -103,7 +103,7 @@ export function SignupForm() {
                 </Button>
 
                 {error && (
-                    <div className="text-red-600 text-sm">
+                    <div className="text-accent text-sm">
                         {error}
                     </div>
                 )}

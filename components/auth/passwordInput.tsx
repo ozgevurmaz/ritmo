@@ -28,7 +28,7 @@ interface PasswordInputProps<T extends FieldValues> {
 }
 
 const ValidationItem = ({ isValid, text }: { isValid: boolean; text: string }) => (
-  <div className={`flex items-center space-x-2 text-sm ${isValid ? 'text-green-600' : 'text-gray-500'}`}>
+  <div className={`flex items-center space-x-2 text-sm ${isValid ? 'text-green-500' : 'text-muted-foreground'}`}>
     {isValid ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
     <span>{text}</span>
   </div>
@@ -80,7 +80,7 @@ export function PasswordInput<T extends FieldValues>({
                     type={showPassword ? "text" : "password"}
                     placeholder={`${requireConfirmation ? `Create a ${label.toLowerCase()}` : `Enter your password`}`}
                     disabled={disabled}
-                    className="pr-10"
+                    className="pr-10 bg-muted"
                     {...field}
                   />
                   <Button
@@ -112,8 +112,8 @@ export function PasswordInput<T extends FieldValues>({
         render={({ field }) => (
           <>
             {field.value && showValidation && (
-              <div className="space-y-2 p-3 bg-gray-50 rounded-md">
-                <p className="text-sm font-medium">Password Requirements:</p>
+              <div className="space-y-2 p-3 bg-muted rounded-md text-muted-foreground">
+                <p className="text-sm font-medium text-accent">Password Requirements:</p>
                 <ValidationItem isValid={passwordValidation.minLength} text="At least 8 characters" />
                 <ValidationItem isValid={passwordValidation.hasUpperCase} text="One uppercase letter" />
                 <ValidationItem isValid={passwordValidation.hasLowerCase} text="One lowercase letter" />
@@ -138,7 +138,7 @@ export function PasswordInput<T extends FieldValues>({
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder={`Confirm your ${label.toLowerCase()}`}
                     disabled={disabled}
-                    className="pr-10"
+                    className="pr-10 bg-muted"
                     {...field}
                   />
                   <Button

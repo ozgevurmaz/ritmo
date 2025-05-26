@@ -37,7 +37,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "components/client/Navbar",
+    "components/Navbar",
     "jest.config.js",
     "jest.setup.ts"
   ],

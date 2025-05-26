@@ -12,11 +12,12 @@ import {
   LogOut,
   User,
   ChevronDown,
+  ExternalLink,
 } from 'lucide-react';
-import { CURRENT_USER, NAV_LINKS } from '@/lib/constants';
-import { Button } from '../../ui/button';
-import { Badge } from '../../ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '../../ui/avatar';
+import { NAV_LINKS } from '@/lib/constants';
+import { Button } from '../ui/button';
+import { Badge } from '../ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,13 +25,19 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '../../ui/dropdown-menu';
+} from '../ui/dropdown-menu';
 import { getInitials } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useProfile } from '@/lib/Queries/useProfile';
 
+interface NavbarProps {
+  isAdmin?: boolean
+}
 
-export function Navbar() {
+export function Navbar({ isAdmin = false }: NavbarProps) {
+  const { data: profile, isLoading, error } = useProfile();
+
   const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -43,13 +50,133 @@ export function Navbar() {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  if (isLoading) {
+    return (
+      <div>Loading</div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div>Something went wrong</div>
+    )
+  }
   return (
     <>
-      <nav className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container flex h-14 items-center justify-between px-4">
+      <header className="sticky top-0 z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 bg-card/95 ">
+        <div className="flex h-14 items-center justify-between px-10">
 
-          {/* Mobile Menu Button */}
-          <div className="flex items-center gap-2">
+          {/* Logo and Brand */}
+          <Link className="flex items-center gap-2" href="/">
+            <Zap className="h-6 w-6 text-primary" />
+            <span className="text-lg font-semibold tracking-tight">Ritmo {isAdmin && "Admin"}</span>
+          </Link>
+
+          {/* User Actions */}
+          <div className="flex items-center gap-1">
+
+            {
+              isAdmin &&
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-success/10 rounded-full">
+                <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-success-foreground">
+                  1,247 live users
+                </span>
+              </div>
+            }
+
+            {
+              isAdmin &&
+              <Link
+                href="/"
+                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground hover:text-muted-foreground transition-colors"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Return to App
+              </Link>
+            }
+
+            {/* Streak - Hidden on small screens */}
+            {!isAdmin && <div className='hidden sm:flex items-center gap-1 px-2 py-1 text-strike'>
+              <Flame className="h-5 w-5" />
+              <span className="hidden md:inline">{profile?.streak} days</span>
+            </div>}
+
+            {/* Notifications */}
+            <Button variant="ghost" size="icon" className="relative hover:bg-accent/70 cursor-pointer">
+              <Bell className="h-5 w-5" />
+              {profile?.notifications && profile?.notifications > 0 ? (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-primary text-primary-foreground">
+                  {profile?.notifications}
+                </Badge>
+              ) : ""}
+            </Button>
+
+            {/* Messages */}
+            <Button variant="ghost" size="icon" className="relative hover:bg-accent/70 cursor-pointer">
+              <MessageSquare className="h-5 w-5" />
+              {profile?.messages && profile?.messages > 0 ? (
+                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-primary text-primary-foreground">
+                  {profile?.messages}
+                </Badge>
+              ) : ""}
+            </Button>
+
+            {/* Avatar/Profile Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger className='hover:bg-muted/70' asChild>
+                <Button variant="ghost" className="gap-2 ml-2 p-2 rounded-lg cursor-pointer">
+                  <Avatar className="h-7 w-7">
+                    {profile?.avatar ? (
+                      <AvatarImage src={profile?.avatar} alt={profile?.name} />
+                    ) : (
+                      <AvatarFallback className="bg-primary/20 text-primary text-xs">
+                        {getInitials(profile?.name || "My Ritmo")}
+                      </AvatarFallback>
+                    )}
+                  </Avatar>
+                  <span className="hidden sm:inline-block text-sm font-medium">
+                    {profile?.name}
+                  </span>
+                  <ChevronDown className="h-3 w-3 hidden sm:inline-block" />
+                </Button>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent align="end" className="w-56 bg-card border-border px-4 py-2">
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-medium leading-none">{profile?.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {profile?.email || 'user@example.com'}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted" asChild>
+                  <Link href="/profile">
+                    <User className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted" asChild>
+                  <Link href="/settings">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
+                <DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer text-accent focus:text-accent-foreground px-4 py-2">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button
               variant="ghost"
               size="icon"
@@ -61,120 +188,16 @@ export function Navbar() {
               ) : (
                 <Menu className="h-5 w-5" />
               )}
-            </Button>
+            </Button> </div>
 
-            {/* Logo and Brand */}
-            <Link className="flex items-center gap-2" href="/">
-              <Zap className="h-6 w-6 text-primary" />
-              <span className="text-lg font-semibold tracking-tight">Ritmo</span>
-            </Link>
-          </div>
-
-          {/* Desktop Navigation Links - Hidden on mobile */}
-          <div className="hidden md:flex items-center space-x-1">
-            {NAV_LINKS.slice(0, 4).map((link, index) => (
-              <Link
-                key={index}
-                href={link.href}
-                className="flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-md hover:bg-accent hover:text-accent-foreground transition-colors"
-              >
-                <link.icon className="h-4 w-4" />
-                <span className="hidden lg:inline-block">{link.name}</span>
-              </Link>
-            ))}
-          </div>
-
-          {/* User Actions */}
-          <div className="flex items-center gap-1">
-
-            {/* Streak - Hidden on small screens */}
-            <div className='hidden sm:flex items-center gap-1 px-2 py-1'>
-              <Flame className="h-5 w-5" />
-              <span className="hidden md:inline">5 days</span>
-            </div>
-
-            {/* Notifications */}
-            <Button variant="ghost" size="icon" className="relative hover:bg-accent/70 cursor-pointer">
-              <Bell className="h-5 w-5" />
-              {CURRENT_USER.notifications > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-primary text-primary-foreground">
-                  {CURRENT_USER.notifications}
-                </Badge>
-              )}
-            </Button>
-
-            {/* Messages */}
-            <Button variant="ghost" size="icon" className="relative hover:bg-accent/70 cursor-pointer">
-              <MessageSquare className="h-5 w-5" />
-              {CURRENT_USER.messages > 0 && (
-                <Badge className="absolute -top-1 -right-1 h-5 w-5 p-0 flex items-center justify-center bg-primary text-primary-foreground">
-                  {CURRENT_USER.messages}
-                </Badge>
-              )}
-            </Button>
-
-            {/* Avatar/Profile Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="gap-2 ml-2 py-2 hover:bg-accent/70 cursor-pointer">
-                  <Avatar className="h-7 w-7">
-                    {CURRENT_USER.avatar ? (
-                      <AvatarImage src={CURRENT_USER.avatar} alt={CURRENT_USER.name} />
-                    ) : (
-                      <AvatarFallback className="bg-primary/20 text-primary text-xs">
-                        {getInitials(CURRENT_USER.name)}
-                      </AvatarFallback>
-                    )}
-                  </Avatar>
-                  <span className="hidden sm:inline-block text-sm font-medium">
-                    {CURRENT_USER.name}
-                  </span>
-                  <ChevronDown className="h-3 w-3 hidden sm:inline-block" />
-                </Button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent align="end" className="w-56 bg-background">
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{CURRENT_USER.name}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
-                      {CURRENT_USER.email || 'user@example.com'}
-                    </p>
-                  </div>
-                </DropdownMenuLabel>
-
-                <DropdownMenuSeparator />
-
-                <DropdownMenuItem asChild>
-                  <Link href="/profile" className="cursor-pointer">
-                    <User className="mr-2 h-4 w-4" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                  <Link href="/settings" className="cursor-pointer">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600 focus:text-red-600">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Log out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-          </div>
         </div>
 
-      </nav>
+      </header>
 
       {/* Mobile Navigation Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
-          <div className="fixed inset-y-0 left-0 z-50 w-full max-w-xs bg-background border-r shadow-lg">
+        <div className="lg:hidden fixed inset-0 z-50 bg-background backdrop-blur-sm">
+          <div className="fixed inset-y-0 left-0 z-50 w-full max-w-xs bg-secondary text-secondary-foreground border-r shadow-lg">
             <div className="flex h-14 items-center justify-between px-4 border-b">
               <Link className="flex items-center gap-2" href="/" onClick={() => setMobileMenuOpen(false)}>
                 <Zap className="h-6 w-6 text-primary" />
@@ -207,23 +230,23 @@ export function Navbar() {
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-background">
               <div className="flex items-center gap-3">
                 <Avatar className="h-10 w-10">
-                  {CURRENT_USER.avatar ? (
-                    <AvatarImage src={CURRENT_USER.avatar} alt={CURRENT_USER.name} />
+                  {profile?.avatar ? (
+                    <AvatarImage src={profile?.avatar} alt={profile?.name} />
                   ) : (
                     <AvatarFallback className="bg-primary/20 text-primary">
-                      {getInitials(CURRENT_USER.name)}
+                      {getInitials(profile?.avatar || "My Ritmo")}
                     </AvatarFallback>
                   )}
                 </Avatar>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium truncate">{CURRENT_USER.name}</p>
+                  <p className="text-sm font-medium truncate">{profile?.name}</p>
                   <p className="text-xs text-muted-foreground truncate">
-                    {CURRENT_USER.email || 'user@example.com'}
+                    {profile?.email || 'user@example.com'}
                   </p>
                 </div>
                 <div className="flex items-center gap-1">
                   <Flame className="h-4 w-4" />
-                  <span className="text-sm">5</span>
+                  <span className="text-sm">{profile?.streak}</span>
                 </div>
               </div>
             </div>
