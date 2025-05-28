@@ -30,6 +30,7 @@ import { getInitials } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/lib/Queries/useProfile';
+import { ThemeToggle } from '../themeToggle';
 
 interface NavbarProps {
   isAdmin?: boolean
@@ -75,6 +76,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
           {/* User Actions */}
           <div className="flex items-center gap-1">
 
+            <ThemeToggle />
             {
               isAdmin &&
               <div className="flex items-center gap-2 px-3 py-1.5 bg-success/10 rounded-full">
@@ -154,14 +156,14 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted" asChild>
-                  <Link href="/profile">
+                <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted focus:text-muted-foreground  " asChild>
+                  <Link href="/account">
                     <User className="mr-2 h-4 w-4" />
                     Profile
                   </Link>
                 </DropdownMenuItem>
 
-                <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted" asChild>
+                <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted focus:text-muted-foreground" asChild>
                   <Link href="/settings">
                     <Settings className="mr-2 h-4 w-4" />
                     Settings
@@ -170,7 +172,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
 
                 <DropdownMenuSeparator />
 
-                <DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer text-accent focus:text-accent-foreground px-4 py-2">
+                <DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer px-4 py-2">
                   <LogOut className="mr-2 h-4 w-4" />
                   Log out
                 </DropdownMenuItem>

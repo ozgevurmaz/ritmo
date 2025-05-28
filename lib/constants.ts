@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 
 // Dummy data imports
-export const TODOS = [
+export const TODOS: TodoType[] = [
   {
     id: "todo1",
     title: "Weekly Planning Session",
@@ -53,13 +53,13 @@ export const TODOS = [
     deadline: "2025-05-21",
     time: "17:30",
     completed: false,
-    repeat: "none",
+    repeat: "never",
     notifyBefore: "30m",
     tags: ["career"],
     category: "Work"
   }
 ];
-export const HABITS = [
+export const HABITS:HabitsType[] = [
   {
     id: "habit1",
     title: "Drink Water",
@@ -69,7 +69,6 @@ export const HABITS = [
     completedToday: 3,
     streak: 5,
     customMessage: "Hydration is power!",
-    reminderSound: "water-drop.mp3",
     allowSkip: true,
     category: "Fitness"
   },
@@ -82,12 +81,11 @@ export const HABITS = [
     completedToday: 0,
     streak: 2,
     customMessage: "A page a day keeps ignorance away.",
-    reminderSound: "book-flip.mp3",
     allowSkip: false,
     category: "Learning"
   }
 ];
-export const GOALS = [
+export const GOALS:GoalType[] = [
   {
     id: "goal1",
     title: "Healthy Life",

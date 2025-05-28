@@ -1,66 +1,108 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fef4ec;
-  --foreground: #1c1c1c;
+  --background: #fef7f0;
+  --foreground: #2d2d2d;
+  --popover: #ffffff;
+  --popover-foreground: #333333;
 
-  --primary: #ff8c42;
+  --primary: #ff6b35;
   --primary-foreground: #ffffff;
 
-  --secondary: #ffd1a1;
-  --secondary-foreground: #1c1c1c;
+  --secondary: #ffb380;
+  --secondary-foreground: #2d2d2d;
 
-  --accent: #f95f53;
+  --accent: #ff4757;
   --accent-foreground: #ffffff;
 
-  --muted: #fbf6f1;
+  --muted: #f8f4f0;
   --muted-foreground: #666666;
 
-  --card: #fceadc;
-  --border: #e2e8f0;
+  --destructive: #e74c3c;
 
-  --success: #22c55e;
+  --card: #ffffff;
+  --border: #e8ddd4;
+
+  --success: #27ae60;
   --success-foreground: #ffffff;
+  --input: #f5f5f5;
+  --ring: #ff6b35;
 
-  --color-habits: #ffe7d4;
-  --color-goals: #fff1b8;
-  --color-todos: #ffe2e2;
-  --color-activities: #dbf6e9;
-  --color-friends: #f3e6ff;
-  --color-strike: #9fa408;
+  --chart-1: #ff6b35;
+  --chart-2: #3498db;
+  --chart-3: #9b59b6;
+  --chart-4: #f39c12;
+  --chart-5: #1abc9c;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2d2d2d;
+  --sidebar-primary: #ff6b35;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #fef7f0;
+  --sidebar-accent-foreground: #2d2d2d;
+  --sidebar-border: #e8ddd4;
+  --sidebar-ring: #ff6b35;
+
+  --color-habits: #2ecc71;
+  --color-goals: #de8a0c;
+  --color-todos: #e74c3c;
+  --color-activities: #3498db;
+  --color-friends: #9b59b6;
+  --color-strike: #34495e;
 
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'Geist Mono', monospace;
 }
 
 html[data-theme="dark"] {
-  --background: #1b1a17;
-  --foreground: #f7f7f7;
+  --background: #1a1a1a;
+  --foreground: #f5f5f5;
 
-  --primary: #ff944d;
-  --primary-foreground: #482b01;
+  --primary: #ff7f50;
+  --primary-foreground: #1a1a1a;
 
-  --secondary: #c98b64;
+  --secondary: #d4652f;
   --secondary-foreground: #ffffff;
 
-  --accent: #ff5e57;
+  --accent: #ff6b6b;
   --accent-foreground: #ffffff;
 
-  --muted: #2a2a2a;
-  --muted-foreground: #cecece;
+  --muted: #2d2d2d;
+  --muted-foreground: #cccccc;
 
-  --card: #1e1e1e;
-  --border: #374151;
+  --destructive: #ff5757;
 
-  --success: #16a34a;
+  --card: #262626;
+  --border: #404040;
+
+  --success: #2ecc71;
   --success-foreground: #ffffff;
+  --popover: #333333;
+  --popover-foreground: #f5f5f5;
+  --input: #333333;
+  --ring: #ff7f50;
 
-  --color-habits: #8b5c3c;
-  --color-goals: #b4992c;
-  --color-todos: #a86868;
-  --color-activities: #528f72;
-  --color-friends: #7c6399;
-  --color-strike: #e8ef22;
+  --chart-1: #ff7f50;
+  --chart-2: #5dade2;
+  --chart-3: #bb8fce;
+  --chart-4: #f7dc6f;
+  --chart-5: #58d68d;
+
+  --sidebar: #1f1f1f;
+  --sidebar-foreground: #f5f5f5;
+  --sidebar-primary: #ff7f50;
+  --sidebar-primary-foreground: #1a1a1a;
+  --sidebar-accent: #2d2d2d;
+  --sidebar-accent-foreground: #f5f5f5;
+  --sidebar-border: #404040;
+  --sidebar-ring: #ff7f50;
+
+  --color-habits: #50da8a;
+  --color-goals: #fbb635;
+  --color-todos: #d14536;
+  --color-activities: #74b9ff;
+  --color-friends: #a29bfe;
+  --color-strike: #636e72;
 
   --font-sans: 'Inter', sans-serif;
   --font-mono: 'Geist Mono', monospace;
@@ -83,6 +125,8 @@ html[data-theme="dark"] {
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
 
+  --color-destructive: var(--destructive);
+
   --color-card: var(--card);
   --color-border: var(--border);
 
@@ -95,6 +139,26 @@ html[data-theme="dark"] {
   --color-activities: var(--color-activities);
   --color-friends: var(--color-friends);
   --color-strike: var(--color-strike);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 body {
@@ -117,5 +181,5 @@ select:-webkit-autofill {
 }
 
 ::-webkit-scrollbar {
-    display: none;
+  display: none;
 }

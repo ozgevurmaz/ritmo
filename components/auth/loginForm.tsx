@@ -64,7 +64,7 @@ export default function LoginForm() {
                                     <Input
                                         type="email"
                                         placeholder="Enter your email"
-                                        className="pl-10 bg-muted"
+                                        className="pl-10"
                                         {...field}
                                         disabled={isLoading}
                                     />

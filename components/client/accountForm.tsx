@@ -19,13 +19,16 @@ type ExtendedPostgrestError = PostgrestError & {
 }
 
 const profileSchema = z.object({
-  full_name: z
+  name: z
     .string()
-    .min(1, "Full name is required.")
-    .max(100, "Full name must be less than 100 characters"),
+    .min(1, "Name is required.")
+    .max(100, "Name must be less than 100 characters"),
+  surname: z
+    .string(),
+  email: z.string(),
   username: z
     .string()
-    .min(3, "Username must be at least 3 characters.")
+    .min(1, "Username is required.")
     .max(30, 'Username must be less than 30 characters')
     .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
 })
@@ -40,7 +43,9 @@ export default function AccountForm({ user }: { user: User | null }) {
   const form = useForm<ProfileFormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      full_name: "",
+      name: "",
+      surname: "",
+      email: user?.email,
       username: "",
     }
   })
@@ -48,10 +53,9 @@ export default function AccountForm({ user }: { user: User | null }) {
   const getProfile = useCallback(async () => {
     try {
       setLoading(true)
-
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`full_name, username, avatar_url`)
+        .select(`name, surname, username, email, avatar_url`)
         .eq('id', user?.id)
         .single()
 
@@ -62,7 +66,9 @@ export default function AccountForm({ user }: { user: User | null }) {
 
       if (data) {
         form.reset({
-          full_name: data.full_name || '',
+          name: data.name || '',
+          surname: data.surname || '',
+          email: user?.email,
           username: data.username || '',
         })
       }
@@ -84,7 +90,9 @@ export default function AccountForm({ user }: { user: User | null }) {
 
       const { error } = await supabase.from('profiles').upsert({
         id: user?.id as string,
-        full_name: data.full_name,
+        email: user?.email,
+        name: data.name,
+        surname: data.surname,
         username: data.username,
         updated_at: new Date().toISOString(),
       })
@@ -140,8 +148,8 @@ export default function AccountForm({ user }: { user: User | null }) {
                 <Input
                   id="email"
                   type="email"
-                  value={user?.email || ''}
-                  className="bg-gray-50"
+                  value={user?.user_metadata.email}
+                  className="bg-muted"
                   disabled
                 />
                 <p className="text-sm text-muted-foreground">
@@ -151,13 +159,29 @@ export default function AccountForm({ user }: { user: User | null }) {
 
               <FormField
                 control={form.control}
-                name="full_name"
+                name="name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Full Name</FormLabel>
+                    <FormLabel>Name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter your full name"
+                        placeholder="Enter your name"
+                        {...field}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="surname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Surname</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your surname"
                         {...field}
                       />
                     </FormControl>
@@ -199,14 +223,12 @@ export default function AccountForm({ user }: { user: User | null }) {
             </form>
           </Form>
 
-
-
           <div>
             <form action="/auth/signout" method="post">
               <Button
                 type="submit"
-                variant="outline"
-                className="w-full sm:w-auto text-red-600 hover:text-red-700 hover:bg-red-50"
+                variant="destructive"
+                className="w-full sm:w-auto text-accent-foreground bg-accent hover:bg-accent/70"
               >
                 Sign out
               </Button>

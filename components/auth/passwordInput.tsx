@@ -80,7 +80,7 @@ export function PasswordInput<T extends FieldValues>({
                     type={showPassword ? "text" : "password"}
                     placeholder={`${requireConfirmation ? `Create a ${label.toLowerCase()}` : `Enter your password`}`}
                     disabled={disabled}
-                    className="pr-10 bg-muted"
+                    className="pr-10"
                     {...field}
                   />
                   <Button
@@ -138,7 +138,7 @@ export function PasswordInput<T extends FieldValues>({
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder={`Confirm your ${label.toLowerCase()}`}
                     disabled={disabled}
-                    className="pr-10 bg-muted"
+                    className="pr-10 bg-background"
                     {...field}
                   />
                   <Button
