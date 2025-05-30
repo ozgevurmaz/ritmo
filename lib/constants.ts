@@ -30,7 +30,8 @@ export const TODOS: TodoType[] = [
     repeat: "weekly",
     notifyBefore: "1h",
     tags: ["planning", "focus"],
-    category: "Work"
+    category: "Work",
+    visibility: "public"
   },
   {
     id: "todo2",
@@ -43,7 +44,8 @@ export const TODOS: TodoType[] = [
     repeat: "monthly",
     notifyBefore: "1d",
     tags: ["personal", "finance"],
-    category: "Personal"
+    category: "Personal",
+    visibility: "public"
   },
   {
     id: "todo3",
@@ -56,36 +58,41 @@ export const TODOS: TodoType[] = [
     repeat: "never",
     notifyBefore: "30m",
     tags: ["career"],
-    category: "Work"
+    category: "Work",
+    visibility: "public"
   }
 ];
-export const HABITS:HabitsType[] = [
+export const HABITS: HabitType[] = [
   {
     id: "habit1",
     title: "Drink Water",
     goal: "Healthy Life",
     frequencyPerDay: 8,
-    times: ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
+    reminderTimes: ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
     completedToday: 3,
     streak: 5,
     customMessage: "Hydration is power!",
     allowSkip: true,
-    category: "Fitness"
+    category: "Fitness",
+    endDate: null,
+    visibility: "public"
   },
   {
     id: "habit2",
     title: "Read 20 Pages",
     goal: null,
     frequencyPerDay: 1,
-    times: ["21:00"],
+    reminderTimes: ["21:00"],
     completedToday: 0,
-    streak: 2,
+    streak: 12,
     customMessage: "A page a day keeps ignorance away.",
     allowSkip: false,
-    category: "Learning"
+    category: "Learning",
+    endDate: null,
+    visibility: "public"
   }
 ];
-export const GOALS:GoalType[] = [
+export const GOALS: GoalType[] = [
   {
     id: "goal1",
     title: "Healthy Life",
@@ -187,4 +194,32 @@ export const ADMIN_NAV_LINKS = [
   { icon: MessageSquare, name: 'Communications', href: '/admin/communications' },
   { icon: Gamepad2, name: 'Gamifications', href: '/admin/gamifications' },
   { icon: Settings, name: 'Settings', href: '/admin/settings' },
+];
+
+export const categories = [
+  'Work',
+  'Personal',
+  'Health',
+  'Finance',
+  'Education',
+  'Shopping',
+  'Home',
+  'Travel'
+];
+
+export const notificationOptions = [
+  { value: '0', label: 'At time' },
+  { value: '5', label: '5 minutes before' },
+  { value: '15', label: '15 minutes before' },
+  { value: '30', label: '30 minutes before' },
+  { value: '60', label: '1 hour before' },
+  { value: '120', label: '2 hours before' },
+  { value: '1440', label: '1 day before' }
+];
+
+export const contacts = [
+  "jane",
+  "sarah",
+  "mike",
+  "emma"
 ];

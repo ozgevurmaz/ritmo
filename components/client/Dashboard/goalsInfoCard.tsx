@@ -6,9 +6,11 @@ import Link from "next/link";
 
 export default function GoalsInfoCard(
     {
-        goals
+        goals,
+        setGoalFormOpen
     }: {
         goals: GoalType[]
+        setGoalFormOpen?: () => void,
     }
 ) {
 
@@ -20,7 +22,11 @@ export default function GoalsInfoCard(
                         <Target className="h-4 w-4 mr-2 text-foreground" />
                         <span>Active Goals</span>
                     </CardTitle>
-                    <Button size="sm" variant="outline" className="border-goals bg-goals/10 text-goals hover:bg-goals hover:text-primary-foreground transition-all duration-200">
+                    <Button
+                        onClick={setGoalFormOpen}
+                        size="sm"
+                        variant="outline"
+                        className="border-goals bg-goals/10 text-goals hover:bg-goals hover:text-primary-foreground transition-all duration-200">
                         <PlusCircle className="h-3.5 w-3.5 mr-1" />
                         Add Goal
                     </Button>
@@ -28,7 +34,7 @@ export default function GoalsInfoCard(
             </CardHeader>
 
             <CardContent className="pt-3 flex flex-col items-center justify-center gap-3">
-                <div className="space-y-3 max-h-56 overflow-y-auto pr-1">
+                <div className="space-y-3 max-h-56 overflow-y-auto p-1">
                     {goals.map((goal) =>
                         <SingleGoalInfoCardType key={goal.id} goal={goal} />
                     )}

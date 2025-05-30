@@ -8,7 +8,7 @@ interface SingleGoalInfoCardType {
 export default function SingleGoalInfoCard({ goal }: SingleGoalInfoCardType) {
     const daysDuration = ((new Date(goal.endDate).getTime() - new Date(goal.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1;
     
-    const progressPercent = Math.round((goal.completedDays / daysDuration) * 100);
+    const progressPercent = Math.round((goal.complatedDays / daysDuration) * 100);
 
     return (
         <Card className="shadow-none bg-muted border-border">

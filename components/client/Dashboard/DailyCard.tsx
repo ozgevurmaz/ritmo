@@ -1,25 +1,28 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, Circle, Target, Clock, CheckSquare, RotateCcw } from "lucide-react";
-import { useState } from "react";
-import { TODOS, HABITS } from "@/lib/constants";
+import { CheckSquare, RotateCcw } from "lucide-react";
+import React, { useState } from "react";
 import { CustomProgress } from "@/components/custom/customProgress";
 import TodosChecklist from "./todosCheckbox";
 import HabitsCheckbox from "./habitsCheckbox";
+import { useToggleTodo } from "@/lib/Mutations/todos/useToggleTodo";
+import { useUpdateHabitProgress } from "@/lib/Mutations/habits/useUpdateHabitProgress";
+import { useGoals } from "@/lib/Queries/useGoal";
 
 interface DailyCardProps {
     className?: string
-    habits: HabitsType[]
+    habits: HabitType[]
     todos: TodoType[]
+    userId: string
 }
 
-export default function DailyCard({ className, todos, habits }: DailyCardProps) {
-    const [currentTodos, setCurrentTodos] = useState<TodoType[]>(todos);
-    const [currentHabits, setCurrentHabits] = useState<HabitsType[]>(habits);
+export default function DailyCard({ className, todos, habits, userId }: DailyCardProps) {
+
+    const { mutate: toggleTodoInDb } = useToggleTodo(userId);
+    const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId);
+    const { data: goals } = useGoals(userId)
 
     // Calculate progress
     const completedTodos = todos.filter(todo => todo.completed).length;
@@ -32,27 +35,28 @@ export default function DailyCard({ className, todos, habits }: DailyCardProps) 
 
     const overallProgress = ((completedTodos + completedHabitsToday) / (totalTodos + totalHabitsToday)) * 100;
 
-    const toggleTodo = (id: string) => {
-        setCurrentTodos(prev => prev.map(todo =>
-            todo.id === id ? { ...todo, completed: !todo.completed } : todo
-        ));
-    };
-
     const incrementHabit = (id: string) => {
-        setCurrentHabits(prev => prev.map(habit =>
-            habit.id === id && habit.completedToday < habit.frequencyPerDay
-                ? { ...habit, completedToday: habit.completedToday + 1 }
-                : habit
-        ));
+        const habit = habits.find(h => h.id === id);
+        if (!habit) return;
+
+        const nextCount = habit.completedToday + 1;
+
+        if (nextCount <= habit.frequencyPerDay) {
+            updateHabitProgress({ habitId: id, completedToday: nextCount });
+        }
     };
 
     const decrementHabit = (id: string) => {
-        setCurrentHabits(prev => prev.map(habit =>
-            habit.id === id && habit.completedToday > 0
-                ? { ...habit, completedToday: habit.completedToday - 1 }
-                : habit
-        ));
+        const habit = habits.find(h => h.id === id);
+        if (!habit) return;
+
+        const nextCount = habit.completedToday - 1;
+
+        if (nextCount <= habit.frequencyPerDay) {
+            updateHabitProgress({ habitId: id, completedToday: nextCount });
+        }
     };
+
 
     return (
         <Card className={`border-primary ${className}`}>
@@ -86,7 +90,7 @@ export default function DailyCard({ className, todos, habits }: DailyCardProps) 
                     </h3>
                     <div className="space-y-2">
                         {todos.map((todo) => (
-                            <TodosChecklist key={todo.id} todo={todo} toggleTodo={() => toggleTodo(todo.id)} />
+                            <TodosChecklist key={todo.id} todo={todo} toggleTodo={() => toggleTodoInDb(todo)} userId={userId} />
                         ))}
                     </div>
                 </div>
@@ -99,7 +103,12 @@ export default function DailyCard({ className, todos, habits }: DailyCardProps) 
                     </h3>
                     <div className="space-y-2">
                         {habits.map((habit) => (
-                            <HabitsCheckbox key={habit.id} habit={habit} decrementHabit={() => decrementHabit(habit.id)} incrementHabit={() => incrementHabit(habit.id)} />
+                            <HabitsCheckbox
+                                key={habit.id}
+                                habit={habit}
+                                decrementHabit={() => decrementHabit(habit.id)}
+                                incrementHabit={() => incrementHabit(habit.id)}
+                                goal={goals?.find(g => g.id === habit.goal)?.title} />
                         ))}
                     </div>
                 </div>

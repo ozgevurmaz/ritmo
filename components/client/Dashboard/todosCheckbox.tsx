@@ -1,15 +1,22 @@
+"use client"
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
-import { Clock, Edit, Ghost } from "lucide-react";
+import { getPriorityColor, getPriorityLabel } from "@/lib/utils";
+import { Clock, Edit } from "lucide-react";
+import { useState } from "react";
+import TodoForm from "../Forms/todoForm";
 
 interface TodosChecklistProps {
     todo: TodoType,
     toggleTodo: () => void,
+    userId: string
 }
 
-export default function TodosChecklist({ todo, toggleTodo }: TodosChecklistProps) {
+export default function TodosChecklist({ todo, toggleTodo, userId }: TodosChecklistProps) {
+    const [isEditFormOpen, setIsEditFormOpen] = useState<boolean>(false)
+
     return (
         <div className="flex items-start gap-3 p-2 rounded-lg hover:bg-muted/50 transition-colors">
             <Checkbox
@@ -29,11 +36,18 @@ export default function TodosChecklist({ todo, toggleTodo }: TodosChecklistProps
                 )}
             </div>
             <div className="flex items-center">
-                <Badge className={`text-sm ${todo.urgent === "High" ? "bg-red-400" : todo.urgent === "Medium" ? "bg-amber-300" : "bg-blue-400"} ${todo.completed && "opacity-50"}`}>
-                    {todo.urgent}
+                <Badge className={`text-sm ${getPriorityColor(todo.urgent, todo.importance)} ${todo.completed && "opacity-50"}`}>
+                    {getPriorityLabel(todo.urgent, todo.importance)}
                 </Badge>
 
-                <Button disabled={todo.completed} variant="ghost" className="p-0 hover:bg-transperent hover:text-foreground cursor-pointer"><Edit /></Button>
+                <Button
+                    onClick={() => setIsEditFormOpen(true)}
+                    disabled={todo.completed}
+                    variant="ghost"
+                    className="p-0 hover:bg-transperent hover:text-foreground cursor-pointer">
+                    <Edit />
+                </Button>
             </div>
+            <TodoForm isOpen={isEditFormOpen} setIsOpen={() => setIsEditFormOpen(false)} editingTodo={todo} userId={userId} />
         </div>)
 }

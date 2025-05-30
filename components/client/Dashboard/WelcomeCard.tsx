@@ -3,6 +3,7 @@
 import CustomCalendar from "@/components/customCalendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatDate } from "@/lib/utils";
 import { Bell, ChevronLeft, ChevronRight, PlusCircle, Calendar, Target } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
@@ -10,28 +11,19 @@ export default function WelcomeCard({
     name,
     selectedDate,
     handleDayChange,
-    onAddTodo,
-    onAddHabit,
     onDateSelect,
+    setTodoFormOpen,
+    setHabitFormOpen
 }: {
     name: string,
     selectedDate: Date,
     handleDayChange: (count: number) => void
-    onAddTodo?: () => void,
-    onAddHabit?: () => void
     onDateSelect?: (date: Date) => void,
+    setTodoFormOpen?: () => void,
+    setHabitFormOpen?: () => void,
 }) {
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-
-    const formatDate = (selectedDate: Date) => {
-        return selectedDate.toLocaleDateString('en-US', {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric',
-            year: 'numeric'
-        });
-    };
-
+    
     const getGreeting = () => {
         const hour = new Date().getHours();
         if (hour < 12) return "Good Morning";
@@ -96,20 +88,12 @@ export default function WelcomeCard({
                     </div>
 
                     <div className="flex flex-wrap gap-3">
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            className="border-activities bg-activities/10 text-activities hover:bg-activities hover:text-primary-foreground transition-all duration-200"
-                        >
-                            <Bell className="h-4 w-4 mr-2" />
-                            Alerts
-                        </Button>
 
                         <Button
                             size="sm"
                             variant="outline"
                             className="border-todos bg-todos/10 text-todos hover:bg-todos hover:text-primary-foreground transition-all duration-200"
-                            onClick={onAddTodo}
+                            onClick={setTodoFormOpen}
                         >
                             <PlusCircle className="h-4 w-4 mr-2" />
                             Add Todo
@@ -119,7 +103,7 @@ export default function WelcomeCard({
                             size="sm"
                             variant="outline"
                             className="border-habits bg-habits/10 text-habits hover:bg-habits hover:text-primary-foreground transition-all duration-200"
-                            onClick={onAddHabit}
+                            onClick={setHabitFormOpen}
                         >
                             <Target className="h-4 w-4 mr-2" />
                             Add Habit

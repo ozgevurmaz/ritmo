@@ -5,12 +5,15 @@ import {
   ChevronRight,
   ChevronLeft,
   ShieldUser,
+  Flame,
 } from 'lucide-react';
 
 import { ADMIN_NAV_LINKS, NAV_LINKS } from '@/lib/constants';
 import Link from 'next/link';
 import { useProfile } from '@/lib/Queries/useProfile';
 import { Button } from '../ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { getInitials } from '@/lib/utils';
 
 export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const { data: profile, isLoading, error } = useProfile();
@@ -34,7 +37,7 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
 
   return (
     <aside
-      className={`hidden ${profile && "lg:flex"} min-h-screen bg-sidebar border-r border-sidebar-border text-sidebar-foreground transition-all duration-300 sticky pt-14 ${collapsed ? 'w-16' : 'w-50'
+      className={`hidden ${profile && "lg:flex"} sticky min-h-screen bg-sidebar border-r border-sidebar-border text-sidebar-foreground transition-all duration-300 pt-14 ${collapsed ? 'w-16' : 'w-50'
         }`}
     >
       {/* Toggle Button */}

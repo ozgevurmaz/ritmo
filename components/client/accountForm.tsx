@@ -13,30 +13,17 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Label } from '../ui/label'
+import { profileSchema } from '@/lib/zod/client/profile'
+import SignOut from '@/components/auth/signoutButton'
 
 type ExtendedPostgrestError = PostgrestError & {
   constraint_name?: string
 }
-
-const profileSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required.")
-    .max(100, "Name must be less than 100 characters"),
-  surname: z
-    .string(),
-  email: z.string(),
-  username: z
-    .string()
-    .min(1, "Username is required.")
-    .max(30, 'Username must be less than 30 characters')
-    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
-})
-
 type ProfileFormData = z.infer<typeof profileSchema>
 
 export default function AccountForm({ user }: { user: User | null }) {
   const supabase = createClient()
+
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState(false)
 
@@ -224,15 +211,7 @@ export default function AccountForm({ user }: { user: User | null }) {
           </Form>
 
           <div>
-            <form action="/auth/signout" method="post">
-              <Button
-                type="submit"
-                variant="destructive"
-                className="w-full sm:w-auto text-accent-foreground bg-accent hover:bg-accent/70"
-              >
-                Sign out
-              </Button>
-            </form>
+            <SignOut />
           </div>
         </CardContent>
       </Card>

@@ -1,13 +1,14 @@
-import { Badge } from "@/components/ui/badge";
 import { CheckCircle2, Circle, Flame } from "lucide-react";
+import StreakBadge from "../StreakBadge";
 
 interface HabitsCheckboxType {
-    habit: HabitsType
+    habit: HabitType
     decrementHabit: () => void
     incrementHabit: () => void
+    goal: string
 }
 
-export default function HabitsCheckbox({ habit, decrementHabit, incrementHabit }: HabitsCheckboxType) {
+export default function HabitsCheckbox({ habit, decrementHabit, incrementHabit, goal }: HabitsCheckboxType) {
     return (
         <div key={habit.id} className="p-2 rounded-lg hover:bg-muted/50 transition-colors">
             <div className="flex items-start justify-between gap-3">
@@ -16,7 +17,7 @@ export default function HabitsCheckbox({ habit, decrementHabit, incrementHabit }
                         {habit.title}
                         {habit.goal && (
                             <span className="text-xs text-goal bg-goal/10 px-2 py-0.5 rounded-full">
-                                <span className="text-goals font-semibold">Goal:</span> {habit.goal}
+                                <span className="text-goals font-semibold">Goal:</span> {goal}
                             </span>
                         )}
                     </div>
@@ -48,9 +49,7 @@ export default function HabitsCheckbox({ habit, decrementHabit, incrementHabit }
                     </div>
                 </div>
                 {habit.streak > 0 && (
-                    <Badge variant="outline" className="text-xs text-habit border-habit">
-                        <Flame className="w-4 h-4" /> {habit.streak} day streak
-                    </Badge>
+                    <StreakBadge streak={habit.streak} isTextShown isSmall />
                 )}
             </div>
         </div>)

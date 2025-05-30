@@ -26,11 +26,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { getInitials } from '@/lib/utils';
+import { getInitials, getStreakColor } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/lib/Queries/useProfile';
 import { ThemeToggle } from '../themeToggle';
+import StreakBadge from '../client/StreakBadge';
 
 interface NavbarProps {
   isAdmin?: boolean
@@ -64,8 +65,8 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
   }
   return (
     <>
-      <header className="sticky top-0 z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 bg-card/95 ">
-        <div className="flex h-14 items-center justify-between px-10">
+      <header className="sticky top-0 z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 bg-sidebar ">
+        <div className="flex h-14 items-center justify-between px-3 lg:px-10">
 
           {/* Logo and Brand */}
           <Link className="flex items-center gap-2" href="/">
@@ -74,35 +75,29 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
           </Link>
 
           {/* User Actions */}
-          <div className="flex items-center gap-1">
-
-            <ThemeToggle />
+          <div className="flex items-center">
             {
               isAdmin &&
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-success/10 rounded-full">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-success/40 rounded-full border border-success">
                 <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
-                <span className="text-sm font-medium text-success-foreground">
-                  1,247 live users
+                <span className="flex text-sm font-medium text-success-foreground">
+                  1,247 <span className='sm:hidden lg:flex'>live users</span>
                 </span>
               </div>
             }
-
             {
               isAdmin &&
               <Link
                 href="/"
-                className="flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground hover:text-muted-foreground transition-colors"
+                className="sm:hidden md:flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground hover:text-muted-foreground transition-colors"
               >
                 <ExternalLink className="h-4 w-4" />
-                Return to App
+              <span className='sm:hidden lg:flex'>Return to App</span> 
               </Link>
             }
 
             {/* Streak - Hidden on small screens */}
-            {!isAdmin && <div className='hidden sm:flex items-center gap-1 px-2 py-1 text-strike'>
-              <Flame className="h-5 w-5" />
-              <span className="hidden md:inline">{profile?.streak} days</span>
-            </div>}
+            {!isAdmin && <StreakBadge streak={profile?.streak || 0} />}
 
             {/* Notifications */}
             <Button variant="ghost" size="icon" className="relative hover:bg-accent/70 cursor-pointer">
@@ -126,8 +121,8 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
 
             {/* Avatar/Profile Dropdown */}
             <DropdownMenu>
-              <DropdownMenuTrigger className='hover:bg-muted/70' asChild>
-                <Button variant="ghost" className="gap-2 ml-2 p-2 rounded-lg cursor-pointer">
+              <DropdownMenuTrigger className='hover:bg-muted/70 p-0' asChild>
+                <Button variant="ghost" className="gap-1 p-1 md:p-2 rounded-lg cursor-pointer">
                   <Avatar className="h-7 w-7">
                     {profile?.avatar ? (
                       <AvatarImage src={profile?.avatar} alt={profile?.name} />

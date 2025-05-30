@@ -18,11 +18,11 @@ export default function StatisticsCard(
         {
             goals: GoalType[],
             todos: TodoType[],
-            habits: HabitsType[]
+            habits: HabitType[]
         }
 ){
     return (
-        <Card className="mb-5 border-primary">
+        <Card className="col-span-2 md:col-span-1 mb-5 border-primary">
             <CardHeader className="pb-4">
                 <CardTitle className="text-base font-semibold flex items-center">
                     <BarChart className="h-4 w-4 mr-2" />
