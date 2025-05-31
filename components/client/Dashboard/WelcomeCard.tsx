@@ -105,7 +105,7 @@ export default function WelcomeCard({
                             className="border-habits bg-habits/10 text-habits hover:bg-habits hover:text-primary-foreground transition-all duration-200"
                             onClick={setHabitFormOpen}
                         >
-                            <Target className="h-4 w-4 mr-2" />
+                            <PlusCircle className="h-4 w-4 mr-2" />
                             Add Habit
                         </Button>
                     </div>

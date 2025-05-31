@@ -3,47 +3,87 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlusCircle, Target } from "lucide-react";
 import SingleGoalInfoCardType from "./singleGoalInfoCardType";
 import Link from "next/link";
+import { formatDate } from "@/lib/utils";
+import { GoalBriefing } from "./goalsBriefing";
 
 export default function GoalsInfoCard(
     {
         goals,
+        upcomingGoals,
         setGoalFormOpen
     }: {
         goals: GoalType[]
+        upcomingGoals: GoalType[]
         setGoalFormOpen?: () => void,
     }
 ) {
 
+
     return (
-        <Card className="mb-5 border-primary">
-            <CardHeader className="pb-4">
+        <Card className="mb-5 border-primary max-h-max overflow-y-auto gap-2">
+            <CardHeader className="pb-2 mb-0">
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-base font-semibold flex items-center text-foreground">
                         <Target className="h-4 w-4 mr-2 text-foreground" />
                         <span>Active Goals</span>
                     </CardTitle>
-                    <Button
-                        onClick={setGoalFormOpen}
-                        size="sm"
-                        variant="outline"
-                        className="border-goals bg-goals/10 text-goals hover:bg-goals hover:text-primary-foreground transition-all duration-200">
-                        <PlusCircle className="h-3.5 w-3.5 mr-1" />
-                        Add Goal
-                    </Button>
                 </div>
             </CardHeader>
+            <CardContent className="pt-3 flex flex-col items-center justify-center gap-2">
+                {
+                    goals.length === 0 &&
+                    <div className="flex flex-col items-center justify-center py-4 px-2 text-center">
+                        <div className="w-16 h-16 rounded-full bg-muted flex items-center justify-center mb-4">
+                            <Target className="h-8 w-8 text-muted-foreground" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-foreground mb-2">
+                            No Active Goals
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-6 max-w-sm">
+                            There are no active goals yet. Create a goal to start upgrading your life and tracking your progress.
+                        </p>
+                        <Link href="/goals/add" className="text-primary">
+                            Add Your First Goal
+                        </Link>
+                    </div>
+                }
 
-            <CardContent className="pt-3 flex flex-col items-center justify-center gap-3">
-                <div className="space-y-3 max-h-56 overflow-y-auto p-1">
-                    {goals.map((goal) =>
-                        <SingleGoalInfoCardType key={goal.id} goal={goal} />
-                    )}
-                </div>
+                {goals.length > 0 &&
+                    <div className="space-y-3 p-1">
+                        {goals.map((goal) =>
+                            <SingleGoalInfoCardType key={goal.id} goal={goal} />
+                        )}
+                    </div>
+                }
 
-                <Link href="/goals" className="max-w-max mt-2 px-2 py-1 text-xs text-foreground hover:text-foreground/80">
-                    View All Goals
-                </Link>
+                {upcomingGoals.length > 0 && (
+                    <div className="w-full mt-6 pt-4 border-t border-border">
+                        <div className="flex items-center gap-2 mb-4">
+                            <div className="w-2 h-2 rounded-full bg-muted-foreground opacity-60"></div>
+                            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
+                                Upcoming Goals
+                            </h3>
+                        </div>
+
+                        <div className="space-y-3">
+                            {upcomingGoals.map((goal) => (
+                               <GoalBriefing goal={goal} key={goal.id} />
+                            ))}
+                        </div>
+
+                        <Link
+                            href="/goals"
+                            className="inline-flex items-center gap-1 mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors"
+                        >
+                            <span>View all upcoming goals</span>
+                            <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                        </Link>
+                    </div>
+                )}
             </CardContent>
+
         </Card>
     )
 }

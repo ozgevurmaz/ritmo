@@ -30,7 +30,7 @@ import { goalSchema } from '@/lib/zod/client/goal';
 import { categories, contacts } from '@/lib/constants';
 import { toast } from 'sonner';
 import { useAddGoal } from '@/lib/Mutations/goals/useAddGoal';
-import { useHabits } from '@/lib/Queries/useHabit';
+import { useHabits } from '@/lib/Queries/habits/useHabit';
 import { useUpdateGoal } from '@/lib/Mutations/goals/useUpdateGoal';
 import { useUpdateHabit } from '@/lib/Mutations/habits/useUpdateHabit';
 import { useDeleteGoal } from '@/lib/Mutations/goals/useDeleteGoal';

@@ -16,6 +16,8 @@ export const habitSchema = z.object({
     endDate: z.string().optional(),
     sharedWith: z.array(z.string()).optional(),
     visibility: z.enum(["public", "private"]),
+    weeklyFrequency: z.number().max(7),
+    selectedDays: z.array(z.string())
 }).refine((data) => {
     if (!data.endDate) return true;
     const endDate = new Date(data.endDate);

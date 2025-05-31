@@ -7,11 +7,12 @@ export const useAddHabit = (userId: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (habit: Omit<HabitType, "id" | "created_at" | "completed">) => {
+        mutationFn: async (habit: Omit<HabitType, "id" | "created_at" | "weeklyComplated" | "completed">) => {
             const { data, error } = await supabase.from("habits").insert({
                 ...habit,
                 user_id: userId,
                 completedToday: 0,
+                weeklyComplated: 0
             });
 
             if (error) throw new Error(error.message);
@@ -19,6 +20,7 @@ export const useAddHabit = (userId: string) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["habits", userId] });
+            queryClient.invalidateQueries({ queryKey: ["validHabits", userId] });
         }
     });
 };

@@ -7,10 +7,12 @@ import WelcomeCard from "@/components/client/Dashboard/WelcomeCard";
 import GoalForm from "@/components/client/Forms/goalForm";
 import HabitsForm from "@/components/client/Forms/habitForm";
 import TodoForm from "@/components/client/Forms/todoForm";
-import { useGoals } from "@/lib/Queries/useGoal";
-import { useHabits } from "@/lib/Queries/useHabit";
+import { useDailyTodos } from "@/lib/Queries/todos/useDailyTodo";
+import { useValidGoals } from "@/lib/Queries/goals/useValidGoals";
+import { useUpcomingGoals } from "@/lib/Queries/goals/useUpcomingGoals";
+import { useValidHabits } from "@/lib/Queries/habits/useValidHabits";
 import { useProfile } from "@/lib/Queries/useProfile";
-import { useTodos } from "@/lib/Queries/useTodo";
+import { formatDateForQuery } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -22,9 +24,11 @@ export default function Home() {
   const [isHabitFormOpen, setHabitFormOpen] = useState<boolean>(false)
   const [isGoalFormOpen, setGoalFormOpen] = useState<boolean>(false)
 
-  const { data: todos, isLoading: todosLoading } = useTodos(profile?.id || "")
-  const { data: habits, isLoading: habitsLoading } = useHabits(profile?.id || "")
-  const { data: goals, isLoading: goalsLoading } = useGoals(profile?.id || "")
+  const { data: todos, isLoading: todosLoading } = useDailyTodos({ userId: profile?.id || "", date: formatDateForQuery(currentDate) });
+
+  const { data: habits, isLoading: habitsLoading } = useValidHabits({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
+  const { data: goals, isLoading: goalsLoading } = useValidGoals({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
+  const { data: upcomingGoals, isLoading: upcomingGoalsLoading } = useUpcomingGoals({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
 
   useEffect(() => {
     if (!profile) {
@@ -77,7 +81,7 @@ export default function Home() {
         <DailyCard className="col-span-1 md:col-span-2" todos={todos || []} habits={habits || []} userId={profile.id} />
         <div>
           <StatisticsCard todos={todos || []} goals={goals || []} habits={habits || []} />
-          <GoalsInfoCard goals={goals || []} setGoalFormOpen={() => setGoalFormOpen(true)} />
+          <GoalsInfoCard goals={goals || []} upcomingGoals={upcomingGoals || []} />
         </div>
       </div>
     </div>

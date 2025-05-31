@@ -12,4 +12,7 @@ interface HabitType {
     endDate: string | null
     visibility: "public" | "private"
     sharedWith?: string[]
+    selectedDays: string[]
+    weeklyFrequency: number
+    weeklyComplated: number
 }

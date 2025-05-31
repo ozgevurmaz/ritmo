@@ -18,108 +18,6 @@ import {
 } from 'lucide-react';
 
 // Dummy data imports
-export const TODOS: TodoType[] = [
-  {
-    id: "todo1",
-    title: "Weekly Planning Session",
-    urgent: "High",
-    importance: "High",
-    deadline: "2025-05-22",
-    time: "19:00",
-    completed: false,
-    repeat: "weekly",
-    notifyBefore: "1h",
-    tags: ["planning", "focus"],
-    category: "Work",
-    visibility: "public"
-  },
-  {
-    id: "todo2",
-    title: "Pay Internet Bill",
-    urgent: "Medium",
-    importance: "Low",
-    deadline: "2025-05-23",
-    time: "15:00",
-    completed: true,
-    repeat: "monthly",
-    notifyBefore: "1d",
-    tags: ["personal", "finance"],
-    category: "Personal",
-    visibility: "public"
-  },
-  {
-    id: "todo3",
-    title: "Send Portfolio to Sarah",
-    urgent: "High",
-    importance: "High",
-    deadline: "2025-05-21",
-    time: "17:30",
-    completed: false,
-    repeat: "never",
-    notifyBefore: "30m",
-    tags: ["career"],
-    category: "Work",
-    visibility: "public"
-  }
-];
-export const HABITS: HabitType[] = [
-  {
-    id: "habit1",
-    title: "Drink Water",
-    goal: "Healthy Life",
-    frequencyPerDay: 8,
-    reminderTimes: ["08:00", "10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
-    completedToday: 3,
-    streak: 5,
-    customMessage: "Hydration is power!",
-    allowSkip: true,
-    category: "Fitness",
-    endDate: null,
-    visibility: "public"
-  },
-  {
-    id: "habit2",
-    title: "Read 20 Pages",
-    goal: null,
-    frequencyPerDay: 1,
-    reminderTimes: ["21:00"],
-    completedToday: 0,
-    streak: 12,
-    customMessage: "A page a day keeps ignorance away.",
-    allowSkip: false,
-    category: "Learning",
-    endDate: null,
-    visibility: "public"
-  }
-];
-export const GOALS: GoalType[] = [
-  {
-    id: "goal1",
-    title: "Healthy Life",
-    description: "Become more energetic and improve overall health.",
-    motivation: "To wake up feeling refreshed and be more productive.",
-    habits: ["habit1", "habit2"],
-    startDate: "2025-05-20",
-    endDate: "2025-06-20",
-    completedDays: 5,
-    sharedWith: ["user123", "user456"],
-    visibility: "private",
-    category: "Fitness"
-  },
-  {
-    id: "goal2",
-    title: "Deep Work Focus",
-    description: "Minimize distractions and get more done.",
-    motivation: "To finish my side project in 3 weeks.",
-    habits: [],
-    startDate: "2025-05-21",
-    endDate: "2025-06-10",
-    completedDays: 1,
-    sharedWith: [],
-    visibility: "public",
-    category: "Work"
-  }
-];
 
 export const CONNECTIONS = [
   {
@@ -205,16 +103,6 @@ export const categories = [
   'Shopping',
   'Home',
   'Travel'
-];
-
-export const notificationOptions = [
-  { value: '0', label: 'At time' },
-  { value: '5', label: '5 minutes before' },
-  { value: '15', label: '15 minutes before' },
-  { value: '30', label: '30 minutes before' },
-  { value: '60', label: '1 hour before' },
-  { value: '120', label: '2 hours before' },
-  { value: '1440', label: '1 day before' }
 ];
 
 export const contacts = [

@@ -1,18 +1,21 @@
+import { createClient } from "@/lib/supabase/client";
 import { useQuery } from "@tanstack/react-query";
-import { createClient } from "../supabase/client";
+
 
 const supabase = createClient();
 
-export const useGoals = (userId: string) => {
+export const useValidGoals = ({ userId, date }: { userId: string; date: string }) => {
     return useQuery({
-        queryKey: ["goals", userId],
+        queryKey: ["validGoals", userId, date],
         enabled: !!userId,
         queryFn: async () => {
             const { data, error } = await supabase
                 .from("goals")
                 .select("*")
                 .eq("user_id", userId)
-                .order("created_at", { ascending: false })
+                .or(`startDate.lte.${date}`)
+                .or(`endDate.gte.${date}`)
+                .order("startDate", { ascending: false })
 
             if (error) throw new Error(error.message);
             return data;

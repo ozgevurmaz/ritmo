@@ -22,6 +22,7 @@ export const useAddGoal = (userId: string) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["goals", userId] })
+            queryClient.invalidateQueries({ queryKey: ["validGoals", userId] });
         }
     })
 }

@@ -2,14 +2,15 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckSquare, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { CheckSquare, RotateCcw, Columns, Rows } from "lucide-react";
 import React, { useState } from "react";
 import { CustomProgress } from "@/components/custom/customProgress";
 import TodosChecklist from "./todosCheckbox";
 import HabitsCheckbox from "./habitsCheckbox";
 import { useToggleTodo } from "@/lib/Mutations/todos/useToggleTodo";
 import { useUpdateHabitProgress } from "@/lib/Mutations/habits/useUpdateHabitProgress";
-import { useGoals } from "@/lib/Queries/useGoal";
+import { useGoals } from "@/lib/Queries/goals/useGoal";
 
 interface DailyCardProps {
     className?: string
@@ -20,6 +21,7 @@ interface DailyCardProps {
 
 export default function DailyCard({ className, todos, habits, userId }: DailyCardProps) {
 
+    const [isRowLayout, setIsRowLayout] = useState(true);
     const { mutate: toggleTodoInDb } = useToggleTodo(userId);
     const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId);
     const { data: goals } = useGoals(userId)
@@ -63,9 +65,19 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
             <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                     <CardTitle className="text-lg font-semibold">Today's Things</CardTitle>
-                    <Badge variant="outline" className="text-xs">
-                        {Math.round(overallProgress)}% Complete
-                    </Badge>
+                    <div className="flex items-center gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setIsRowLayout(!isRowLayout)}
+                            className="h-8 w-8 p-0"
+                        >
+                            {isRowLayout ? <Columns className="h-4 w-4" /> : <Rows className="h-4 w-4" />}
+                        </Button>
+                        <Badge variant="outline" className="text-xs">
+                            {Math.round(overallProgress)}% Complete
+                        </Badge>
+                    </div>
                 </div>
 
                 {/* Progress Section */}
@@ -81,35 +93,37 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                 </div>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-                {/* Todos Section */}
-                <div className="space-y-3">
-                    <h3 className="text-md font-medium text-todo flex items-center gap-2">
-                        <CheckSquare className="h-4 w-4" />
-                        Todos
-                    </h3>
-                    <div className="space-y-2">
-                        {todos.map((todo) => (
-                            <TodosChecklist key={todo.id} todo={todo} toggleTodo={() => toggleTodoInDb(todo)} userId={userId} />
-                        ))}
+            <CardContent className="flex flex-col h-full">
+                <div className={`gap-6 flex-1 ${isRowLayout ? 'flex flex-col space-y-6' : 'grid grid-cols-1 md:grid-cols-2'}`}>
+                    {/* Todos Section */}
+                    <div className="flex flex-col h-full">
+                        <h3 className="text-md font-medium text-todo flex items-center gap-2 mb-3">
+                            <CheckSquare className="h-4 w-4" />
+                            Todos
+                        </h3>
+                        <div className="space-y-2 flex-1 overflow-y-auto">
+                            {todos.map((todo) => (
+                                <TodosChecklist key={todo.id} todo={todo} toggleTodo={() => toggleTodoInDb(todo)} userId={userId} />
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                {/* Habits Section */}
-                <div className="space-y-3">
-                    <h3 className="text-md font-medium text-habit flex items-center gap-2">
-                        <RotateCcw className="h-4 w-4" />
-                        Habits
-                    </h3>
-                    <div className="space-y-2">
-                        {habits.map((habit) => (
-                            <HabitsCheckbox
-                                key={habit.id}
-                                habit={habit}
-                                decrementHabit={() => decrementHabit(habit.id)}
-                                incrementHabit={() => incrementHabit(habit.id)}
-                                goal={goals?.find(g => g.id === habit.goal)?.title} />
-                        ))}
+                    {/* Habits Section */}
+                    <div className="flex flex-col h-full">
+                        <h3 className="text-md font-medium text-habit flex items-center gap-2 mb-3">
+                            <RotateCcw className="h-4 w-4" />
+                            Habits
+                        </h3>
+                        <div className="space-y-2 flex-1 overflow-y-auto">
+                            {habits.map((habit) => (
+                                <HabitsCheckbox
+                                    key={habit.id}
+                                    habit={habit}
+                                    decrementHabit={() => decrementHabit(habit.id)}
+                                    incrementHabit={() => incrementHabit(habit.id)}
+                                    goal={goals?.find(g => g.id === habit.goal)?.title} />
+                            ))}
+                        </div>
                     </div>
                 </div>
             </CardContent>

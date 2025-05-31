@@ -26,11 +26,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Target, Plus, X, Clock, Link, EyeOff, Eye } from 'lucide-react';
 import { habitSchema } from '@/lib/zod/client/habit';
-import { categories, contacts, GOALS } from '@/lib/constants';
+import { categories, contacts } from '@/lib/constants';
 import { toast } from 'sonner';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useAddHabit } from '@/lib/Mutations/habits/useAddHabit';
 import { useDeleteHabit } from '@/lib/Mutations/habits/useDeleteHabit';
+import { useUpdateHabit } from '@/lib/Mutations/habits/useUpdateHabit';
+import { useGoals } from '@/lib/Queries/goals/useGoal';
 
 type HabitFormData = z.infer<typeof habitSchema>;
 
@@ -46,7 +48,9 @@ const HabitsForm = ({
     userId: string
 }) => {
     const { mutateAsync: addHabit } = useAddHabit(userId)
+    const { mutateAsync: updateHabit } = useUpdateHabit(userId)
     const { mutate: deleteHabit } = useDeleteHabit(userId)
+    const { data: goals } = useGoals(userId)
 
     const [timeInput, setTimeInput] = useState('');
     const [timesList, setTimesList] = useState<string[]>(editingHabit?.reminderTimes || []);
@@ -72,36 +76,44 @@ const HabitsForm = ({
             category: editingHabit?.category || '',
             endDate: editingHabit?.endDate || '',
             visibility: editingHabit?.visibility || 'private',
-            sharedWith: editingHabit?.sharedWith || []
+            sharedWith: editingHabit?.sharedWith || [],
+            weeklyFrequency: editingHabit?.weeklyFrequency || 7,
+            selectedDays: editingHabit?.selectedDays || []
         }
     });
 
     const selectedGoal = watch('goal');
     const frequencyPerDay = watch('frequencyPerDay');
     const visibility = watch('visibility')
+    const weeklyFrequency = watch('weeklyFrequency')
+    const selectedDats = watch('selectedDays')
 
     const onSubmit = async (data: HabitFormData) => {
+        console.log(data)
         try {
+
             if (editingHabit) {
 
-                addHabit({
+                const updated = {
                     ...data,
                     reminderTimes: timesList,
                     completedToday: 0,
                     streak: 0,
                     customMessage: data.customMessage || '',
                     endDate: data.endDate ? new Date(data.endDate).toISOString() : null
-                })
+                }
+
+                await updateHabit({ habitId: editingHabit.id, updates: updated })
                 toast.success("Habit edited successfully.")
 
             } else {
-                addHabit({
+                await addHabit({
                     ...data,
                     reminderTimes: timesList,
                     completedToday: 0,
                     streak: 0,
                     customMessage: data.customMessage || '',
-                    endDate: data.endDate ? new Date(data.endDate).toString() : null
+                    endDate: data.endDate ? new Date(data.endDate).toISOString() : null
                 })
                 toast.success("Habit added successfully.")
             }
@@ -186,7 +198,7 @@ const HabitsForm = ({
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectItem value="none">No Goal</SelectItem>
-                                {GOALS.map(goal => (
+                                {goals?.map(goal => (
                                     <SelectItem key={goal.id} value={goal.id}>
                                         <div className="flex items-center gap-2">
                                             <span>{goal.title}</span>
@@ -201,7 +213,7 @@ const HabitsForm = ({
                         {selectedGoal && selectedGoal !== 'none' && (
                             <div className="p-3 bg-success/20 rounded-lg border border-success">
                                 <p className="text-sm text-success flex gap-1">
-                                    <Link className='w-4 h-4' /> Linked to: <strong>{GOALS.find(g => g.id === selectedGoal)?.title}</strong>
+                                    <Link className='w-4 h-4' /> Linked to: <strong>{goals?.find(g => g.id === selectedGoal)?.title}</strong>
                                 </p>
                             </div>
                         )}
@@ -252,6 +264,53 @@ const HabitsForm = ({
                                 <p className="text-destructive text-sm mt-1">{errors.category.message}</p>
                             )}
                         </div>
+                    </div>
+
+                    <div className='grid grid-cols-2 gap-4"'>
+                        {/* Weekly Frequency */}
+                        <div className="space-y-2">
+                            <Label htmlFor="weeklyFrequency" className="text-sm font-medium">
+                                Weekly Frequency *
+                            </Label>
+                            <Input
+                                id="weeklyFrequency"
+                                type="number"
+                                min="1"
+                                max="7"
+                                {...register("weeklyFrequency", { valueAsNumber: true })}
+                                className={errors.weeklyFrequency ? 'border-destructive' : ''}
+                            />
+                            {errors.weeklyFrequency && (
+                                <p className="text-xs text-destructive">{errors.weeklyFrequency.message}</p>
+                            )}
+                            <p className="text-xs text-muted-foreground">How many days a week should this habit be done?</p>
+                        </div>
+
+                        {/* Selected Days */}
+                        {weeklyFrequency < 7 &&
+                            <div className="space-y-2">
+                                <Label className="text-sm font-medium">Select Days</Label>
+                                <div className="flex flex-wrap gap-2 px-4">
+                                    {["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"].map(day => (
+                                        <div key={day} className="flex items-center space-x-2">
+                                            <Checkbox
+                                                id={day}
+                                                checked={watch("selectedDays").includes(day)}
+                                                onCheckedChange={(checked) => {
+                                                    const current = watch("selectedDays");
+                                                    const updated = checked
+                                                        ? [...current, day]
+                                                        : current.filter(d => d !== day);
+                                                    setValue("selectedDays", updated);
+                                                }}
+                                                className='border-foreground'
+                                            />
+                                            <Label htmlFor={day}>{day}</Label>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        }
                     </div>
 
                     {/* End Date */}
@@ -318,6 +377,7 @@ const HabitsForm = ({
                             {timesList.length}/{frequencyPerDay} reminder times set
                         </p>
                     </div>
+
 
                     {/* Custom Message */}
                     <div className="space-y-2">

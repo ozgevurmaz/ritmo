@@ -17,6 +17,7 @@ export const useDeleteTodo = (userId: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos", userId] });
+      queryClient.invalidateQueries({ queryKey: ["dailyTodos", userId] })
     },
   });
 };

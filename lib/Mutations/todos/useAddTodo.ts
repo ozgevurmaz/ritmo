@@ -7,11 +7,12 @@ export const useAddTodo = (userId: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (todo: Omit<TodoType, "id" | "created_at" | "completed">) => {
+        mutationFn: async (todo: Omit<TodoType, "id" | "created_at" | "completed" | "completedAt">) => {
             const { data, error } = await supabase.from("todos").insert({
                 ...todo,
                 user_id: userId,
                 completed: false,
+                completedAt: null
             });
 
             if (error) throw new Error(error.message);
@@ -19,6 +20,7 @@ export const useAddTodo = (userId: string) => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["todos", userId] });
+            queryClient.invalidateQueries({ queryKey: ["dailyTodos", userId] })
         }
     });
 };

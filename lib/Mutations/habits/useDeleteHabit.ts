@@ -17,6 +17,7 @@ export const useDeleteHabit = (userId: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["habits", userId] });
+      queryClient.invalidateQueries({ queryKey: ["validHabits", userId] });
     },
   });
 };

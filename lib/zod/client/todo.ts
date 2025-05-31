@@ -12,4 +12,5 @@ export const todoSchema = z.object({
     category: z.string().min(1, "Category is required"),
     sharedWith: z.array(z.string()).optional(),
     visibility: z.enum(["public", "private"]),
+    type: z.enum(["task", "event"]),
 })
