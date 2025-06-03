@@ -1,11 +1,11 @@
 'use client'
 
-import DailyCard from "@/components/client/Dashboard/DailyCard";
-import GoalsInfoCard from "@/components/client/Dashboard/goalsInfoCard";
-import StatisticsCard from "@/components/client/Dashboard/statisticsCard";
-import WelcomeCard from "@/components/client/Dashboard/WelcomeCard";
-import HabitsForm from "@/components/client/Forms/habitForm";
-import TodoForm from "@/components/client/Forms/todoForm";
+import DailyCard from "@/components/Dashboard/client/DailyCard";
+import GoalsInfoCard from "@/components/Dashboard/client/goalsInfoCard";
+import StatisticsCard from "@/components/Dashboard/client/statisticsCard";
+import WelcomeCard from "@/components/Dashboard/client/WelcomeCard";
+import HabitsForm from "@/components/Forms/habitForm";
+import TodoForm from "@/components/Forms/todoForm";
 import { useDailyTodos } from "@/lib/Queries/todos/useDailyTodo";
 import { useValidGoals } from "@/lib/Queries/goals/useValidGoals";
 import { useUpcomingGoals } from "@/lib/Queries/goals/useUpcomingGoals";
@@ -14,6 +14,7 @@ import { useProfile } from "@/lib/Queries/useProfile";
 import { formatDateForQuery } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import LoadingScreen from "@/components/shared/pageStyles/Loading";
 
 export default function Home() {
   const router = useRouter();
@@ -45,6 +46,8 @@ export default function Home() {
       return newDate;
     });
   };
+
+  if (todosLoading && habitsLoading && goalsLoading && upcomingGoalsLoading) return <LoadingScreen />
 
   return (
     <div>

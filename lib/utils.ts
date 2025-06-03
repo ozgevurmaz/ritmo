@@ -78,6 +78,13 @@ export const slugify = (text: string) =>
     .toString()
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-')     
-    .replace(/[^\w\-]+/g, '')   
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
     .replace(/\-\-+/g, '-');
+
+export const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return "Good Morning";
+  if (hour < 17) return "Good Afternoon";
+  return "Good Evening";
+};

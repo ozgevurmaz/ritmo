@@ -11,6 +11,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Loader2, Mail } from 'lucide-react'
 import { PasswordInput } from '@/components/auth/passwordInput'
 import { signupSchema } from '@/lib/zod/auth/auth'
+import LoadingScreen from '../shared/pageStyles/Loading'
 
 type SignupFormData = z.infer<typeof signupSchema>
 
@@ -49,6 +50,8 @@ export function SignupForm() {
             setIsLoading(false)
         }
     }
+
+    if (isLoading) return <LoadingScreen />
 
     return (
         <Form {...signupForm}>

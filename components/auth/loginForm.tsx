@@ -13,6 +13,7 @@ import { Loader2, Mail } from 'lucide-react'
 import Link from 'next/link'
 import { loginSchema } from '@/lib/zod/auth/auth'
 import { PasswordInput } from './passwordInput'
+import LoadingScreen from '../shared/pageStyles/Loading'
 
 type LoginFormData = z.infer<typeof loginSchema>
 
@@ -48,6 +49,7 @@ export default function LoginForm() {
             setIsLoading(false)
         }
     }
+    if (isLoading) return <LoadingScreen />
 
     return (
         <Form {...form}>

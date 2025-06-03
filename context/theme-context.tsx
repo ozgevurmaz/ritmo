@@ -8,8 +8,8 @@ import {
   ReactNode,
 } from 'react'
 
-export type ThemePreference = 'light' | 'dark' | 'system'
-type Theme = 'light' | 'dark'
+export type ThemePreference = 'light' | 'dark' | 'neutral' | 'system'
+type Theme = 'light' | 'dark' | 'neutral'
 
 interface ThemeContextType {
   theme: Theme
@@ -44,8 +44,8 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     if (mounted) {
-     const target = document.documentElement
-     target.setAttribute('data-theme', theme)
+      const target = document.documentElement
+      target.setAttribute('data-theme', theme)
     }
   }, [theme, mounted])
 

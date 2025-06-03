@@ -1,6 +1,7 @@
 "use client";
 
-import GoalForm from "@/components/client/Forms/goalForm";
+import GoalForm from "@/components/Forms/goalForm";
+import LoadingScreen from "@/components/shared/pageStyles/Loading";
 import { useSelectedGoal } from "@/lib/Queries/goals/useSelectedGoal";
 import { useProfile } from "@/lib/Queries/useProfile";
 import { useParams } from "next/navigation";
@@ -18,8 +19,8 @@ const EditGoal = () => {
 
   const isLoading = profileLoading || goalLoading || !profile?.id;
 
-  if (isLoading) return <div>Loading...</div>;
-
+  if (isLoading) return <LoadingScreen />
+  
   return <GoalForm userId={profile.id} editingGoal={selectedGoal} />;
 };
 

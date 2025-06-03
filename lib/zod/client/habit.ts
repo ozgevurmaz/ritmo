@@ -21,12 +21,43 @@ export const habitSchema = z.object({
     weeklyFrequency: z.number().max(7),
     selectedDays: z.array(z.string())
 }).refine((data) => {
-    if (!data.endDate) return true;
-    const endDate = new Date(data.endDate);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return endDate >= today;
+    // Check if start date is provided and valid
+    if (data.startDate) {
+        const startDate = new Date(data.startDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return startDate >= today;
+    }
+    return true;
+}, {
+    message: "Start date must be today or in the future",
+    path: ["startDate"]
+}).refine((data) => {
+    // Check if end date is provided and valid (today or future)
+    if (data.endDate) {
+        const endDate = new Date(data.endDate);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return endDate >= today;
+    }
+    return true;
 }, {
     message: "End date must be today or in the future",
+    path: ["endDate"]
+}).refine((data) => {
+    // Check if both dates are provided and end date is after start date
+    if (data.startDate && data.endDate) {
+        const startDate = new Date(data.startDate);
+        const endDate = new Date(data.endDate);
+        
+        // Normalize dates to avoid time zone issues
+        startDate.setHours(0, 0, 0, 0);
+        endDate.setHours(0, 0, 0, 0);
+        
+        return endDate > startDate;
+    }
+    return true;
+}, {
+    message: "End date must be after start date",
     path: ["endDate"]
 });

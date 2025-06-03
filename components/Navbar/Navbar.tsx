@@ -26,12 +26,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { getInitials, getStreakColor } from '@/lib/utils';
+import { getInitials } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/lib/Queries/useProfile';
-import { ThemeToggle } from '../themeToggle';
-import StreakBadge from '../client/StreakBadge';
+import StreakBadge from '../shared/StreakBadge';
+import LoadingScreen from '../shared/pageStyles/Loading';
+import { ThemeToggle } from '../Profile/themeToggle';
 
 interface NavbarProps {
   isAdmin?: boolean
@@ -52,11 +53,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
-  if (isLoading) {
-    return (
-      <div>Loading</div>
-    )
-  }
+  if (isLoading) return <LoadingScreen />
 
   if (error) {
     return (
@@ -65,15 +62,15 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
   }
   return (
     <>
-      <header className="sticky top-0 z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 bg-sidebar ">
+      <header className="z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 bg-background">
         <div className="flex h-14 items-center justify-between px-3 lg:px-10">
 
           {/* Logo and Brand */}
           <Link className="flex items-center gap-2" href="/">
             <Zap className="h-6 w-6 text-primary" />
-            <span className="text-lg font-semibold tracking-tight">Ritmo {isAdmin && "Admin"}</span>
+            <span className="text-lg font-semibold tracking-tight">Ritmo {isAdmin && <span className='text-primary font-bold'>Admin</span>}</span>
           </Link>
-
+          
           {/* User Actions */}
           <div className="flex items-center">
             {
@@ -92,7 +89,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
                 className="sm:hidden md:flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-foreground hover:text-muted-foreground transition-colors"
               >
                 <ExternalLink className="h-4 w-4" />
-              <span className='sm:hidden lg:flex'>Return to App</span> 
+                <span className='sm:hidden lg:flex'>Return to App</span>
               </Link>
             }
 
