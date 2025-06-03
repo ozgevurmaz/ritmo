@@ -111,3 +111,25 @@ export const contacts = [
   "mike",
   "emma"
 ];
+
+export const PRIORITY_EXPLANATIONS = {
+    'High-High': 'Do First - Critical and urgent tasks',
+    'High-Medium': 'Do First - Important tasks with some urgency',
+    'High-Low': 'Schedule - Important but not urgent',
+    'Medium-High': 'Do Next - Urgent but less important',
+    'Medium-Medium': 'Schedule - Moderate priority tasks',
+    'Medium-Low': 'Delegate - Can be done later or by others',
+    'Low-High': 'Do Next - Quick urgent tasks',
+    'Low-Medium': 'Delegate - Low priority tasks',
+    'Low-Low': 'Eliminate - Consider if really needed'
+};
+
+export const DAYS_OF_WEEK = [
+    { short: "Mon", full: "Monday" },
+    { short: "Tue", full: "Tuesday" },
+    { short: "Wed", full: "Wednesday" },
+    { short: "Thu", full: "Thursday" },
+    { short: "Fri", full: "Friday" },
+    { short: "Sat", full: "Saturday" },
+    { short: "Sun", full: "Sunday" }
+];

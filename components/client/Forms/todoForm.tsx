@@ -1,91 +1,92 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { CheckSquare, Plus, X, Calendar, Clock, Bell, EyeOff, Eye, Ban } from 'lucide-react';
-import { todoSchema } from '@/lib/zod/client/todo';
-import { categories, contacts } from '@/lib/constants';
-import { formatDateForQuery, getPriorityColor, getPriorityLabel } from '@/lib/utils';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { toast } from 'sonner';
-import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+    CheckSquare,
+    Calendar,
+    Sparkles,
+    Tag,
+    Zap,
+} from 'lucide-react';
+
+import { todoSchema } from '@/lib/zod/client/todo';
+import { formatDateForQuery, getPriorityColor, getPriorityLabel } from '@/lib/utils';
+
 import { useAddTodo } from '@/lib/Mutations/todos/useAddTodo';
 import { useUpdateTodo } from '@/lib/Mutations/todos/useUpdateTodo';
 import { useDeleteTodo } from '@/lib/Mutations/todos/useDeleteTodo';
+import { PRIORITY_EXPLANATIONS } from '@/lib/constants';
+
+import { NotificationSelect } from './FormElements/atoms/NotificationSelection';
+import { RepeatSelection } from './FormElements/atoms/RepeatSelection';
+import { TypeSelection } from './FormElements/atoms/TypeSelection';
+import { TagsInput } from './FormElements/atoms/TagsInput';
+import { CategorySelection } from './FormElements/atoms/CategorySelection';
+import { FormWrapper } from './FormElements/organisms/FormWrapper';
+import { DateRangePicker } from './FormElements/molecules/DatePicker';
+import { TimeInput } from './FormElements/atoms/TimeInput';
+import { PriorityMatrixSection } from './FormElements/atoms/PriortySelection';
+import { TitleInput } from './FormElements/atoms/TitleInput';
+
+import { FormActions } from './FormElements/organisms/FormActions';
+import { DeleteConfirmDialog } from './FormElements/organisms/DeleteConfirmDialog';
+import { PrivacyCard } from './FormElements/organisms/PrivacyCard';
 
 type TodoFormData = z.infer<typeof todoSchema>;
 
-const notificationOptions = [
-    { value: 'never', label: 'Never' },
-    { value: '0', label: 'At time' },
-    { value: '5', label: '5 minutes before' },
-    { value: '15', label: '15 minutes before' },
-    { value: '30', label: '30 minutes before' },
-    { value: '60', label: '1 hour before' },
-    { value: '120', label: '2 hours before' },
-    { value: '1440', label: '1 day before' }
-];
+interface TodoFormProps {
+    isOpen: boolean;
+    setIsOpen: () => void;
+    editingTodo?: TodoType | null;
+    userId: string;
+}
 
-const TodoForm = (
-    {
-        isOpen, setIsOpen, editingTodo = null, userId
-    }:
-        {
-            isOpen: boolean,
-            setIsOpen: () => void,
-            editingTodo?: TodoType | null
-            userId: string
-        }) => {
-
-    const { mutateAsync: addToDo } = useAddTodo(userId)
-    const { mutateAsync: updateTodo } = useUpdateTodo(userId)
+const TodoForm: React.FC<TodoFormProps> = ({
+    isOpen,
+    setIsOpen,
+    editingTodo = null,
+    userId
+}) => {
+    const { mutateAsync: addToDo } = useAddTodo(userId);
+    const { mutateAsync: updateTodo } = useUpdateTodo(userId);
     const { mutate: deleteTodo } = useDeleteTodo(userId);
 
     const [tagInput, setTagInput] = useState('');
     const [tagsList, setTagsList] = useState<string[]>(editingTodo?.tags || []);
     const [selectedContacts, setSelectedContacts] = useState<string[]>(editingTodo?.sharedWith || []);
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
 
-    // Set proper default values
+    const isEditing = Boolean(editingTodo);
+
+    // Enhanced default values function
     const getDefaultValues = () => ({
         title: editingTodo?.title || '',
         urgent: editingTodo?.urgent || 'Medium',
         importance: editingTodo?.importance || 'Medium',
-        deadline: editingTodo?.deadline || formatDateForQuery(new Date),
-        time: editingTodo?.time || null,
+        deadline: editingTodo?.deadline || formatDateForQuery(new Date()),
+        time: editingTodo?.time || '',
         notifyBefore: editingTodo?.notifyBefore || 'never',
         repeat: editingTodo?.repeat || 'never',
         category: editingTodo?.category || '',
         tags: editingTodo?.tags || [],
         visibility: editingTodo?.visibility || 'private',
         sharedWith: editingTodo?.sharedWith || [],
-        type: editingTodo?.type || 'event'
+        type: editingTodo?.type || 'task'
     });
 
     const {
-        register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isDirty },
         setValue,
         reset,
         watch,
@@ -95,9 +96,29 @@ const TodoForm = (
         defaultValues: getDefaultValues()
     });
 
-    const urgentValue = watch('urgent');
-    const importanceValue = watch('importance');
-    const visibility = watch('visibility');
+    const watchedValues = watch();
+    const { urgent: urgentValue, importance: importanceValue, visibility } = watchedValues;
+
+    const priorityInfo = useMemo(() => {
+        const priorityKey = `${importanceValue}-${urgentValue}` as keyof typeof PRIORITY_EXPLANATIONS;
+        return {
+            label: getPriorityLabel(urgentValue, importanceValue),
+            color: getPriorityColor(urgentValue, importanceValue),
+            explanation: PRIORITY_EXPLANATIONS[priorityKey] || 'Unknown priority level'
+        };
+    }, [urgentValue, importanceValue]);
+
+    // Reset form when dialog opens/closes
+    useEffect(() => {
+        if (isOpen) {
+            const defaults = getDefaultValues();
+            reset(defaults);
+            setTagsList(editingTodo?.tags || []);
+            setSelectedContacts(editingTodo?.sharedWith || []);
+        } else {
+            setDeleteConfirmOpen(false);
+        }
+    }, [isOpen, editingTodo, reset]);
 
     const onSubmit = async (data: TodoFormData) => {
         try {
@@ -109,18 +130,18 @@ const TodoForm = (
                 sharedWith: selectedContacts
             };
 
-            if (editingTodo) {
-                await updateTodo({ todoId: editingTodo.id, updates: submitData });
-                toast.success("Todo edited successfully")
+            if (isEditing) {
+                await updateTodo({ todoId: editingTodo!.id, updates: submitData });
+                toast.success("Todo updated successfully!");
             } else {
                 await addToDo(submitData);
-                toast.success("Todo added successfully.")
+                toast.success("Todo created successfully!");
             }
 
             handleClose();
         } catch (error) {
             console.error('Error saving todo:', error);
-            toast.error("Error creating todo. Please try again.")
+            toast.error(isEditing ? "Error updating todo. Please try again." : "Error creating todo. Please try again.");
         }
     };
 
@@ -129,398 +150,167 @@ const TodoForm = (
         setTagsList([]);
         setSelectedContacts([]);
         setTagInput('');
+        setDeleteConfirmOpen(false);
         setIsOpen();
     };
 
     const handleContactChange = (contact: string, checked: boolean) => {
-        let newContacts: string[];
-        if (checked) {
-            newContacts = [...selectedContacts, contact];
-        } else {
-            newContacts = selectedContacts.filter(c => c !== contact);
-        }
+        const newContacts = checked
+            ? [...selectedContacts, contact]
+            : selectedContacts.filter(c => c !== contact);
+
         setSelectedContacts(newContacts);
-        setValue("sharedWith", newContacts);
+        setValue("sharedWith", newContacts, { shouldDirty: true });
     };
 
-    const addTag = () => {
-        const trimmedTag = tagInput.trim().toLowerCase();
-        if (trimmedTag && !tagsList.includes(trimmedTag)) {
-            setTagsList(prev => [...prev, trimmedTag]);
-            setTagInput('');
+    const handleDelete = () => {
+        setDeleteConfirmOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (editingTodo) {
+            deleteTodo(editingTodo.id);
+            toast.success("Todo deleted successfully.");
+            handleClose();
         }
     };
 
-    const removeTag = (tagToRemove: string) => {
-        setTagsList(prev => prev.filter(tag => tag !== tagToRemove));
+    const cancelDelete = () => {
+        setDeleteConfirmOpen(false);
     };
-
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            addTag();
-        }
-    };
-
-    // Reset form when dialog opens/closes or editing todo changes
-    useEffect(() => {
-        if (isOpen) {
-            const defaults = getDefaultValues();
-            reset(defaults);
-            setTagsList(editingTodo?.tags || []);
-            setSelectedContacts(editingTodo?.sharedWith || []);
-        }
-    }, [isOpen, editingTodo, reset]);
 
     return (
         <Dialog open={isOpen} onOpenChange={handleClose}>
-            <DialogContent className="sm:max-w-[750px] max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        <CheckSquare className="h-5 w-5 text-primary" />
-                        {editingTodo ? 'Edit Todo' : 'Create New Todo'}
-                    </DialogTitle>
-                    <DialogDescription>
-                        Add a new task with priority levels, deadlines, and notifications using the Eisenhower Matrix approach.
-                    </DialogDescription>
-                </DialogHeader>
-
-                <form className="space-y-6 py-4" onSubmit={handleSubmit(onSubmit)}>
-
-                    {/* Title and Type */}
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                        <div className="space-y-2">
-                            <Label htmlFor="title" className="text-sm font-medium">
-                                Task Title *
-                            </Label>
-                            <Input
-                                id="title"
-                                {...register('title')}
-                                placeholder="What needs to be done?"
-                                className={errors.title ? 'border-destructive' : ''}
-                            />
-                            {errors.title && (
-                                <p className="text-sm text-destructive">{errors.title.message}</p>
-                            )}
-                        </div>
-                        <div className='space-y-2'>
-                            <Label className="text-sm font-medium">Type</Label>
-                            <Controller
-                                name="type"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger className={errors.type ? 'border-destructive' : ''}>
-                                            <SelectValue placeholder="Select Type" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="task">Task</SelectItem>
-                                            <SelectItem value="event">Event</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                )} />
-                            {errors.type && (
-                                <p className="text-xs text-destructive">{errors.type.message}</p>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Priority Matrix - Urgency and Importance */}
-                    <div className="space-y-4 p-4 bg-muted/30 rounded-lg border">
-                        <div className="flex items-center gap-2 mb-2">
-                            <h3 className="text-sm font-medium">Priority Matrix</h3>
-                            <Badge className={getPriorityColor(urgentValue, importanceValue)}>
-                                {getPriorityLabel(urgentValue, importanceValue)}
-                            </Badge>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label className="text-sm font-medium">Urgency *</Label>
-                                <Controller
-                                    name="urgent"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger className={errors.urgent ? 'border-destructive' : ''}>
-                                                <SelectValue placeholder="Select urgency" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="High">🔴 High - Needs immediate attention</SelectItem>
-                                                <SelectItem value="Medium">🟡 Medium - Can wait a bit</SelectItem>
-                                                <SelectItem value="Low">🟢 Low - Not time-sensitive</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    )} />
-                                {errors.urgent && (
-                                    <p className="text-xs text-destructive">{errors.urgent.message}</p>
-                                )}
-                            </div>
-
-                            <div className="space-y-2">
-                                <Label className="text-sm font-medium">Importance *</Label>
-                                <Controller
-                                    name="importance"
-                                    control={control}
-                                    render={({ field }) => (
-                                        <Select onValueChange={field.onChange} value={field.value}>
-                                            <SelectTrigger className={errors.importance ? 'border-destructive' : ''}>
-                                                <SelectValue placeholder="Select importance" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="High">⭐ High - Critical</SelectItem>
-                                                <SelectItem value="Medium">📝 Medium - Somewhat important</SelectItem>
-                                                <SelectItem value="Low">📄 Low - Nice to have</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    )} />
-                                {errors.importance && (
-                                    <p className="text-xs text-destructive">{errors.importance.message}</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Date and Time */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="deadline" className="text-sm font-medium flex items-center gap-1">
-                                <Calendar className="h-4 w-4 text-primary" />
-                                Deadline *
-                            </Label>
-                            <Input
-                                id="deadline"
-                                type="date"
-                                {...register('deadline')}
-                                className={errors.deadline ? 'border-destructive' : ''}
-                                min={new Date().toISOString().split('T')[0]}
-                            />
-                            {errors.deadline && (
-                                <p className="text-xs text-destructive">{errors.deadline.message}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2">
-                            <Label htmlFor="time" className="text-sm font-medium flex items-center gap-1">
-                                <Clock className="h-4 w-4 text-primary" />
-                                Time (Optional)
-                            </Label>
-                            <Input
-                                id="time"
-                                type="time"
-                                {...register('time')}
-                                className={errors.time ? 'border-destructive' : ''}
-                            />
-                            {errors.time && (
-                                <p className="text-xs text-destructive">{errors.time.message}</p>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Notification, Repeat, Categories, Tags */}
-                    <div className="w-full flex flex-wrap gap-4">
-                        <div className="space-y-2 flex-1">
-                            <Label className="text-sm font-medium flex items-center gap-1">
-                                <Bell className="h-4 w-4 text-primary" />
-                                Notify Before
-                            </Label>
-                            <Controller
-                                name="notifyBefore"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger className={errors.notifyBefore ? 'border-destructive' : ''}>
-                                            <SelectValue placeholder="Select notification time" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {notificationOptions.map(option => (
-                                                <SelectItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errors.notifyBefore && (
-                                <p className="text-xs text-destructive">{errors.notifyBefore.message}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2 flex-1">
-                            <Label className="text-sm font-medium">Repeat</Label>
-                            <Controller
-                                name="repeat"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="Select repeat option" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="never">Never</SelectItem>
-                                            <SelectItem value="daily">Daily</SelectItem>
-                                            <SelectItem value="weekly">Weekly</SelectItem>
-                                            <SelectItem value="monthly">Monthly</SelectItem>
-                                            <SelectItem value="yearly">Yearly</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                        </div>
-
-                        <div className='space-y-2 flex-1'>
-                            <Label className="text-sm font-medium">Category *</Label>
-                            <Controller
-                                name="category"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger className={errors.category ? "border-destructive" : ""}>
-                                            <SelectValue placeholder="Select a category" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {categories.map((category) => (
-                                                <SelectItem key={category} value={category}>
-                                                    {category}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errors.category && (
-                                <p className="text-destructive text-sm mt-1">{errors.category.message}</p>
-                            )}
-                        </div>
-
-                        <div className="space-y-2 flex-2 max-w-max">
-                            <Label className="text-sm font-medium">Tags (Optional)</Label>
-                            <div className="flex gap-2">
-                                <Input
-                                    value={tagInput}
-                                    onChange={(e) => setTagInput(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Add a tag and press Enter"
-                                    className="flex-1"
-                                />
-                                <Button type="button" onClick={addTag} size="sm" variant="outline">
-                                    <Plus className="h-4 w-4" />
-                                </Button>
-                            </div>
-                            {tagsList.length > 0 && (
-                                <div className="flex flex-wrap gap-2 mt-2 p-2 bg-muted/20 rounded-md">
-                                    {tagsList.map(tag => (
-                                        <Badge key={tag} variant="secondary" className="flex items-center gap-1">
-                                            {tag}
-                                            <button onClick={() => removeTag(tag)} className='p-0 cursor-pointer hover:text-destructive transition-colors'>
-                                                <X
-                                                    className="h-3 w-3 "
-
-                                                />
-                                            </button>
-                                        </Badge>
-                                    ))}
+            <DialogContent className="min-w-4/5 lg:min-w-2/3 max-h-[90vh] overflow-y-auto px-2 md:p-4">
+                <FormWrapper
+                    variant="dialog"
+                    title={isEditing ? 'Edit Todo' : 'Create New Todo'}
+                    icon={CheckSquare}
+                    description={isEditing
+                        ? 'Update your task details and priorities.'
+                        : 'Add a new task with priority levels, deadlines, and notifications.'
+                    }>
+                    <form className="space-y-8 py-3 md:py-6" onSubmit={handleSubmit(onSubmit)}>
+                        {/* Basic Information */}
+                        <FormWrapper title='Basic Information' icon={Sparkles} variant="element">
+                            <div className="flex flex-col md:flex-row gap-4">
+                                {/* Title */}
+                                <div className='flex-1 md:flex-2'>
+                                    <TitleInput<TodoFormData>
+                                        control={control}
+                                        errors={errors}
+                                        name="title"
+                                        label="Task Title"
+                                        placeholder="e.g., Schedule dentist appointment, Submit report, Call mom"
+                                    />
                                 </div>
-                            )}
-                        </div>
-                    </div>
+                                <div className='md:flex-1'>
+                                    {/* Type */}
+                                    <TypeSelection
+                                        control={control}
+                                        name="type"
+                                        errors={errors} />
+                                </div>
+                            </div>
 
-                    {/* Visibility Settings */}
-                    <div className="space-y-3 p-4 bg-muted/30 rounded-lg border">
-                        <Label className="text-sm font-medium">Visibility Settings</Label>
-                        <Controller
-                            name="visibility"
+                            {/* Category */}
+                            <CategorySelection<TodoFormData>
+                                control={control}
+                                controlName="category"
+                                errors={errors}
+                            />
+                        </FormWrapper>
+
+                        {/* Priority Matrix */}
+                        <FormWrapper title="Priority Matrix" icon={Zap} variant="element">
+                            <Badge className={priorityInfo.color} variant="secondary" >
+                                {priorityInfo.label}
+                            </Badge>
+                            <PriorityMatrixSection<TodoFormData>
+                                control={control}
+                                errors={errors}
+                                urgencyName="urgent"
+                                importanceName="importance"
+                            />
+                            <Alert className={priorityInfo.color}>
+                                <AlertDescription className={priorityInfo.color}>
+                                    <strong>Current Priority:</strong> {priorityInfo.explanation}
+                                </AlertDescription>
+                            </Alert>
+                        </FormWrapper>
+
+                        {/* Schedule & Timing */}
+                        <FormWrapper title="Schedule & Timing" icon={Calendar} variant="element">
+                            {/* Date and Time */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <DateRangePicker<TodoFormData>
+                                    control={control}
+                                    startName='deadline'
+                                    errors={errors}
+                                    type="todo"
+                                />
+                                <TimeInput<TodoFormData>
+                                    control={control}
+                                    controlName="time"
+                                    errors={errors}
+                                />
+                            </div>
+
+                            {/* Notifications and Repeat */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <NotificationSelect<TodoFormData>
+                                    control={control}
+                                    errors={errors}
+                                    name="notifyBefore"
+                                />
+
+                                <RepeatSelection
+                                    control={control}
+                                    name="repeat"
+                                />
+                            </div>
+                        </FormWrapper>
+
+                        {/* Tags & Organization */}
+                        <FormWrapper title="Tags & Organization" icon={Tag} variant="element">
+                            <TagsInput<TodoFormData>
+                                control={control}
+                                errors={errors}
+                                name="tags"
+                                setValue={setValue}
+                            />
+                        </FormWrapper>
+
+                        {/* Privacy & Sharing */}
+                        <PrivacyCard<TodoFormData>
+                            userId={userId}
                             control={control}
-                            render={({ field }) => (
-                                <RadioGroup
-                                    onValueChange={field.onChange}
-                                    value={field.value}
-                                    className="space-y-2"
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="private" id="private" className='border-foreground/70' />
-                                        <Label htmlFor="private" className="flex items-center gap-2 cursor-pointer">
-                                            <EyeOff className="h-4 w-4" />
-                                            Private - Only I can see this todo
-                                        </Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="public" id="public" className='border-foreground/70' />
-                                        <Label htmlFor="public" className="flex items-center gap-2 cursor-pointer">
-                                            <Eye className="h-4 w-4" />
-                                            Public - Others can view my progress
-                                        </Label>
-                                    </div>
-                                </RadioGroup>
-                            )}
+                            visibility={visibility}
+                            visibilityName='visibility'
+                            selectedContacts={selectedContacts}
+                            handleContactChange={handleContactChange}
                         />
 
-                        {/* Share With Contacts */}
-                        {visibility === "public" && (
-                            <div className="mt-4 space-y-3">
-                                <div>
-                                    <Label className="text-sm font-medium">Share with specific people</Label>
-                                    <p className="text-sm text-muted-foreground">
-                                        Choose people who can view and encourage your progress
-                                    </p>
-                                </div>
-                                <div className="space-y-2 max-h-32 overflow-y-auto border rounded-md p-3 bg-background">
-                                    {contacts.map((contact) => (
-                                        <div key={contact} className="flex items-center space-x-2">
-                                            <Checkbox
-                                                id={contact}
-                                                checked={selectedContacts.includes(contact)}
-                                                onCheckedChange={(checked) => handleContactChange(contact, checked as boolean)}
-                                                className='border-foreground'
-                                            />
-                                            <Label htmlFor={contact} className="text-sm font-normal cursor-pointer">
-                                                {contact}
-                                            </Label>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
+                        {/* Footer Actions */}
 
-                    <DialogFooter className="flex flex-col sm:flex-row gap-2 sm:justify-between">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={handleClose}
-                            className="order-1 sm:order-none"
-                        >
-                            Cancel
-                        </Button>
+                        <FormActions
+                            isSubmitting={isSubmitting}
+                            submitLabel="Save Task"
+                            onCancel={() => isOpen}
+                            onDelete={handleDelete}
+                            showDelete={!!editingTodo}
+                        />
 
-                        <div className="flex gap-2 order-2 sm:order-none">
-                            {editingTodo && (
-                                <Button
-                                    type="button"
-                                    variant="destructive"
-                                    onClick={() => {
-                                        deleteTodo(editingTodo.id);
-                                        handleClose();
-                                    }}
-                                >
-                                    Delete
-                                </Button>
-                            )}
+                        <DeleteConfirmDialog
+                            open={deleteConfirmOpen}
+                            onClose={cancelDelete}
+                            onConfirm={confirmDelete}
+                            title="Delete this task?"
+                            description="This will permanently remove your task from the system."
+                        />
 
-                            <Button
-                                type='submit'
-                                disabled={isSubmitting}
-                                className="min-w-[120px]"
-                            >
-                                {isSubmitting
-                                    ? (editingTodo ? 'Updating...' : 'Creating...')
-                                    : (editingTodo ? 'Update Todo' : 'Create Todo')
-                                }
-                            </Button>
-                        </div>
-                    </DialogFooter>
-                </form>
+                    </form>
+                </FormWrapper>
             </DialogContent>
         </Dialog>
     );

@@ -13,8 +13,10 @@ export const habitSchema = z.object({
         .optional(),
     allowSkip: z.boolean(),
     category: z.string().min(1, "Category is required"),
+    startDate: z.string().optional(),
     endDate: z.string().optional(),
     sharedWith: z.array(z.string()).optional(),
+    reminderTimes: z.array(z.string()).optional(),
     visibility: z.enum(["public", "private"]),
     weeklyFrequency: z.number().max(7),
     selectedDays: z.array(z.string())

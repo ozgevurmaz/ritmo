@@ -7,10 +7,10 @@ import { CheckSquare, RotateCcw, Columns, Rows } from "lucide-react";
 import React, { useState } from "react";
 import { CustomProgress } from "@/components/custom/customProgress";
 import TodosChecklist from "./todosCheckbox";
-import HabitsCheckbox from "./habitsCheckbox";
 import { useToggleTodo } from "@/lib/Mutations/todos/useToggleTodo";
 import { useUpdateHabitProgress } from "@/lib/Mutations/habits/useUpdateHabitProgress";
 import { useGoals } from "@/lib/Queries/goals/useGoal";
+import { SimpleHabitsCards } from "../Forms/FormElements/molecules/SimpleHabitsCards";
 
 interface DailyCardProps {
     className?: string
@@ -116,12 +116,15 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                         </h3>
                         <div className="space-y-2 flex-1 overflow-y-auto">
                             {habits.map((habit) => (
-                                <HabitsCheckbox
+                                <SimpleHabitsCards
                                     key={habit.id}
                                     habit={habit}
+                                    showGoal={true}
                                     decrementHabit={() => decrementHabit(habit.id)}
                                     incrementHabit={() => incrementHabit(habit.id)}
-                                    goal={goals?.find(g => g.id === habit.goal)?.title} />
+                                    goal={goals?.find(g => g.id === habit.goal)?.title}
+                                    border={false}
+                                    />
                             ))}
                         </div>
                     </div>

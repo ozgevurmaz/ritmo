@@ -11,4 +11,5 @@ interface GoalType {
     sharedWith?: string[]
     visibility: "public" | "private"
     category: string
+    slug: string
 }

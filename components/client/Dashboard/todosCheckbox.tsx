@@ -31,7 +31,7 @@ export default function TodosChecklist({ todo, toggleTodo, userId }: TodosCheckl
             >
                 <Checkbox
                     checked={todo.completed}
-                    className="mt-0.5 border-foreground cursor-pointer data-[state=checked]:bg-todos data-[state=checked]:border-todos shrink-0"
+                    className="mt-0.5 border-foreground cursor-pointer shrink-0"
                     onClick={() => { toggleTodo() }}
                 />
 
@@ -87,7 +87,7 @@ export default function TodosChecklist({ todo, toggleTodo, userId }: TodosCheckl
                         disabled={todo.completed}
                         variant="ghost"
                         size="sm"
-                        className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-muted hover:text-foreground disabled:opacity-0"
+                        className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity text-foreground hover:bg-muted hover:text-todos disabled:opacity-0"
                         aria-label={`Edit ${todo.title}`}
                     >
                         <Edit className="h-4 w-4" />

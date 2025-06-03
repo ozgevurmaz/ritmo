@@ -4,7 +4,6 @@ import DailyCard from "@/components/client/Dashboard/DailyCard";
 import GoalsInfoCard from "@/components/client/Dashboard/goalsInfoCard";
 import StatisticsCard from "@/components/client/Dashboard/statisticsCard";
 import WelcomeCard from "@/components/client/Dashboard/WelcomeCard";
-import GoalForm from "@/components/client/Forms/goalForm";
 import HabitsForm from "@/components/client/Forms/habitForm";
 import TodoForm from "@/components/client/Forms/todoForm";
 import { useDailyTodos } from "@/lib/Queries/todos/useDailyTodo";
@@ -22,7 +21,6 @@ export default function Home() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isTodoFormOpen, setTodoFormOpen] = useState<boolean>(false)
   const [isHabitFormOpen, setHabitFormOpen] = useState<boolean>(false)
-  const [isGoalFormOpen, setGoalFormOpen] = useState<boolean>(false)
 
   const { data: todos, isLoading: todosLoading } = useDailyTodos({ userId: profile?.id || "", date: formatDateForQuery(currentDate) });
 
@@ -68,12 +66,6 @@ export default function Home() {
       <HabitsForm
         isOpen={isHabitFormOpen}
         setIsOpen={() => setHabitFormOpen(false)}
-        userId={profile.id}
-      />
-
-      <GoalForm
-        isOpen={isGoalFormOpen}
-        setIsOpen={() => setGoalFormOpen(false)}
         userId={profile.id}
       />
 

@@ -7,12 +7,13 @@ export const useAddHabit = (userId: string) => {
     const queryClient = useQueryClient();
 
     return useMutation({
-        mutationFn: async (habit: Omit<HabitType, "id" | "created_at" | "weeklyComplated" | "completed">) => {
+        mutationFn: async (habit: Omit<HabitType, "id" | "created_at" | "weeklyComplated" | "completedToday" | "streak">) => {
             const { data, error } = await supabase.from("habits").insert({
                 ...habit,
                 user_id: userId,
                 completedToday: 0,
-                weeklyComplated: 0
+                weeklyComplated: 0,
+                streak: 0
             });
 
             if (error) throw new Error(error.message);

@@ -72,3 +72,12 @@ export const formatDate = (
 };
 
 export const formatDateForQuery = (date: Date) => date.toISOString().split("T")[0];
+
+export const slugify = (text: string) =>
+  text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')     
+    .replace(/[^\w\-]+/g, '')   
+    .replace(/\-\-+/g, '-');

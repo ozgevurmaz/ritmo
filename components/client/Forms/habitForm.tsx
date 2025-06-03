@@ -1,66 +1,76 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogFooter
 } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue
-} from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { Calendar, Target, Plus, X, Clock, Link, EyeOff, Eye } from 'lucide-react';
+    Calendar,
+    Target,
+    Clock,
+    Sparkles,
+    WandSparkles
+} from 'lucide-react';
 import { habitSchema } from '@/lib/zod/client/habit';
-import { categories, contacts } from '@/lib/constants';
 import { toast } from 'sonner';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useAddHabit } from '@/lib/Mutations/habits/useAddHabit';
 import { useDeleteHabit } from '@/lib/Mutations/habits/useDeleteHabit';
 import { useUpdateHabit } from '@/lib/Mutations/habits/useUpdateHabit';
-import { useGoals } from '@/lib/Queries/goals/useGoal';
+import { formatDateForQuery } from '@/lib/utils';
+import { PrivacyCard } from './FormElements/organisms/PrivacyCard';
+import { CategorySelection } from './FormElements/atoms/CategorySelection';
+import { FormWrapper } from './FormElements/organisms/FormWrapper';
+import { DateRangePicker } from './FormElements/molecules/DatePicker';
+import { TextAreaInput } from './FormElements/atoms/TextAreaInput';
+import { TitleInput } from './FormElements/atoms/TitleInput';
+import { FormActions } from './FormElements/organisms/FormActions';
+import { DeleteConfirmDialog } from './FormElements/organisms/DeleteConfirmDialog';
+import { RelatedGoalSelection } from './FormElements/atoms/RelatedGoalSelection';
+import { FrequencyInput } from './FormElements/atoms/FrequencyInput';
+import { WeeklyDaySelector } from './FormElements/molecules/WeeklyDaySelector';
+import { ReminderTimeInput } from './FormElements/atoms/ReminderTimes';
+import { CheckboxCard } from './FormElements/organisms/CheckedBoxCard';
 
 type HabitFormData = z.infer<typeof habitSchema>;
 
-const HabitsForm = ({
+interface HabitsFormProps {
+    isOpen: boolean;
+    setIsOpen: () => void;
+    editingHabit?: HabitType | HabitFormValues | null;
+    userId: string;
+    fromGoal?: boolean;
+    setGoalHabits?: (habitData: any) => void;
+    goalTitle?: string
+}
+
+const HabitsForm: React.FC<HabitsFormProps> = ({
     isOpen,
     setIsOpen,
     editingHabit = null,
-    userId
-}: {
-    isOpen: boolean,
-    setIsOpen: () => void,
-    editingHabit?: HabitType | null,
-    userId: string
+    userId,
+    fromGoal = false,
+    setGoalHabits,
+    goalTitle
 }) => {
-    const { mutateAsync: addHabit } = useAddHabit(userId)
-    const { mutateAsync: updateHabit } = useUpdateHabit(userId)
-    const { mutate: deleteHabit } = useDeleteHabit(userId)
-    const { data: goals } = useGoals(userId)
+    const { mutateAsync: addHabit } = useAddHabit(userId);
+    const { mutateAsync: updateHabit } = useUpdateHabit(userId);
+    const { mutate: deleteHabit } = useDeleteHabit(userId);
 
     const [timeInput, setTimeInput] = useState('');
     const [timesList, setTimesList] = useState<string[]>(editingHabit?.reminderTimes || []);
+    const [selectedContacts, setSelectedContacts] = useState<string[]>(editingHabit?.sharedWith || []);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-    const [selectedContacts, setSelectedContacts] = useState<string[]>([]);
+
+    const isEditing = Boolean(editingHabit);
 
     const {
-        register,
         handleSubmit,
-        formState: { errors, isSubmitting },
+        formState: { errors, isSubmitting, isDirty },
         setValue,
         reset,
         watch,
@@ -74,6 +84,7 @@ const HabitsForm = ({
             customMessage: editingHabit?.customMessage || '',
             allowSkip: editingHabit?.allowSkip || false,
             category: editingHabit?.category || '',
+            startDate: editingHabit?.startDate || formatDateForQuery(new Date()),
             endDate: editingHabit?.endDate || '',
             visibility: editingHabit?.visibility || 'private',
             sharedWith: editingHabit?.sharedWith || [],
@@ -82,70 +93,106 @@ const HabitsForm = ({
         }
     });
 
-    const selectedGoal = watch('goal');
-    const frequencyPerDay = watch('frequencyPerDay');
-    const visibility = watch('visibility')
-    const weeklyFrequency = watch('weeklyFrequency')
-    const selectedDats = watch('selectedDays')
+    const watchedValues = watch();
+    const { frequencyPerDay, visibility, weeklyFrequency, selectedDays, goal: selectedGoal } = watchedValues;
+
+    // Validation for selected days
+    const isDaySelectionValid = useMemo(() => {
+        if (weeklyFrequency === 7) return true;
+        return selectedDays.length === weeklyFrequency;
+    }, [weeklyFrequency, selectedDays]);
+
+    useEffect(() => {
+        if (isOpen && editingHabit) {
+            reset({
+                title: editingHabit.title || '',
+                goal: editingHabit.goal || null,
+                frequencyPerDay: editingHabit.frequencyPerDay || 1,
+                customMessage: editingHabit.customMessage || '',
+                allowSkip: editingHabit.allowSkip || false,
+                category: editingHabit.category || '',
+                startDate: editingHabit.startDate || formatDateForQuery(new Date()),
+                endDate: editingHabit.endDate || '',
+                visibility: editingHabit.visibility || 'private',
+                sharedWith: editingHabit.sharedWith || [],
+                weeklyFrequency: editingHabit.weeklyFrequency || 7,
+                selectedDays: editingHabit.selectedDays || [],
+            });
+
+            setTimesList(editingHabit.reminderTimes || []);
+            setSelectedContacts(editingHabit.sharedWith || []);
+        }
+    }, [editingHabit, isOpen, reset]);
 
     const onSubmit = async (data: HabitFormData) => {
-        console.log(data)
+        if (!isDaySelectionValid) {
+            toast.error(`Please select exactly ${weeklyFrequency} days for your habit.`);
+            return;
+        }
+
         try {
+            const habitData = {
+                ...data,
+                reminderTimes: timesList,
+                customMessage: data.customMessage || '',
+                startDate: data.startDate ? formatDateForQuery(new Date(data.startDate)) : formatDateForQuery(new Date()),
+                endDate: data.endDate ? formatDateForQuery(new Date(data.endDate)) : null,
+                sharedWith: selectedContacts
+            };
 
-            if (editingHabit) {
-
-                const updated = {
-                    ...data,
-                    reminderTimes: timesList,
-                    completedToday: 0,
-                    streak: 0,
-                    customMessage: data.customMessage || '',
-                    endDate: data.endDate ? new Date(data.endDate).toISOString() : null
-                }
-
-                await updateHabit({ habitId: editingHabit.id, updates: updated })
-                toast.success("Habit edited successfully.")
-
-            } else {
-                await addHabit({
-                    ...data,
-                    reminderTimes: timesList,
-                    completedToday: 0,
-                    streak: 0,
-                    customMessage: data.customMessage || '',
-                    endDate: data.endDate ? new Date(data.endDate).toISOString() : null
-                })
-                toast.success("Habit added successfully.")
+            if (fromGoal && setGoalHabits) {
+                setGoalHabits(habitData);
+                handleClose();
+                return;
             }
 
-            // Reset form
-            reset();
-            setTimesList([]);
-            setIsOpen();
+            if (isEditing) {
+                await updateHabit({ habitId: editingHabit!.id, updates: habitData });
+                toast.success("Habit updated successfully!");
+            } else {
+                await addHabit(habitData);
+                toast.success("Habit created successfully!");
+            }
+
+            handleClose();
         } catch (error) {
-            console.error('Error creating habit:', error);
-            toast.error("Error creating habit. Please try again.")
+            console.error('Error saving habit:', error);
+            toast.error(isEditing ? "Error updating habit. Please try again." : "Error creating habit. Please try again.");
         }
+    };
+
+    const handleClose = () => {
+        reset();
+        setTimesList([]);
+        setSelectedContacts([]);
+        setShowDeleteConfirm(false);
+        setIsOpen();
     };
 
     const handleContactChange = (contact: string, checked: boolean) => {
-        let newContacts: string[];
-        if (checked) {
-            newContacts = [...selectedContacts, contact];
-        } else {
-            newContacts = selectedContacts.filter(c => c !== contact);
-        }
+        const newContacts = checked
+            ? [...selectedContacts, contact]
+            : selectedContacts.filter(c => c !== contact);
+
         setSelectedContacts(newContacts);
-        setValue("sharedWith", newContacts);
+        setValue("sharedWith", newContacts, { shouldDirty: true });
     };
 
     const addTime = () => {
-        if (timeInput && !timesList.includes(timeInput)) {
-            if (timesList.length < frequencyPerDay) {
-                setTimesList(prev => [...prev, timeInput]);
-                setTimeInput('');
-            }
+        if (!timeInput) return;
+
+        if (timesList.includes(timeInput)) {
+            toast.error("This time is already added.");
+            return;
         }
+
+        if (timesList.length >= frequencyPerDay) {
+            toast.error(`You can only add ${frequencyPerDay} reminder times.`);
+            return;
+        }
+
+        setTimesList(prev => [...prev, timeInput].sort());
+        setTimeInput('');
     };
 
     const removeTime = (timeToRemove: string) => {
@@ -159,354 +206,174 @@ const HabitsForm = ({
         }
     };
 
+    const handleDelete = () => {
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = () => {
+        if (editingHabit) {
+            deleteHabit(editingHabit.id);
+            toast.success("Habit deleted successfully.");
+            handleClose();
+        }
+    };
+
+    const cancelDelete = () => {
+        setShowDeleteConfirm(false);
+    };
+
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent className="sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle className="flex items-center gap-2">
-                        <Target className="h-5 w-5" />
-                        Create New Habit
-                    </DialogTitle>
-                    <DialogDescription>
-                        Build a new habit that will help you achieve your goals. Start small and be consistent.
-                    </DialogDescription>
-                </DialogHeader>
-
-                <form className="space-y-6 py-4" onSubmit={handleSubmit(onSubmit)}>
-                    {/* Habit Title */}
-                    <div className="space-y-2">
-                        <Label htmlFor="title" className="text-sm font-medium">
-                            Habit Title *
-                        </Label>
-                        <Input
-                            id="title"
-                            {...register('title')}
-                            placeholder="e.g., Morning Exercise, Read for 30 minutes, Meditate"
-                            className={errors.title ? 'border-destructive' : ''}
-                        />
-                        {errors.title && (
-                            <p className="text-sm text-destructive">{errors.title.message}</p>
-                        )}
-                    </div>
-
-                    {/* Link to Goal */}
-                    <div className="space-y-2">
-                        <Label className="text-sm font-medium">Link to Goal (Optional)</Label>
-                        <Select onValueChange={(value) => setValue('goal', value === 'none' ? null : value)}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a goal to link this habit" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="none">No Goal</SelectItem>
-                                {goals?.map(goal => (
-                                    <SelectItem key={goal.id} value={goal.id}>
-                                        <div className="flex items-center gap-2">
-                                            <span>{goal.title}</span>
-                                            <Badge variant="outline" className="text-xs">
-                                                {goal.category}
-                                            </Badge>
-                                        </div>
-                                    </SelectItem>
-                                ))}
-                            </SelectContent>
-                        </Select>
-                        {selectedGoal && selectedGoal !== 'none' && (
-                            <div className="p-3 bg-success/20 rounded-lg border border-success">
-                                <p className="text-sm text-success flex gap-1">
-                                    <Link className='w-4 h-4' /> Linked to: <strong>{goals?.find(g => g.id === selectedGoal)?.title}</strong>
-                                </p>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Frequency and Category */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="frequency" className="text-sm font-medium">
-                                Frequency per Day *
-                            </Label>
-                            <Input
-                                id="frequency"
-                                type="number"
-                                min="1"
-                                max="20"
-                                {...register('frequencyPerDay', { valueAsNumber: true })}
-                                className={errors.frequencyPerDay ? 'border-destructive' : ''}
-                            />
-                            {errors.frequencyPerDay && (
-                                <p className="text-xs text-destructive">{errors.frequencyPerDay.message}</p>
-                            )}
-                            <p className="text-xs text-muted-foreground">How many times per day?</p>
-                        </div>
-
-                        {/* Category Selection */}
-                        <div>
-                            <Label>Category *</Label>
-                            <Controller
-                                name="category"
-                                control={control}
-                                render={({ field }) => (
-                                    <Select onValueChange={field.onChange} value={field.value}>
-                                        <SelectTrigger className={errors.category ? "border-destructive" : ""}>
-                                            <SelectValue placeholder="Select a category" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {categories.map((category) => (
-                                                <SelectItem key={category} value={category}>
-                                                    {category}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                )}
-                            />
-                            {errors.category && (
-                                <p className="text-destructive text-sm mt-1">{errors.category.message}</p>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className='grid grid-cols-2 gap-4"'>
-                        {/* Weekly Frequency */}
-                        <div className="space-y-2">
-                            <Label htmlFor="weeklyFrequency" className="text-sm font-medium">
-                                Weekly Frequency *
-                            </Label>
-                            <Input
-                                id="weeklyFrequency"
-                                type="number"
-                                min="1"
-                                max="7"
-                                {...register("weeklyFrequency", { valueAsNumber: true })}
-                                className={errors.weeklyFrequency ? 'border-destructive' : ''}
-                            />
-                            {errors.weeklyFrequency && (
-                                <p className="text-xs text-destructive">{errors.weeklyFrequency.message}</p>
-                            )}
-                            <p className="text-xs text-muted-foreground">How many days a week should this habit be done?</p>
-                        </div>
-
-                        {/* Selected Days */}
-                        {weeklyFrequency < 7 &&
-                            <div className="space-y-2">
-                                <Label className="text-sm font-medium">Select Days</Label>
-                                <div className="flex flex-wrap gap-2 px-4">
-                                    {["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"].map(day => (
-                                        <div key={day} className="flex items-center space-x-2">
-                                            <Checkbox
-                                                id={day}
-                                                checked={watch("selectedDays").includes(day)}
-                                                onCheckedChange={(checked) => {
-                                                    const current = watch("selectedDays");
-                                                    const updated = checked
-                                                        ? [...current, day]
-                                                        : current.filter(d => d !== day);
-                                                    setValue("selectedDays", updated);
-                                                }}
-                                                className='border-foreground'
-                                            />
-                                            <Label htmlFor={day}>{day}</Label>
-                                        </div>
-                                    ))}
+        <Dialog open={isOpen} onOpenChange={handleClose}>
+            <DialogContent className="min-w-4/5 lg:min-w-2/3 max-h-[90vh] overflow-y-auto">
+                <FormWrapper
+                    variant="dialog"
+                    title={isEditing ? 'Edit Habit' : 'Create New Habit'}
+                    icon={Target}
+                    description={isEditing
+                        ? 'Update your habit details to better align with your goals.'
+                        : 'Build a new habit that will help you achieve your goals. Start small and be consistent.'
+                    }
+                >
+                    <form className="space-y-8 py-6" onSubmit={handleSubmit(onSubmit)}>
+                        {/* Basic Information */}
+                        <FormWrapper title='Basic Information' icon={Sparkles} variant="element">
+                            {/* Habit Title */}
+                            <div className='flex flex-wrap gap-4'>
+                                <div className='flex-2'>
+                                    <TitleInput<HabitFormData>
+                                        control={control}
+                                        errors={errors}
+                                        name="title"
+                                        label="Habit Title"
+                                        placeholder="e.g., Drink 2L water, Meditate 10 mins, Read 10 pages"
+                                    />
                                 </div>
+
+                                {/* Category */}
+                                <CategorySelection<HabitFormData>
+                                    control={control}
+                                    controlName="category"
+                                    errors={errors}
+                                />
                             </div>
-                        }
-                    </div>
 
-                    {/* End Date */}
-                    <div className="space-y-2">
-                        <Label htmlFor="endDate" className="text-sm font-medium flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            End Date
-                        </Label>
-                        <Input
-                            id="endDate"
-                            type="date"
-                            {...register('endDate')}
-                            className={errors.endDate ? 'border-destructive' : ''}
-                            min={new Date().toISOString().split('T')[0]}
-                        />
-                        {errors.endDate && (
-                            <p className="text-xs text-destructive">{errors.endDate.message}</p>
-                        )}
-                        <p className="text-xs text-muted">Set a target end date for this habit</p>
-                    </div>
-
-                    {/* Reminder Times */}
-                    <div className="space-y-2">
-                        <Label className="text-sm font-medium flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            Reminder Times (Optional)
-                        </Label>
-                        <div className="flex gap-2">
-                            <Input
-                                type="time"
-                                value={timeInput}
-                                onChange={(e) => setTimeInput(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                placeholder="Set reminder time"
-                                disabled={timesList.length >= frequencyPerDay}
+                            {/* Link to Goal */}
+                            <RelatedGoalSelection<HabitFormData>
+                                control={control}
+                                setValue={setValue}
+                                name="goal"
+                                userId={userId}
+                                goalTitle={goalTitle}
                             />
-                            <Button
-                                type="button"
-                                onClick={addTime}
-                                size="sm"
-                                variant="outline"
-                                disabled={!timeInput || timesList.length >= frequencyPerDay}
-                            >
-                                <Plus className="h-4 w-4" />
-                            </Button>
-                        </div>
 
-                        {timesList.length > 0 && (
-                            <div className="flex flex-wrap gap-2 mt-2">
-                                {timesList.map(time => (
-                                    <Badge key={time} variant="outline" className="flex items-center gap-1">
-                                        <Clock className="h-3 w-3" />
-                                        {time}
-                                        <X
-                                            className="h-3 w-3 cursor-pointer hover:text-destructive"
-                                            onClick={() => removeTime(time)}
-                                        />
-                                    </Badge>
-                                ))}
+                        </FormWrapper>
+
+                        {/* Frequency Settings */}
+                        <FormWrapper title='Frequency Settings' icon={Calendar} variant="element">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <FrequencyInput<HabitFormData>
+                                    control={control}
+                                    errors={errors}
+                                    name="frequencyPerDay"
+                                    label="Times per Day"
+                                    max={20}
+                                    helperText="How many times per day?"
+                                />
+
+                                <FrequencyInput<HabitFormData>
+                                    control={control}
+                                    errors={errors}
+                                    name="weeklyFrequency"
+                                    label="Days per Week"
+                                    min={1}
+                                    max={7}
+                                    helperText="How many days a week?"
+                                />
                             </div>
-                        )}
 
-                        <p className="text-xs text-muted">
-                            {timesList.length}/{frequencyPerDay} reminder times set
-                        </p>
-                    </div>
-
-
-                    {/* Custom Message */}
-                    <div className="space-y-2">
-                        <Label htmlFor="customMessage" className="text-sm font-medium">
-                            Custom Motivation Message (Optional)
-                        </Label>
-                        <input
-                            id="customMessage"
-                            {...register('customMessage')}
-                            placeholder="e.g., 'Every step counts!', 'You're building a better you!', 'Consistency is key!'"
-                            className={errors.customMessage ? 'border-destructive' : ''}
-                        />
-                        {errors.customMessage && (
-                            <p className="text-xs text-destructive">{errors.customMessage.message}</p>
-                        )}
-                        <p className="text-xs text-muted">A personal message to motivate you</p>
-                    </div>
-
-                    {/* Visibility Settings */}
-                    <div>
-                        <Label>Visibility</Label>
-                        <Controller
-                            name="visibility"
-                            control={control}
-                            render={({ field }) => (
-                                <RadioGroup
-                                    onValueChange={field.onChange}
-                                    value={field.value}
-                                    className="mt-2"
-                                >
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="private" id="private" className='border-foreground/70' />
-                                        <Label htmlFor="private" className="flex items-center gap-2 cursor-pointer">
-                                            <EyeOff className="h-4 w-4" />
-                                            Private - Only I can see this goal
-                                        </Label>
-                                    </div>
-                                    <div className="flex items-center space-x-2">
-                                        <RadioGroupItem value="public" id="public" className='border-foreground/70' />
-                                        <Label htmlFor="public" className="flex items-center gap-2 cursor-pointer">
-                                            <Eye className="h-4 w-4" />
-                                            Public - Others can view my progress
-                                        </Label>
-                                    </div>
-                                </RadioGroup>
+                            {/* Day Selection */}
+                            {weeklyFrequency < 7 && (
+                                <WeeklyDaySelector<HabitFormData>
+                                    selectedDays={selectedDays}
+                                    weeklyFrequency={weeklyFrequency}
+                                    setValue={setValue}
+                                    name="selectedDays"
+                                />
                             )}
+                        </FormWrapper>
+
+                        {/* Schedule & Reminders */}
+                        <FormWrapper title='Schedule & Reminders' icon={Clock} variant="element">
+                            {/* Dates */}
+                            <DateRangePicker<HabitFormData>
+                                control={control}
+                                errors={errors}
+                                startName='startDate'
+                                endName='endDate'
+                                type="habit"
+                            />
+
+                            {/* Reminder Times */}
+                            <ReminderTimeInput
+                                timeInput={timeInput}
+                                setTimeInput={setTimeInput}
+                                timesList={timesList}
+                                setTimesList={setTimesList}
+                                frequencyPerDay={frequencyPerDay}
+                            />
+                        </FormWrapper>
+
+                        {/* Motivation & Settings */}
+                        <FormWrapper title='Motivation & Settings' icon={WandSparkles} variant="element">
+                            <TextAreaInput<HabitFormData>
+                                control={control}
+                                errors={errors}
+                                name="customMessage"
+                                setValue={setValue}
+                            />
+
+                            {/* Allow Skip Option */}
+                            <CheckboxCard<HabitFormData>
+                                label="Allow skipping this habit"
+                                description="Enable this if it's okay to skip this habit occasionally without breaking your streak"
+                                name="allowSkip"
+                                value={watch("allowSkip")}
+                                setValue={setValue}
+                            />
+                        </FormWrapper>
+
+                        {/* Privacy & Sharing */}
+                        <PrivacyCard<HabitFormData>
+                            userId={userId}
+                            control={control}
+                            visibility={visibility}
+                            visibilityName='visibility'
+                            selectedContacts={selectedContacts}
+                            handleContactChange={handleContactChange}
                         />
-                    </div>
-                    {/* Share With Contacts */}
-                    {visibility === "public" && (
-                        <div>
-                            <Label>Share with specific people</Label>
-                            <p className="text-sm text-muted-foreground mb-3">
-                                Choose people who can view and encourage your progress
-                            </p>
-                            <div className="space-y-2 max-h-32 overflow-y-auto border rounded-md p-3">
-                                {contacts.map((contact) => (
-                                    <div key={contact} className="flex items-center space-x-2">
-                                        <Checkbox
-                                            id={contact}
-                                            checked={selectedContacts.includes(contact)}
-                                            onCheckedChange={(checked) => handleContactChange(contact, checked as boolean)}
-                                            className='border-foreground'
-                                        />
-                                        <Label htmlFor={contact} className="text-sm font-normal cursor-pointer">
-                                            {contact}
-                                        </Label>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
 
-                    {/* Allow Skip Option */}
-                    <div className="flex items-center space-x-2 p-3 rounded-lg">
-                        <Checkbox
-                            id="allowSkip"
-                            onCheckedChange={(checked) => setValue('allowSkip', !!checked)}
-                            className='border-foreground'
+                        <FormActions
+                            isSubmitting={isSubmitting}
+                            submitLabel="Save Habit"
+                            onCancel={() => setIsOpen}
+                            onDelete={handleDelete}
+                            showDelete={!!editingHabit && !fromGoal}
                         />
-                        <div className="flex-1">
-                            <Label htmlFor="allowSkip" className="text-sm font-medium cursor-pointer">
-                                Allow skipping this habit
-                            </Label>
-                            <p className="text-xs text-gray-500">
-                                Enable this if it's okay to skip this habit occasionally without breaking your streak
-                            </p>
-                        </div>
-                    </div>
 
+                        {!fromGoal && (
+                            <DeleteConfirmDialog
+                                open={showDeleteConfirm}
+                                onClose={cancelDelete}
+                                onConfirm={confirmDelete}
+                                title="Delete this habit?"
+                                description="This will permanently remove your habit from the system."
+                            />
+                        )}
 
-                    <DialogFooter className="flex justify-between gap-1">
-                        <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => {
-                                setIsOpen();
-                                reset();
-                                setTimesList([]);
-                            }}
-                        >
-                            Cancel
-                        </Button>
-
-                        {
-                            editingHabit &&
-                            <Button
-                                type='button'
-                                variant="destructive"
-                                className="min-w-[120px]"
-                                onClick={() => { deleteHabit(editingHabit?.id) }}
-                            >
-                                Delete
-                            </Button>
-                        }
-
-                        <Button
-                            type='submit'
-                            disabled={isSubmitting}
-                            className="min-w-[120px]"
-                        >
-                            {isSubmitting ? 'Creating...' : 'Create Habit'}
-                        </Button>
-
-                    </DialogFooter>
-                </form>
+                    </form>
+                </FormWrapper>
             </DialogContent>
         </Dialog>
-
     );
 };
 

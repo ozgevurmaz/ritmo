@@ -11,7 +11,7 @@ interface CustomProgressProps extends React.HTMLAttributes<HTMLDivElement> {
     showPercentage?: boolean
     showTitle?: boolean
     textColor?: string
-    headerPosition?: "outside" | "none"
+    headerPosition?: "outside" | "outside-end" | "none"
     animated?: boolean
 }
 
@@ -37,6 +37,12 @@ export const CustomProgress = React.forwardRef<HTMLDivElement, CustomProgressPro
                 {headerPosition === "outside" && (
                     <div className="flex justify-between text-sm text-primary">
                         {showTitle && <span className={cn(textColor)}>{title}</span>}
+                        {showPercentage && <span className={cn("font-medium", textColor)}>{Math.round(percentage)}%</span>}
+                    </div>
+                )}
+
+                {headerPosition === "outside-end" && (
+                    <div className="flex justify-end text-sm text-primary">
                         {showPercentage && <span className={cn("font-medium", textColor)}>{Math.round(percentage)}%</span>}
                     </div>
                 )}
