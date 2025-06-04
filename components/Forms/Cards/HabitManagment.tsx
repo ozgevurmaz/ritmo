@@ -41,7 +41,8 @@ export const HabitManagment = ({
     let totalSelectedHabits = addedHabits.length + selectedHabits.length;
 
     const [showHabitForm, setShowHabitForm] = useState(false);
-    const [editingHabit, setEditingHabit] = useState<HabitFormValues | HabitType | null>(null)
+    const [editingHabit, setEditingHabit] = useState<HabitType | null>(null)
+    const [editingGoalHabit, setEditingGoalHabit] = useState<HabitFormValues | null>(null)
 
     const filteredAvailableHabits = allHabits
         ?.filter((habit) => habit.goal === null)
@@ -58,14 +59,13 @@ export const HabitManagment = ({
                 <Button
                     disabled={!enableAddHabit}
                     type="button"
-                    variant="outline"
                     onClick={() => {
-                        setEditingHabit(defaultGoalHabit)
+                        setEditingGoalHabit(defaultGoalHabit)
                         setShowHabitForm(true)
                     }}
-                    className="relative md:absolute md:top-5 md:right-7 z-50"
+                    className="relative"
                 >
-                    Add Goal
+                    Add New Habit
                 </Button>
                 {totalSelectedHabits === 0 && (
                     <Alert variant="destructive">
@@ -112,7 +112,7 @@ export const HabitManagment = ({
                                     showEdit
                                     deleteAction={() => handleRemoveNewHabit(habit.title)}
                                     EditAction={() => {
-                                        setEditingHabit(habit)
+                                        setEditingGoalHabit(habit)
                                         setShowHabitForm(true)
                                     }}
                                 />
@@ -143,7 +143,7 @@ export const HabitManagment = ({
                 )}
 
                 <HabitsForm
-                    editingHabit={editingHabit}
+                    editingGoalHabit={editingGoalHabit}
                     isOpen={showHabitForm}
                     setIsOpen={() => setShowHabitForm(false)}
                     userId={userId}

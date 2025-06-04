@@ -70,7 +70,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
             <Zap className="h-6 w-6 text-primary" />
             <span className="text-lg font-semibold tracking-tight">Ritmo {isAdmin && <span className='text-primary font-bold'>Admin</span>}</span>
           </Link>
-          
+          <ThemeToggle />
           {/* User Actions */}
           <div className="flex items-center">
             {

@@ -243,7 +243,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
 
   return (
     <div>
-      <div className="sm:max-w-[1000px] max-h-[90vh] overflow-y-auto">
+      <div className="w-full overflow-y-auto">
         <FormWrapper
           icon={Target}
           title={isEditing ? 'Edit Goal' : 'Create New Goal'}
@@ -254,7 +254,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
           variant='page'
         >
 
-          <form className="space-y-8 py-6" onSubmit={handleSubmit(onSubmit)}>
+          <form className="space-y-8 py-6 w-full" onSubmit={handleSubmit(onSubmit)}>
             {/* Goal Information */}
             <FormWrapper
               variant='element'

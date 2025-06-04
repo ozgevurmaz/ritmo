@@ -25,7 +25,8 @@ interface RelatedGoalSelectionProps<T extends FieldValues> {
     setValue: UseFormSetValue<T>;
     name: Path<T>;
     userId: string;
-    goalTitle?: string
+    goalTitle?: string;
+    disabled: boolean
 }
 
 export const RelatedGoalSelection = <T extends FieldValues>({
@@ -33,7 +34,8 @@ export const RelatedGoalSelection = <T extends FieldValues>({
     setValue,
     name,
     userId,
-    goalTitle
+    goalTitle,
+    disabled
 }: RelatedGoalSelectionProps<T>) => {
 
     const { data: goals, isLoading: goalsLoading } = useGoals(userId);
@@ -53,7 +55,7 @@ export const RelatedGoalSelection = <T extends FieldValues>({
                             setValue(name, value === 'none' ? null : value as any, { shouldDirty: true })
                         }
                         value={field.value || 'none'}
-                        disabled={goalsLoading}
+                        disabled={ disabled}
                     >
                         <SelectTrigger>
                             <SelectValue placeholder={goalsLoading ? "Loading goals..." : "Select a goal"} />

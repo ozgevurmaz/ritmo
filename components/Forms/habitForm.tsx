@@ -41,6 +41,7 @@ interface HabitsFormProps {
     isOpen: boolean;
     setIsOpen: () => void;
     editingHabit?: HabitType | null;
+    editingGoalHabit?: HabitFormData | null;
     userId: string;
     fromGoal?: boolean;
     setGoalHabits?: (habitData: any) => void;
@@ -51,6 +52,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     isOpen,
     setIsOpen,
     editingHabit = null,
+    editingGoalHabit = null,
     userId,
     fromGoal = false,
     setGoalHabits,
@@ -78,18 +80,18 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     } = useForm<HabitFormData>({
         resolver: zodResolver(habitSchema),
         defaultValues: {
-            title: editingHabit?.title || '',
-            goal: editingHabit?.goal || null,
-            frequencyPerDay: editingHabit?.frequencyPerDay || 1,
-            customMessage: editingHabit?.customMessage || '',
-            allowSkip: editingHabit?.allowSkip || false,
-            category: editingHabit?.category || '',
-            startDate: editingHabit?.startDate || formatDateForQuery(new Date()),
-            endDate: editingHabit?.endDate || '',
-            visibility: editingHabit?.visibility || 'private',
-            sharedWith: editingHabit?.sharedWith || [],
-            weeklyFrequency: editingHabit?.weeklyFrequency || 7,
-            selectedDays: editingHabit?.selectedDays || []
+            title: editingGoalHabit?.title || editingHabit?.title || '',
+            goal: editingGoalHabit?.goal || editingHabit?.goal || null,
+            frequencyPerDay: editingGoalHabit?.frequencyPerDay || editingHabit?.frequencyPerDay || 1,
+            customMessage: editingGoalHabit?.customMessage || editingHabit?.customMessage || '',
+            allowSkip: editingGoalHabit?.allowSkip || editingHabit?.allowSkip || false,
+            category: editingGoalHabit?.category || editingHabit?.category || '',
+            startDate: editingGoalHabit?.startDate || editingHabit?.startDate || formatDateForQuery(new Date()),
+            endDate: editingGoalHabit?.endDate || editingHabit?.endDate || '',
+            visibility: editingGoalHabit?.visibility || editingHabit?.visibility || 'private',
+            sharedWith: editingGoalHabit?.sharedWith || editingHabit?.sharedWith || [],
+            weeklyFrequency: editingGoalHabit?.weeklyFrequency || editingHabit?.weeklyFrequency || 7,
+            selectedDays: editingGoalHabit?.selectedDays || editingHabit?.selectedDays || []
         }
     });
 
@@ -125,6 +127,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     }, [editingHabit, isOpen, reset]);
 
     const onSubmit = async (data: HabitFormData) => {
+
         if (!isDaySelectionValid) {
             toast.error(`Please select exactly ${weeklyFrequency} days for your habit.`);
             return;
@@ -143,6 +146,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
             if (fromGoal && setGoalHabits) {
                 setGoalHabits(habitData);
                 handleClose();
+                toast.success("Habit will be created with goal!");
                 return;
             }
 
@@ -178,34 +182,6 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
         setValue("sharedWith", newContacts, { shouldDirty: true });
     };
 
-    const addTime = () => {
-        if (!timeInput) return;
-
-        if (timesList.includes(timeInput)) {
-            toast.error("This time is already added.");
-            return;
-        }
-
-        if (timesList.length >= frequencyPerDay) {
-            toast.error(`You can only add ${frequencyPerDay} reminder times.`);
-            return;
-        }
-
-        setTimesList(prev => [...prev, timeInput].sort());
-        setTimeInput('');
-    };
-
-    const removeTime = (timeToRemove: string) => {
-        setTimesList(prev => prev.filter(time => time !== timeToRemove));
-    };
-
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            addTime();
-        }
-    };
-
     const handleDelete = () => {
         setShowDeleteConfirm(true);
     };
@@ -234,7 +210,13 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                         : 'Build a new habit that will help you achieve your goals. Start small and be consistent.'
                     }
                 >
-                    <form className="space-y-8 py-6" onSubmit={handleSubmit(onSubmit)}>
+                    <form
+                        className="space-y-8 py-6" onSubmit={(e) => {
+                            if (fromGoal) {
+                                e.stopPropagation();
+                            }
+                            handleSubmit(onSubmit)(e);
+                        }}>
                         {/* Basic Information */}
                         <FormWrapper title='Basic Information' icon={Sparkles} variant="element">
                             {/* Habit Title */}
@@ -264,6 +246,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                                 name="goal"
                                 userId={userId}
                                 goalTitle={goalTitle}
+                                disabled={fromGoal}
                             />
 
                         </FormWrapper>

@@ -25,7 +25,7 @@ export const FormWrapper = ({
     const WrapperDescription = variant === "dialog" ? DialogDescription : CardDescription;
 
     return (
-        <Card className={`${variant !== "element" ? "border-none bg-transparent shadow-none" : ""} relative`}>
+        <Card className={`${variant !== "element" ? "border-none bg-transparent shadow-none" : ""} relative w-full`}>
             <WrapperHeader>
                 <WrapperTitle className="flex items-center gap-2 text-lg font-semibold px-5 md:px-6">
                     <Icon className={`h-5 w-5 ${variant !== "element" && "text-primary h-6 w-6"}`} />
