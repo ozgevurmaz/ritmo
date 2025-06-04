@@ -5,10 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CheckSquare, RotateCcw, Columns, Rows } from "lucide-react";
 import React, { useState } from "react";
-import { CustomProgress } from "@/components/shared/customProgress";
+import { CustomProgress } from "@/components/custom/customProgress";
 import TodosChecklist from "../../Todos/todosCheckbox";
 import { useToggleTodo } from "@/lib/Mutations/todos/useToggleTodo";
-import { useUpdateHabitProgress } from "@/lib/Mutations/habits/useUpdateHabitProgress";
 import { useGoals } from "@/lib/Queries/goals/useGoal";
 import { HabitsCard } from "../../Habits/HabitsCard";
 
@@ -23,7 +22,7 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
 
     const [isRowLayout, setIsRowLayout] = useState(false);
     const { mutate: toggleTodoInDb } = useToggleTodo(userId);
-    const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId);
+
     const { data: goals } = useGoals(userId)
 
     // Calculate progress
@@ -36,29 +35,6 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
     const habitProgress = totalHabitsToday > 0 ? (completedHabitsToday / totalHabitsToday) * 100 : 0;
 
     const overallProgress = ((completedTodos + completedHabitsToday) / (totalTodos + totalHabitsToday)) * 100;
-
-    const incrementHabit = (id: string) => {
-        const habit = habits.find(h => h.id === id);
-        if (!habit) return;
-
-        const nextCount = habit.completedToday + 1;
-
-        if (nextCount <= habit.frequencyPerDay) {
-            updateHabitProgress({ habitId: id, completedToday: nextCount });
-        }
-    };
-
-    const decrementHabit = (id: string) => {
-        const habit = habits.find(h => h.id === id);
-        if (!habit) return;
-
-        const nextCount = habit.completedToday - 1;
-
-        if (nextCount <= habit.frequencyPerDay) {
-            updateHabitProgress({ habitId: id, completedToday: nextCount });
-        }
-    };
-
 
     return (
         <Card className={`border-primary ${className}`}>
@@ -117,14 +93,15 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                         <div className="space-y-2 flex-1 overflow-y-auto">
                             {habits.map((habit) => (
                                 <HabitsCard
+                                    userId={userId}
                                     key={habit.id}
                                     habit={habit}
                                     showGoal={true}
-                                    decrementHabit={() => decrementHabit(habit.id)}
-                                    incrementHabit={() => incrementHabit(habit.id)}
                                     goal={goals?.find(g => g.id === habit.goal)?.title}
                                     border={false}
-                                    />
+                                    habits={habits}
+                                    showProccess
+                                />
                             ))}
                         </div>
                     </div>

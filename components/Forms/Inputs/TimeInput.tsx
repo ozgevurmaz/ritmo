@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Clock } from "lucide-react";
 import { useState } from "react";
 import { Control, Controller, FieldErrors, FieldValues, Path } from "react-hook-form";
-import CustomTimePicker from "./CustomTimePicker";
+import CustomTimePicker from "../../custom/CustomTimePicker";
 
 interface TimeInputProps<T extends FieldValues> {
     control: Control<T>;

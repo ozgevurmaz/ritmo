@@ -30,9 +30,8 @@ import { getInitials } from '@/lib/utils';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useProfile } from '@/lib/Queries/useProfile';
-import StreakBadge from '../shared/StreakBadge';
+import StreakBadge from '../custom/StreakBadge';
 import LoadingScreen from '../shared/pageStyles/Loading';
-import { ThemeToggle } from '../Profile/themeToggle';
 
 interface NavbarProps {
   isAdmin?: boolean
@@ -70,7 +69,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
             <Zap className="h-6 w-6 text-primary" />
             <span className="text-lg font-semibold tracking-tight">Ritmo {isAdmin && <span className='text-primary font-bold'>Admin</span>}</span>
           </Link>
-          <ThemeToggle />
+     
           {/* User Actions */}
           <div className="flex items-center">
             {

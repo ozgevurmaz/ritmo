@@ -15,7 +15,7 @@ export const useUpdateGoal = (userId: string) => {
     }: {
       updatedGoal: GoalType;
       currentLinkedHabits: HabitType[];
-      newaddedHabits: Omit<HabitType, "id" | "created_at" | "weeklyComplated" | "completedToday" | "streak">[],
+      newaddedHabits: Omit<HabitType, "id" | "created_at" | "weeklyCompleted" | "completedToday" | "streak">[],
     }) => {
       const { id: goalId, ...restGoal } = updatedGoal;
 
@@ -76,7 +76,7 @@ export const useUpdateGoal = (userId: string) => {
               goal: goalId,
               user_id: userId,
               completedToday: 0,
-              weeklyComplated: 0,
+              weeklyCompleted: 0,
               streak: 0,
             }))
           )

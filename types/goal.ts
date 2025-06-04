@@ -6,8 +6,8 @@ interface GoalType {
     habits: string[]
     startDate: string
     endDate: string
-    complated:boolean
-    complatedDays: number
+    completed:boolean
+    completedDays: number
     sharedWith?: string[]
     visibility: "public" | "private"
     category: string

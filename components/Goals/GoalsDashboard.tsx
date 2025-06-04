@@ -3,49 +3,54 @@
 import React from 'react'
 import { useGoals } from '@/lib/Queries/goals/useGoal'
 import { useHabits } from '@/lib/Queries/habits/useHabit'
-import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle2, PlayCircle, Timer, FunctionSquare } from "lucide-react"
 import { GoalSection } from './goalsSection'
+import PageHeaders from '../shared/Headers/PageHeaders'
+import { useRouter } from 'next/navigation'
+import AnalyticsCard from '../shared/AnalyticsCard'
+import { useGoalsAnalytics } from '@/hooks/analytics'
 
-interface GoalsPageProps {
+interface GoalsDashboardProps {
     userId: string
 }
 
-export default function GoalsPage({ userId }: GoalsPageProps) {
+export default function GoalsDashboard({ userId }: GoalsDashboardProps) {
+    const router = useRouter()
+
     const { data: goals = [] } = useGoals(userId)
     const { data: habits = [] } = useHabits(userId)
 
+    const analyticsData = useGoalsAnalytics(goals)
+
     const today = new Date()
 
-    const completedGoals = goals.filter(goal => goal.complated)
+    const completedGoals = goals.filter(goal => goal.completed)
 
     const currentGoals = goals.filter(goal =>
-        !goal.complated &&
+        !goal.completed &&
         new Date(goal.startDate) <= today &&
         new Date(goal.endDate) >= today
     )
 
     const upcomingGoals = goals.filter(goal =>
-        !goal.complated &&
+        !goal.completed &&
         new Date(goal.startDate) > today
     )
 
     return (
-        <div className="container mx-auto p-6 space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-3xl font-bold text-goals">Goals</h1>
-                    <p className="text-muted-foreground mt-1">
-                        Track your progress and achieve your dreams
-                    </p>
-                </div>
-                <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="text-sm">
-                        {goals.length} Total Goals
-                    </Badge>
-                </div>
-            </div>
+        <div className="space-y-6 p-6">
+
+            <PageHeaders
+                title="Goals"
+                defination="Track your progress and achieve your dreams"
+                showButton
+                buttonAction={() => router.push(`/goals/add`)}
+                textColor="text-goals"
+                buttonStyle="bg-goals hover:bg-goals/60"
+            />
+
+            <AnalyticsCard data={analyticsData} />
 
             <Tabs defaultValue="current" className="w-full">
                 <TabsList className="grid w-full max-w-md grid-cols-3">

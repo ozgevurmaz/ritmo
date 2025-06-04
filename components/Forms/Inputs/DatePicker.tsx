@@ -1,5 +1,5 @@
 "use client"
-import CustomCalendar from "@/components/shared/customCalendar";
+import CustomCalendar from "@/components/custom/customCalendar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

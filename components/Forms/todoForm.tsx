@@ -39,7 +39,7 @@ import { PriorityMatrixSection } from './Selectors/PriortySelection';
 import { TitleInput } from './Inputs/TitleInput';
 
 import { FormActions } from './Cards/FormActions';
-import { DeleteConfirmDialog } from './Cards/DeleteConfirmDialog';
+import { DeleteConfirmDialog } from '../shared/DeleteConfirmDialog';
 import { PrivacyCard } from './Cards/PrivacyCard';
 
 type TodoFormData = z.infer<typeof todoSchema>;

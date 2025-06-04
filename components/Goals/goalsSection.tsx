@@ -43,12 +43,6 @@ export const GoalSection = ({
                         {goals.length}
                     </Badge>
                 </div>
-                <Link href="/goals/add">
-                    <Button variant="outline" size="sm" className="flex items-center gap-2 border-goals text-goals hover:text-foreground hover:bg-goals">
-                        <Plus className="h-4 w-4" />
-                        Add Goal
-                    </Button>
-                </Link>
             </div>
 
             {goals.length === 0 ? (
@@ -104,7 +98,7 @@ export const GoalSection = ({
                                                         habit={habit}
                                                         showEdit={true}
                                                         showDelete={true}
-                                                        EditAction={() => {
+                                                        editAction={() => {
                                                             setEditingHabit(habit)
                                                             setShowHabitEdit(true)
                                                         }}

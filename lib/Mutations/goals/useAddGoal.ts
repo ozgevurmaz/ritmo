@@ -13,7 +13,7 @@ export const useAddGoal = (userId: string) => {
             newHabits,
             linkedHabits
         }: {
-            goalData: Omit<GoalType, "id" | "created_at" | "complated" | "complatedDays" | "slug">,
+            goalData: Omit<GoalType, "id" | "created_at" | "completed" | "completedDays" | "slug">,
             newHabits: Omit<HabitType, "id" | "created_at" | "weeklyComplated" | "completedToday" | "streak">[],
             linkedHabits: { id: string, updates: Partial<HabitType> }[]
         }) => {

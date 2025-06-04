@@ -4,7 +4,8 @@ import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Circle, Edit, Trash2 } from "lucide-react";
-import StreakBadge from "@/components/shared/StreakBadge";
+import StreakBadge from "@/components/custom/StreakBadge";
+import { useUpdateHabitProgress } from "@/lib/Mutations/habits/useUpdateHabitProgress";
 
 interface HabitsCardProps {
     habit?: HabitType
@@ -13,15 +14,16 @@ interface HabitsCardProps {
     checkboxAction?: (habitId: string) => void;
     checked?: boolean;
     showEdit?: boolean;
-    EditAction?: () => void;
+    editAction?: () => void;
     showDelete?: boolean;
     deleteAction?: () => void;
-    decrementHabit?: () => void
-    incrementHabit?: () => void
     goal?: string
     showStreak?: boolean
     border?: boolean
-    showGoal?:boolean
+    showGoal?: boolean
+    userId?: string,
+    habits?: HabitType[],
+    showProccess?: boolean
 }
 
 export const HabitsCard: React.FC<HabitsCardProps> = ({
@@ -30,21 +32,43 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
     checkbox = false,
     checkboxAction,
     checked,
-    showEdit = true,
-    EditAction,
-    showDelete = true,
+    editAction,
     deleteAction,
-    decrementHabit,
-    incrementHabit,
     goal,
     showGoal = false,
     showStreak = false,
-    border = true
+    border = true,
+    userId,
+    habits,
+    showProccess = false
 }) => {
 
+    const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId || "");
+
+    const incrementHabit = (id: string) => {
+        const habit = habits?.find(h => h.id === id);
+        if (!habit) return;
+
+        const nextCount = habit.completedToday + 1;
+
+        if (nextCount <= habit.frequencyPerDay) {
+            updateHabitProgress({ habitId: id, completedToday: nextCount });
+        }
+    };
+
+    const decrementHabit = (id: string) => {
+        const habit = habits?.find(h => h.id === id);
+        if (!habit) return;
+
+        const nextCount = habit.completedToday - 1;
+
+        if (nextCount <= habit.frequencyPerDay) {
+            updateHabitProgress({ habitId: id, completedToday: nextCount });
+        }
+    };
 
     return (
-        <div className={`w-full flex items-center space-x-3 p-3 ${border ? "border justify-between" : ""} rounded-lg hover:bg-muted`}>
+        <div className={`w-full flex items-center space-x-3 p-3 ${border ? "border" : ""} justify-between rounded-lg hover:bg-muted`}>
             {habit && checkbox && (
                 <Checkbox
                     className="cursor-pointer"
@@ -65,11 +89,11 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                     <span className="font-medium">{habit ? habit.title : newHabit ? newHabit.title : ""}</span>
 
                     {!goal && !decrementHabit && !incrementHabit &&
-                    <span> • {habit ? habit.category : newHabit ? newHabit.category : ""} • {habit ? habit.frequencyPerDay : newHabit ? newHabit.frequencyPerDay : ""} x daily, {habit ? habit.weeklyFrequency : newHabit ? newHabit.weeklyFrequency : ""} days/week </span>}
-                    
-                    { showGoal && goal && (
+                        <span> • {habit ? habit.category : newHabit ? newHabit.category : ""} • {habit ? habit.frequencyPerDay : newHabit ? newHabit.frequencyPerDay : ""} x daily, {habit ? habit.weeklyFrequency : newHabit ? newHabit.weeklyFrequency : ""} days/week </span>}
+
+                    {showGoal && goal && (
                         <span className="text-xs text-goal bg-goal/10 px-2 py-0.5 rounded-full">
-                                  <span className="text-goals font-semibold"> • Goal: </span>
+                            <span className="text-goals font-semibold"> • Goal: </span>
                             {goal}
                         </span>
                     )}
@@ -77,7 +101,7 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2 mt-1">
-                    {habit && decrementHabit && incrementHabit &&
+                    {showProccess && habit &&
                         <div>
                             <div className="flex items-center gap-1">
                                 {Array.from({ length: habit.frequencyPerDay }).map((_, index) => (
@@ -85,9 +109,9 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                                         key={index}
                                         onClick={() => {
                                             if (index < habit.completedToday) {
-                                                decrementHabit();
+                                                decrementHabit(habit.id);
                                             } else if (index === habit.completedToday) {
-                                                incrementHabit();
+                                                incrementHabit(habit.id);
                                             }
                                         }}
                                         className="transition-colors"
@@ -107,22 +131,27 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                         </div>}
                 </div>
             </div>
+
+
             <div className="flex gap-2">
-                {showEdit && EditAction && (
-                    <Button variant="outline" size="sm" onClick={EditAction}>
+                {habit && showStreak && (
+                    <StreakBadge streak={habit.streak} isTextShown isSmall />
+                )}
+
+                {editAction && (
+                    <Button variant="outline" size="sm" onClick={editAction}>
                         <Edit className="h-4 w-4" />
                     </Button>
                 )}
-                {showDelete && deleteAction && (
+
+                {deleteAction && (
                     <Button variant="destructive" size="sm" onClick={deleteAction}>
                         <Trash2 className="h-4 w-4" />
                     </Button>
                 )}
             </div>
 
-            {habit && showStreak && habit.streak > 0 && (
-                <StreakBadge streak={habit.streak} isTextShown isSmall />
-            )}
+
         </div>
     );
 };

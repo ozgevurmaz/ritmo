@@ -1,19 +1,20 @@
 "use client"
 
-import GoalsDashboard from '@/components/Goals/GoalsDashboard'
 import LoadingScreen from '@/components/shared/pageStyles/Loading';
+import TodosDashboard from '@/components/Todos/TodosDashboard';
 import { useProfile } from '@/lib/Queries/useProfile';
 import React from 'react'
 
-const Goals = () => {
+const Todos = () => {
     const { data: profile, isLoading, error } = useProfile();
 
-    if (isLoading) return <LoadingScreen />
     if (!profile) return
-    
+
+    if (isLoading) return <LoadingScreen />
+
     return (
-        <GoalsDashboard userId={profile.id} />
+        <TodosDashboard userId={profile.id} />
     )
 }
 
-export default Goals
+export default Todos

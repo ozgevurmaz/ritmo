@@ -25,11 +25,7 @@ import { DateRangePicker } from './Inputs/DatePicker';
 import { HabitManagment } from './Cards/HabitManagment';
 import { PrivacyCard } from './Cards/PrivacyCard';
 import { FormActions } from './Cards/FormActions';
-import { DeleteConfirmDialog } from './Cards/DeleteConfirmDialog';
-
-
-
-
+import { DeleteConfirmDialog } from '../shared/DeleteConfirmDialog';
 
 type GoalFormData = z.infer<typeof goalSchema>;
 
@@ -242,7 +238,6 @@ const GoalForm: React.FC<GoalFormProps> = ({
   };
 
   return (
-    <div>
       <div className="w-full overflow-y-auto">
         <FormWrapper
           icon={Target}
@@ -252,6 +247,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
             : 'Set a meaningful goal and create or link habits that will help you achieve it.'
           }
           variant='page'
+          textColor='text-goals'
         >
 
           <form className="space-y-8 py-6 w-full" onSubmit={handleSubmit(onSubmit)}>
@@ -259,7 +255,8 @@ const GoalForm: React.FC<GoalFormProps> = ({
             <FormWrapper
               variant='element'
               title=" Goal Information"
-              icon={Flag}                            >
+              icon={Flag}    
+              >
 
               {/* Title */}
               <TitleInput<GoalFormData>
@@ -353,7 +350,6 @@ const GoalForm: React.FC<GoalFormProps> = ({
           </form>
         </FormWrapper>
       </div>
-    </div>
   );
 };
 

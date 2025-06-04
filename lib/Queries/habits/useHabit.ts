@@ -15,7 +15,7 @@ export const useHabits = (userId: string) => {
                 .order("created_at", { ascending: false })
 
             if (error) throw new Error(error.message);
-            return data;
+            return data as HabitType[];
         }
     })
 }

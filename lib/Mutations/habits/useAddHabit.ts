@@ -9,7 +9,7 @@ export const useAddHabit = (userId: string) => {
 
     return useMutation({
         mutationFn: async (
-            habit: Omit<HabitType, "id" | "created_at" | "weeklyComplated" | "completedToday" | "streak">
+            habit: Omit<HabitType, "id" | "created_at" | "weeklyCompleted" | "completedToday" | "streak">
         ) => {
             const { data, error } = await supabase
                 .from("habits")
@@ -17,7 +17,7 @@ export const useAddHabit = (userId: string) => {
                     ...habit,
                     user_id: userId,
                     completedToday: 0,
-                    weeklyComplated: 0,
+                    weeklyCompleted: 0,
                     streak: 0
                 })
                 .select();

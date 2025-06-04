@@ -15,7 +15,7 @@ interface HabitType {
     sharedWith?: string[]
     selectedDays: string[]
     weeklyFrequency: number
-    weeklyComplated: number
+    weeklyCompleted: number
 }
 
 interface HabitFormValues {

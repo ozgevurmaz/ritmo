@@ -28,7 +28,7 @@ import { DateRangePicker } from './Inputs/DatePicker';
 import { TextAreaInput } from './Inputs/TextAreaInput';
 import { TitleInput } from './Inputs/TitleInput';
 import { FormActions } from './Cards/FormActions';
-import { DeleteConfirmDialog } from './Cards/DeleteConfirmDialog';
+import { DeleteConfirmDialog } from '../shared/DeleteConfirmDialog';
 import { RelatedGoalSelection } from './Selectors/RelatedGoalSelection';
 import { FrequencyInput } from './Inputs/FrequencyInput';
 import { WeeklyDaySelector } from './Selectors/WeeklyDaySelector';

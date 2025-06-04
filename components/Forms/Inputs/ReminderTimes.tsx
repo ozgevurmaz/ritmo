@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Bell, Plus, X, Clock } from "lucide-react";
 import React, { useState } from "react";
-import CustomTimePicker from "./CustomTimePicker";
+import CustomTimePicker from "../../custom/CustomTimePicker";
 
 interface ReminderTimeInputProps {
   timeInput: string;

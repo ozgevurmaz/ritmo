@@ -16,7 +16,7 @@ export const useGoals = (userId: string) => {
                 .order("startDate", { ascending: false })
 
             if (error) throw new Error(error.message);
-            return data;
+            return data as GoalType[];
         }
     })
 }

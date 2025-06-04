@@ -1,4 +1,4 @@
-import { CustomProgress } from "@/components/shared/customProgress";
+import { CustomProgress } from "@/components/custom/customProgress";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Target } from "lucide-react";
