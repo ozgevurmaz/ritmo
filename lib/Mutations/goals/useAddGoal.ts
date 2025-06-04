@@ -14,7 +14,7 @@ export const useAddGoal = (userId: string) => {
             linkedHabits
         }: {
             goalData: Omit<GoalType, "id" | "created_at" | "completed" | "completedDays" | "slug">,
-            newHabits: Omit<HabitType, "id" | "created_at" | "weeklyComplated" | "completedToday" | "streak">[],
+            newHabits: Omit<HabitType, "id" | "created_at" | "weeklyCompleted" | "completedToday" | "streak">[],
             linkedHabits: { id: string, updates: Partial<HabitType> }[]
         }) => {
             const { data: goal, error: goalError } = await supabase
@@ -23,8 +23,8 @@ export const useAddGoal = (userId: string) => {
                     ...goalData,
                     user_id: userId,
                     slug: slugify(goalData.title),
-                    complatedDays: 0,
-                    complated: false
+                    completedDays: 0,
+                    completed: false
                 })
                 .select()
                 .single();
@@ -45,7 +45,7 @@ export const useAddGoal = (userId: string) => {
                             goal: goalId,
                             user_id: userId,
                             completedToday: 0,
-                            weeklyComplated: 0,
+                            weeklyCompleted: 0,
                             streak: 0
                         }))
                     )

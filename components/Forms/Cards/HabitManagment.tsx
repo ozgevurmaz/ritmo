@@ -88,7 +88,7 @@ export const HabitManagment = ({
                                     showDelete
                                     showEdit
                                     deleteAction={() => handleRemoveExistingHabit(habit.id)}
-                                    EditAction={() => {
+                                    editAction={() => {
                                         setEditingHabit(habit)
                                         setShowHabitForm(true)
                                     }}
@@ -111,7 +111,7 @@ export const HabitManagment = ({
                                     showDelete
                                     showEdit
                                     deleteAction={() => handleRemoveNewHabit(habit.title)}
-                                    EditAction={() => {
+                                    editAction={() => {
                                         setEditingGoalHabit(habit)
                                         setShowHabitForm(true)
                                     }}
