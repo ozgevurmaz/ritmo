@@ -7,7 +7,6 @@ import { CheckSquare, RotateCcw, Columns, Rows } from "lucide-react";
 import React, { useState } from "react";
 import { CustomProgress } from "@/components/custom/customProgress";
 import TodosChecklist from "../../Todos/todosCheckbox";
-import { useToggleTodo } from "@/lib/Mutations/todos/useToggleTodo";
 import { useGoals } from "@/lib/Queries/goals/useGoal";
 import { HabitsCard } from "../../Habits/HabitsCard";
 
@@ -21,8 +20,7 @@ interface DailyCardProps {
 export default function DailyCard({ className, todos, habits, userId }: DailyCardProps) {
 
     const [isRowLayout, setIsRowLayout] = useState(false);
-    const { mutate: toggleTodoInDb } = useToggleTodo(userId);
-
+   
     const { data: goals } = useGoals(userId)
 
     // Calculate progress
@@ -79,7 +77,7 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                         </h3>
                         <div className="space-y-2 flex-1 overflow-y-auto">
                             {todos.map((todo) => (
-                                <TodosChecklist key={todo.id} todo={todo} toggleTodo={() => toggleTodoInDb(todo)} userId={userId} />
+                                <TodosChecklist key={todo.id} todo={todo} userId={userId} />
                             ))}
                         </div>
                     </div>

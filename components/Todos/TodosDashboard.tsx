@@ -5,6 +5,7 @@ import PageHeaders from '../shared/Headers/PageHeaders'
 import { useTodosAnalytics } from '@/hooks/analytics'
 import AnalyticsCard from '../shared/AnalyticsCard'
 import { useTodos } from '@/lib/Queries/todos/useTodo'
+import TodoTabs from './TodoTabs'
 
 interface TodoDashboardProps {
     userId: string
@@ -14,7 +15,7 @@ const TodosDashboard = ({ userId }: TodoDashboardProps) => {
     const [editingTodo, setEditingTodo] = useState<TodoType | null>(null)
     const [showTodoForm, setShowTodoForm] = useState<boolean>(false)
 
-     const { data: todos = [] } = useTodos(userId)
+    const { data: todos = [] } = useTodos(userId)
 
     const analyticsData = useTodosAnalytics(todos)
     return (
@@ -32,6 +33,8 @@ const TodosDashboard = ({ userId }: TodoDashboardProps) => {
             />
 
             <AnalyticsCard data={analyticsData} />
+
+            <TodoTabs userId={userId} todos={todos} />
 
         </div>
     )

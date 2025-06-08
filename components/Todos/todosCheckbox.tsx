@@ -7,18 +7,22 @@ import { formatDate, getPriorityColor, getPriorityLabel } from "@/lib/utils";
 import { Clock, Edit } from "lucide-react";
 import { useState } from "react";
 import TodoForm from "../Forms/todoForm";
+import { useToggleTodo } from "@/lib/Mutations/todos/useToggleTodo";
 
 interface TodosChecklistProps {
     todo: TodoType;
-    toggleTodo: () => void;
     userId: string;
 }
 
-export default function TodosChecklist({ todo, toggleTodo, userId }: TodosChecklistProps) {
+export default function TodosChecklist({ todo, userId }: TodosChecklistProps) {
     const [isEditFormOpen, setIsEditFormOpen] = useState<boolean>(false);
+    const [editingTodo, setEditingTodo] = useState<TodoType | null>(null);
+
+    const { mutate: toggleTodoInDb } = useToggleTodo(userId);
 
     const handleEditClick = (e: React.MouseEvent) => {
         e.stopPropagation();
+        setEditingTodo(todo)
         setIsEditFormOpen(true);
     };
 
@@ -32,7 +36,7 @@ export default function TodosChecklist({ todo, toggleTodo, userId }: TodosCheckl
                 <Checkbox
                     checked={todo.completed}
                     className="mt-0.5 border-foreground cursor-pointer shrink-0"
-                    onClick={() => { toggleTodo() }}
+                    onClick={() => { toggleTodoInDb(todo) }}
                 />
 
                 <div className="flex-1 min-w-0">
@@ -101,6 +105,8 @@ export default function TodosChecklist({ todo, toggleTodo, userId }: TodosCheckl
                 editingTodo={todo}
                 userId={userId}
             />
+
+            <TodoForm isOpen={isEditFormOpen} setIsOpen={() => setIsEditFormOpen(false)} userId={userId} editingTodo={editingTodo}/>
         </>
     );
 }
