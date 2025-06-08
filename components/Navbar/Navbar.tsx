@@ -28,10 +28,10 @@ import {
 } from '../ui/dropdown-menu';
 import { getInitials } from '@/lib/utils';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useProfile } from '@/lib/Queries/useProfile';
 import StreakBadge from '../custom/StreakBadge';
 import LoadingScreen from '../shared/pageStyles/Loading';
+import { handleLogout } from '@/actions/auth';
 
 interface NavbarProps {
   isAdmin?: boolean
@@ -40,13 +40,8 @@ interface NavbarProps {
 export function Navbar({ isAdmin = false }: NavbarProps) {
   const { data: profile, isLoading, error } = useProfile();
 
-  const router = useRouter()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleLogout = async () => {
-    await fetch('/auth/signout', { method: 'POST' });
-    router.push('/auth')
-  };
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);

@@ -14,10 +14,12 @@ import Link from 'next/link'
 import { loginSchema } from '@/lib/zod/auth/auth'
 import { PasswordInput } from './passwordInput'
 import LoadingScreen from '../shared/pageStyles/Loading'
+import { useRouter } from 'next/navigation'
 
 type LoginFormData = z.infer<typeof loginSchema>
 
 export default function LoginForm() {
+    const router = useRouter()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -48,6 +50,7 @@ export default function LoginForm() {
         } finally {
             setIsLoading(false)
         }
+        router.push("/")
     }
     if (isLoading) return <LoadingScreen />
 

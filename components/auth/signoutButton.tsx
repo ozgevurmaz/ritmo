@@ -1,21 +1,13 @@
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
-import React from 'react'
+import { handleLogout } from "@/actions/auth"
+import { Button } from "@/components/ui/button"
+import { LogOut } from "lucide-react"
 
-type Props = {}
+export default function SignOutButton() {
 
-const SignOut = (props: Props) => {
-    const router = useRouter();
-
-    const handleLogout = async () => {
-        await fetch('/auth/signout', { method: 'POST' })
-        router.push('/auth')
-    }
     return (
-        <Button onClick={handleLogout} variant="destructive" className="w-full sm:w-auto text-accent-foreground bg-accent hover:bg-accent/70">
-            Sign out
+        <Button onClick={() => handleLogout()} variant="destructive">
+            <LogOut className="mr-2 h-4 w-4" />
+            Log out
         </Button>
     )
 }
-
-export default SignOut

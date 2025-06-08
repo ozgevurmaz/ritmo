@@ -63,7 +63,7 @@ export async function signup(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/account')
+  redirect('/verify-mail')
 }
 
 export async function resetPasswordForEmail(formData: FormData) {
@@ -95,4 +95,18 @@ export async function updatePassword(formData: FormData) {
   }
 
   redirect('/auth')
-} 
+}
+
+
+export const handleLogout = async () => {
+
+  const supabase = await createClient()
+
+  const { error } = await supabase.auth.signOut()
+
+  if (error) {
+    console.error("Logout error:", error.message)
+  } else {
+    redirect('/auth')
+  }
+}
