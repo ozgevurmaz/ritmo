@@ -80,7 +80,6 @@ export const NAV_LINKS = [
   { name: 'Goals', icon: Target, href: '/goals' },
   { name: 'Discover', icon: Search, href: '/discover' },
   { name: 'Motivation', icon: Zap, href: '/discover' },
-  { name: 'Logs', icon: FileText, href: '/logs' },
 ];
 
 export const ADMIN_NAV_LINKS = [
