@@ -58,17 +58,6 @@ export const slogans = [
   "Align with your rhythm. Elevate your life.",
   "Your rhythm. Your growth."
 ];
-export const CURRENT_USER: UserType = {
-  id: "123",
-  name: "David Chen",
-  email: "test@example.com",
-  username: "david_c",
-  role: "client",
-  avatar: null,
-  streak: 4,
-  notifications: 3,
-  messages: 2
-};
 
 {/* Nav links */ }
 export const NAV_LINKS = [
