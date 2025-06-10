@@ -8,7 +8,8 @@ import { useParams } from "next/navigation";
 import React from "react";
 
 const EditGoal = () => {
-  const { slug } = useParams<{ slug: string }>();
+  const params = useParams();
+  const slug = params.slug as string;
   const { data: profile, isLoading: profileLoading } = useProfile();
 
   const userId = profile?.id ?? "";
