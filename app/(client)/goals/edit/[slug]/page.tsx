@@ -9,7 +9,10 @@ import React from "react";
 
 const EditGoal = () => {
   const params = useParams();
-  const slug = params.slug as string;
+  if (!params || typeof params.slug !== 'string') {
+    throw new Error("Invalid route params");
+  }
+  const slug = params.slug;
   const { data: profile, isLoading: profileLoading } = useProfile();
 
   const userId = profile?.id ?? "";
