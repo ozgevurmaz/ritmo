@@ -8,4 +8,7 @@ interface UserType {
     streak: number;
     notifications: number;
     messages: number;
+    lang: string;
+    theme: string;
+    dashboardLayout : string;
 }

@@ -3,9 +3,8 @@
 import { Zap } from 'lucide-react';
 import Link from 'next/link';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-
-
+export const dynamic = 'force-dynamic';
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen">
       <nav className="sticky top-0 z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-10">
@@ -18,3 +17,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     </div>
   );
 }
+

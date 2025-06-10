@@ -4,47 +4,107 @@ import React, { useEffect, useState } from 'react';
 import { CheckCircle, Target, ListTodo, TrendingUp, Users, Zap } from 'lucide-react';
 import { slogans } from '@/lib/constants';
 
-const LoadingScreen = () => {
+interface LoadingScreenProps {
+  customMessage?: string;
+  showSlogan?: boolean;
+  duration?: number; // Optional duration for progress bar animation
+}
 
+const LoadingScreen: React.FC<LoadingScreenProps> = ({ 
+  customMessage, 
+  showSlogan = true,
+  duration = 2
+}) => {
   const [currentSlogan, setCurrentSlogan] = useState("");
 
   useEffect(() => {
-    const randomSlogan = slogans[Math.floor(Math.random() * slogans.length)];
-    setCurrentSlogan(randomSlogan);
-  }, []);
+    if (showSlogan) {
+      const randomSlogan = slogans[Math.floor(Math.random() * slogans.length)];
+      setCurrentSlogan(randomSlogan);
+    }
+  }, [showSlogan]);
+
+  // Default loading messages if no custom message provided
+  const defaultMessages = [
+    "Loading your workspace",
+    "Preparing your dashboard", 
+    "Syncing your data",
+    "Getting things ready"
+  ];
+
+  const getLoadingMessage = () => {
+    if (customMessage) return customMessage;
+    return defaultMessages[Math.floor(Math.random() * defaultMessages.length)];
+  };
+
+  const [loadingMessage] = useState(getLoadingMessage());
 
   return (
     <div className="fixed inset-0 bg-background flex flex-col gap-7 items-center justify-center z-50 text-center">
-
+      {/* Logo */}
       <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
         <Zap className="w-5 h-5 text-primary-foreground" />
       </div>
+      
+      {/* App Name */}
       <h1 className="text-2xl font-bold text-foreground">
         Ritmo
       </h1>
 
+      {/* Tagline */}
       <p className="text-muted-foreground">
         Track • Build • Achieve
       </p>
 
+      {/* Progress Bar */}
       <div className="w-64 mx-auto">
         <div className="h-2 bg-muted rounded-full overflow-hidden">
-          <div className="h-full bg-primary rounded-full animate-[fillBar_2s_ease-in-out_infinite]"></div>
+          <div 
+            className="h-full bg-primary rounded-full animate-[fillBar_var(--duration)_ease-in-out_infinite]"
+            style={{ '--duration': `${duration}s` } as React.CSSProperties}
+          ></div>
         </div>
       </div>
 
-      <div className="text-muted-foreground text-sm space-y-2">
-        <div className="animate-pulse">
-          {currentSlogan}
-        </div>
+      {/* Loading Messages */}
+      <div className="text-muted-foreground text-sm space-y-2 min-h-[3rem] flex flex-col justify-center">
+        {/* Custom/Random Slogan */}
+        {showSlogan && currentSlogan && (
+          <div className="animate-pulse">
+            {currentSlogan}
+          </div>
+        )}
+        
+        {/* Loading Message */}
         <div>
-          <span className="inline-block animate-[bounce_1s_infinite] mr-1">Loading</span>
-          <span className="inline-block animate-[bounce_1s_infinite_0.1s] mr-1">your</span>
-          <span className="inline-block animate-[bounce_1s_infinite_0.2s] mr-1">workspace</span>
-          <span className="inline-block animate-[bounce_1s_infinite_0.3s]">...</span>
+          {customMessage ? (
+            // Custom message with simple loading animation
+            <div className="flex items-center justify-center gap-1">
+              <span>{customMessage}</span>
+              <span className="inline-flex">
+                <span className="animate-[bounce_1s_infinite] mx-[1px]">.</span>
+                <span className="animate-[bounce_1s_infinite_0.1s] mx-[1px]">.</span>
+                <span className="animate-[bounce_1s_infinite_0.2s] mx-[1px]">.</span>
+              </span>
+            </div>
+          ) : (
+            // Default animated word loading
+            <div>
+              {loadingMessage.split(' ').map((word, index) => (
+                <span 
+                  key={index}
+                  className={`inline-block animate-[bounce_1s_infinite_${index * 0.1}s] mr-1`}
+                >
+                  {word}
+                </span>
+              ))}
+              <span className="inline-block animate-[bounce_1s_infinite_0.3s]">...</span>
+            </div>
+          )}
         </div>
       </div>
 
+      {/* Floating Icons */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 animate-[float_3s_ease-in-out_infinite]">
           <div className="w-8 h-8 bg-card border border-border rounded-full flex items-center justify-center opacity-60">

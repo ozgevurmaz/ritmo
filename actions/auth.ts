@@ -55,7 +55,7 @@ export async function signup(formData: FormData) {
   if (userId) {
     const { error: profileError } = await supabase
       .from('profiles')
-      .insert({ id: userId, email })
+      .insert({ id: userId, email, username: `user_${Math.floor(Math.random() * 100000)}` })
 
     if (profileError) {
       return { error: profileError.message }
@@ -67,19 +67,32 @@ export async function signup(formData: FormData) {
 }
 
 export async function resetPasswordForEmail(formData: FormData) {
-  const supabase = await createClient()
+  try {
+    const supabase = await createClient()
+    const email = formData.get('email') as string
 
-  const email = formData.get('email') as string
+    if (!email) {
+      return { error: 'Email is required' }
+    }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/reset-password`,
-  })
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    const redirectUrl = `${baseUrl}/auth/reset-password`
 
-  if (error) {
-    return { error: error.message }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: redirectUrl,
+    })
+
+    if (error) {
+      console.error('Reset password error:', error)
+      return { error: error.message }
+    }
+
+    return { success: true }
+
+  } catch (err) {
+    console.error('Unexpected error in resetPasswordForEmail:', err)
+    return { error: 'An unexpected error occurred. Please try again.' }
   }
-
-  return { success: true }
 }
 
 export async function updatePassword(formData: FormData) {
@@ -99,7 +112,6 @@ export async function updatePassword(formData: FormData) {
 
 
 export const handleLogout = async () => {
-
   const supabase = await createClient()
 
   const { error } = await supabase.auth.signOut()

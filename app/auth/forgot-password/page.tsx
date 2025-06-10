@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { forgotPasswordSchema } from "@/lib/zod/auth/auth";
+import { resetPasswordForEmail } from "@/actions/auth";
 
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
@@ -32,14 +33,15 @@ export default function ForgotPasswordPage() {
     setError("");
 
     try {
-      const supabase = createClient();
-      const { error } = await supabase.auth.resetPasswordForEmail(data.email, {
-        redirectTo: `${window.location.origin}/auth/reset-password`,
-      });
 
-      if (error) {
-        setError(error.message);
-      } else {
+      const formData = new FormData();
+      formData.append('email', data.email);
+
+      const result = await resetPasswordForEmail(formData);
+
+      if (result.error) {
+        setError(result.error);
+      } else if (result.success) {
         setSuccess(true);
       }
     } catch (err) {
@@ -53,9 +55,9 @@ export default function ForgotPasswordPage() {
     return (
       <div className="space-y-4 max-w-md mx-auto mt-10">
         <div className="text-center">
-          <div className="text-green-600 text-4xl mb-4">📧</div>
+          <Mail className="w-12 h-12 mx-auto mb-6 text-destructive" />
           <h2 className="text-2xl font-semibold mb-2">Check Your Email</h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-foreground mb-6">
             We've sent a password reset link to your email address.
           </p>
         </div>
@@ -84,8 +86,9 @@ export default function ForgotPasswordPage() {
   return (
     <div className="space-y-6 max-w-md mx-auto mt-10">
       <div className="text-center">
+        <Mail className="w-12 h-12 mx-auto mb-6 text-destructive" />
         <h2 className="text-2xl font-semibold">Forgot Password?</h2>
-        <p className="text-gray-600 mt-2">
+        <p className="text-foreground mt-2">
           Enter your email address and we'll send you a link to reset your password.
         </p>
       </div>
@@ -106,7 +109,7 @@ export default function ForgotPasswordPage() {
                 <FormLabel>Email Address</FormLabel>
                 <FormControl>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="email"
                       placeholder="Enter your email address"
@@ -128,8 +131,8 @@ export default function ForgotPasswordPage() {
       </Form>
 
       <div className="text-center">
-        <Link href="/auth" className="text-sm text-blue-600 hover:underline">
-          <ArrowLeft className="w-4 h-4 inline mr-1" />
+        <Link href="/auth" className="text-sm text-secondary hover:underline flex justify-center items-center">
+          <ArrowLeft className="w-4 h-4 mr-1" />
           Back to Login
         </Link>
       </div>

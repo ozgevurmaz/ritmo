@@ -51,11 +51,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/',
-    '/admin',
-    '/auth',
-    '/admin/:path*',
-    '/(client)/:path*',
-    '/auth/:path*',
+    '/((?!auth/reset-password|auth/forgot-password|auth|_next|favicon.ico|api).*)',
   ],
 };
