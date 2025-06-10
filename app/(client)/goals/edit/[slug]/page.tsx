@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 import React from "react";
 
 const EditGoal = () => {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const { data: profile, isLoading: profileLoading } = useProfile();
 
   const userId = profile?.id ?? "";
@@ -20,7 +20,7 @@ const EditGoal = () => {
   const isLoading = profileLoading || goalLoading || !profile?.id;
 
   if (isLoading) return <LoadingScreen />
-  
+
   return <GoalForm userId={profile.id} editingGoal={selectedGoal} />;
 };
 
