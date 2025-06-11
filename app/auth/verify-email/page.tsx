@@ -5,10 +5,12 @@ import LoadingScreen from '@/components/shared/pageStyles/Loading'
 import { useUser } from '@/context/auth-context'
 import { createClient } from '@/lib/supabase/client'
 import { Mail, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 import { toast } from 'sonner'
 
 const Page = () => {
+    const t = useTranslations()
     const { user, loading } = useUser()
 
     if (loading) return <LoadingScreen />
@@ -16,7 +18,7 @@ const Page = () => {
     if (!user?.email) {
         return (
             <CustomPage
-                header="User cannot be found"
+                header={t("errors.user-error")}
                 icon={X}
             />
         );
@@ -30,7 +32,7 @@ const Page = () => {
         });
 
         if (!error) {
-            toast.success("Verification mail sent");
+            toast.success(t("auth.verification.success"));
         } else {
             toast.error(error.message);
         }
@@ -40,11 +42,11 @@ const Page = () => {
     return (
         <CustomPage
             icon={Mail}
-            header="Verify Your Email"
-            description={`Verify your mail address in ${user?.email ?? 'your email'}`}
+            header={t("auth.verification.title")}
+            description={`${t("auth.verification.description")} ${user.email}`}
             button
-            buttonDescription="Didn't receive the code?"
-            buttonText="Resend verification code"
+            buttonDescription={t("auth.verification.no-code")}
+            buttonText={t("buttons.send-another")}
             buttonAction={handleResend}
         />
     )

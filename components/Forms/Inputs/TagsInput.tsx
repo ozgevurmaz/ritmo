@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -12,6 +14,7 @@ import {
     PathValue,
     UseFormSetValue
 } from 'react-hook-form';
+import { useTranslations } from 'next-intl';
 
 type TagsInputProps<T extends FieldValues> = {
     control: Control<T>;
@@ -27,6 +30,7 @@ export const TagsInput = <T extends FieldValues>({
     setValue
 }: TagsInputProps<T>) => {
     const [inputValue, setInputValue] = useState("");
+    const t = useTranslations('forms.tags');
 
     const handleAddTag = (tags: string[], value: string) => {
         const newTag = value.trim();
@@ -43,7 +47,7 @@ export const TagsInput = <T extends FieldValues>({
 
     return (
         <div className="space-y-2">
-            <Label htmlFor={name} className="text-sm font-medium">Tags (optional)</Label>
+            <Label htmlFor={name} className="text-sm font-medium">{t('label')}</Label>
             <Controller
                 name={name}
                 control={control}
@@ -60,7 +64,7 @@ export const TagsInput = <T extends FieldValues>({
                                     setInputValue("");
                                 }
                             }}
-                            placeholder="Press Enter or comma to add"
+                            placeholder={t('placeholder')}
                             className={errors[name] ? 'border-destructive' : ''}
                         />
                         <div className="flex flex-wrap gap-2 mt-2">
@@ -78,7 +82,7 @@ export const TagsInput = <T extends FieldValues>({
                 )}
             />
             {errors[name] && (
-                <p className="text-xs text-destructive">{String(errors[name]?.message)}</p>
+                <p className="text-xs text-destructive">{String(errors[name]?.message || t('error'))}</p>
             )}
         </div>
     );

@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle2, PlayCircle, Timer, FunctionSquare } from "lucide-react"
 import { GoalSection } from './goalsSection'
 import { useHabits } from "@/lib/Queries/habits/useHabit";
+import { useTranslations } from "next-intl";
 
 interface GoalTabsProps {
     goals: GoalType[]
@@ -11,6 +12,7 @@ interface GoalTabsProps {
 }
 
 export default function GoalTabs({ goals, userId }: GoalTabsProps) {
+    const t = useTranslations("common")
     const { data: habits = [] } = useHabits(userId)
 
     const completedGoals = goals.filter(goal => goal.completed)
@@ -33,15 +35,15 @@ export default function GoalTabs({ goals, userId }: GoalTabsProps) {
             <TabsList className="grid w-full max-w-md grid-cols-3">
                 <TabsTrigger value="current" className="flex items-center gap-2 data-[state=active]:text-goals">
                     <PlayCircle className="h-4 w-4" />
-                    Current ({currentGoals.length})
+                    {t("tabs.active")} ({currentGoals.length})
                 </TabsTrigger>
                 <TabsTrigger value="completed" className="flex items-center gap-2 data-[state=active]:text-goals">
                     <CheckCircle2 className="h-4 w-4" />
-                    Completed ({completedGoals.length})
+                    {t("tabs.completed")} ({completedGoals.length})
                 </TabsTrigger>
                 <TabsTrigger value="upcoming" className="flex items-center gap-2 data-[state=active]:text-goals">
                     <Timer className="h-4 w-4" />
-                    Upcoming ({upcomingGoals.length})
+                    {t("tabs.upcoming")} ({upcomingGoals.length})
                 </TabsTrigger>
             </TabsList>
 
@@ -49,9 +51,9 @@ export default function GoalTabs({ goals, userId }: GoalTabsProps) {
                 <GoalSection
                     goals={currentGoals}
                     habits={habits}
-                    title="Current Goals"
+                    title={t("tabs.active")}
                     icon={PlayCircle}
-                    emptyMessage="No current goals. Start a new goal to begin your journey!"
+                    emptyMessage={t("empty-states.goals.active")}
                     showHabits={true}
                     userId={userId}
                 />
@@ -61,9 +63,9 @@ export default function GoalTabs({ goals, userId }: GoalTabsProps) {
                 <GoalSection
                     goals={completedGoals}
                     habits={habits}
-                    title="Completed Goals"
+                    title={t("tabs.completed")}
                     icon={CheckCircle2}
-                    emptyMessage="No completed goals yet. Keep working on your current goals!"
+                    emptyMessage={t("empty-states.goals.completed")}
                     showHabits={false}
                     userId={userId}
                 />
@@ -73,9 +75,9 @@ export default function GoalTabs({ goals, userId }: GoalTabsProps) {
                 <GoalSection
                     goals={upcomingGoals}
                     habits={habits}
-                    title="Upcoming Goals"
+                    title={t("tabs.upcoming")}
                     icon={FunctionSquare}
-                    emptyMessage="No upcoming goals yet. Find new ones for yourself.!"
+                    emptyMessage={t("empty-states.goals.upcoming")}
                     showHabits={true}
                     userId={userId}
                 />

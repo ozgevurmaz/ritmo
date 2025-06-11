@@ -1,6 +1,7 @@
 
 import * as React from "react"
 import { cn } from "@/lib/utils"
+import { useTranslations } from "next-intl"
 
 interface CustomProgressProps extends React.HTMLAttributes<HTMLDivElement> {
     value: number
@@ -22,7 +23,7 @@ export const CustomProgress = React.forwardRef<HTMLDivElement, CustomProgressPro
         max = 100,
         backgroundColor = "bg-muted",
         fillColor = "bg-primary",
-        title = "Progress",
+        title,
         showPercentage = false,
         headerPosition = "none",
         textColor = "text-primary",
@@ -30,13 +31,14 @@ export const CustomProgress = React.forwardRef<HTMLDivElement, CustomProgressPro
         showTitle = false,
         ...props
     }, ref) => {
+        const t = useTranslations("custom")
         const percentage = Math.min(Math.max((value / max) * 100, 0), 100)
 
         return (
             <div className="w-full space-y-1">
                 {headerPosition === "outside" && (
                     <div className="flex justify-between text-sm text-primary">
-                        {showTitle && <span className={cn(textColor)}>{title}</span>}
+                        {showTitle && <span className={cn(textColor)}>{title || t("progress")}</span>}
                         {showPercentage && <span className={cn("font-medium", textColor)}>{Math.round(percentage)}%</span>}
                     </div>
                 )}

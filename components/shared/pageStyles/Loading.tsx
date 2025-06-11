@@ -2,20 +2,26 @@
 
 import React, { useEffect, useState } from 'react';
 import { CheckCircle, Target, ListTodo, TrendingUp, Users, Zap } from 'lucide-react';
-import { slogans } from '@/lib/constants';
+import { useTranslations } from 'next-intl';
 
 interface LoadingScreenProps {
   customMessage?: string;
   showSlogan?: boolean;
-  duration?: number; // Optional duration for progress bar animation
+  duration?: number;
 }
 
-const LoadingScreen: React.FC<LoadingScreenProps> = ({ 
-  customMessage, 
+const LoadingScreen: React.FC<LoadingScreenProps> = ({
+  customMessage,
   showSlogan = true,
   duration = 2
 }) => {
+  const t = useTranslations("loading");
+
+  const defaultMessages: string[] = t.raw("default-messages");
+  const slogans: string[] = t.raw("slogans");
+
   const [currentSlogan, setCurrentSlogan] = useState("");
+
 
   useEffect(() => {
     if (showSlogan) {
@@ -24,13 +30,6 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
     }
   }, [showSlogan]);
 
-  // Default loading messages if no custom message provided
-  const defaultMessages = [
-    "Loading your workspace",
-    "Preparing your dashboard", 
-    "Syncing your data",
-    "Getting things ready"
-  ];
 
   const getLoadingMessage = () => {
     if (customMessage) return customMessage;
@@ -45,7 +44,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
       <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
         <Zap className="w-5 h-5 text-primary-foreground" />
       </div>
-      
+
       {/* App Name */}
       <h1 className="text-2xl font-bold text-foreground">
         Ritmo
@@ -53,13 +52,13 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
 
       {/* Tagline */}
       <p className="text-muted-foreground">
-        Track • Build • Achieve
+        {t("tagline")}
       </p>
 
       {/* Progress Bar */}
       <div className="w-64 mx-auto">
         <div className="h-2 bg-muted rounded-full overflow-hidden">
-          <div 
+          <div
             className="h-full bg-primary rounded-full animate-[fillBar_var(--duration)_ease-in-out_infinite]"
             style={{ '--duration': `${duration}s` } as React.CSSProperties}
           ></div>
@@ -74,13 +73,13 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
             {currentSlogan}
           </div>
         )}
-        
+
         {/* Loading Message */}
         <div>
           {customMessage ? (
             // Custom message with simple loading animation
             <div className="flex items-center justify-center gap-1">
-              <span>{customMessage}</span>
+              <span>{customMessage || t("custom-loading")}</span>
               <span className="inline-flex">
                 <span className="animate-[bounce_1s_infinite] mx-[1px]">.</span>
                 <span className="animate-[bounce_1s_infinite_0.1s] mx-[1px]">.</span>
@@ -91,7 +90,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
             // Default animated word loading
             <div>
               {loadingMessage.split(' ').map((word, index) => (
-                <span 
+                <span
                   key={index}
                   className={`inline-block animate-[bounce_1s_infinite_${index * 0.1}s] mr-1`}
                 >

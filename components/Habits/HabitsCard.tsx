@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle2, Circle, Edit, Trash2 } from "lucide-react";
 import StreakBadge from "@/components/custom/StreakBadge";
 import { useUpdateHabitProgress } from "@/lib/Mutations/habits/useUpdateHabitProgress";
+import { useTranslations } from "next-intl";
 
 interface HabitsCardProps {
     habit?: HabitType
@@ -42,7 +43,7 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
     habits,
     showProccess = false
 }) => {
-
+    const t = useTranslations()
     const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId || "");
 
     const incrementHabit = (id: string) => {
@@ -93,7 +94,7 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
 
                     {showGoal && goal && (
                         <span className="text-xs text-goal bg-goal/10 px-2 py-0.5 rounded-full">
-                            <span className="text-goals font-semibold"> • Goal: </span>
+                            <span className="text-goals font-semibold"> • {t("habits.goal")}: </span>
                             {goal}
                         </span>
                     )}

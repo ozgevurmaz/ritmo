@@ -25,7 +25,6 @@ import { formatDateForQuery, getPriorityColor, getPriorityLabel } from '@/lib/ut
 import { useAddTodo } from '@/lib/Mutations/todos/useAddTodo';
 import { useUpdateTodo } from '@/lib/Mutations/todos/useUpdateTodo';
 import { useDeleteTodo } from '@/lib/Mutations/todos/useDeleteTodo';
-import { PRIORITY_EXPLANATIONS } from '@/lib/constants';
 
 import { NotificationSelect } from './Selectors/NotificationSelection';
 import { RepeatSelection } from './Selectors/RepeatSelection';
@@ -41,6 +40,7 @@ import { TitleInput } from './Inputs/TitleInput';
 import { FormActions } from './Cards/FormActions';
 import { DeleteConfirmDialog } from '../shared/DeleteConfirmDialog';
 import { PrivacyCard } from './Cards/PrivacyCard';
+import { useTranslations } from 'next-intl';
 
 type TodoFormData = z.infer<typeof todoSchema>;
 
@@ -57,6 +57,8 @@ const TodoForm: React.FC<TodoFormProps> = ({
     editingTodo = null,
     userId
 }) => {
+    const t = useTranslations()
+
     const { mutateAsync: addToDo } = useAddTodo(userId);
     const { mutateAsync: updateTodo } = useUpdateTodo(userId);
     const { mutate: deleteTodo } = useDeleteTodo(userId);
@@ -100,13 +102,13 @@ const TodoForm: React.FC<TodoFormProps> = ({
     const { urgent: urgentValue, importance: importanceValue, visibility } = watchedValues;
 
     const priorityInfo = useMemo(() => {
-        const priorityKey = `${importanceValue}-${urgentValue}` as keyof typeof PRIORITY_EXPLANATIONS;
+        const priorityKey = `forms.todo.priority.${importanceValue}-${urgentValue}`;
         return {
             label: getPriorityLabel(urgentValue, importanceValue),
             color: getPriorityColor(urgentValue, importanceValue),
-            explanation: PRIORITY_EXPLANATIONS[priorityKey] || 'Unknown priority level'
+            explanation: t(priorityKey)
         };
-    }, [urgentValue, importanceValue]);
+    }, [importanceValue, urgentValue, t]);
 
     // Reset form when dialog opens/closes
     useEffect(() => {
@@ -132,16 +134,16 @@ const TodoForm: React.FC<TodoFormProps> = ({
 
             if (isEditing) {
                 await updateTodo({ todoId: editingTodo!.id, updates: submitData });
-                toast.success("Todo updated successfully!");
+                toast.success(t("forms.todo.toasts.success-update"));
             } else {
                 await addToDo(submitData);
-                toast.success("Todo created successfully!");
+                toast.success(t("forms.todo.toasts.success-create"));
             }
 
             handleClose();
         } catch (error) {
             console.error('Error saving todo:', error);
-            toast.error(isEditing ? "Error updating todo. Please try again." : "Error creating todo. Please try again.");
+            toast.error(isEditing ? t("forms.todo.toasts.error-update") : t("forms.todo.toasts.error-create"));
         }
     };
 
@@ -170,7 +172,7 @@ const TodoForm: React.FC<TodoFormProps> = ({
     const confirmDelete = () => {
         if (editingTodo) {
             deleteTodo(editingTodo.id);
-            toast.success("Todo deleted successfully.");
+            toast.success(t("forms.todo.toasts.deleted"));
             handleClose();
         }
     };
@@ -184,15 +186,15 @@ const TodoForm: React.FC<TodoFormProps> = ({
             <DialogContent className="min-w-4/5 lg:min-w-2/3 max-h-[90vh] overflow-y-auto px-2 md:p-4">
                 <FormWrapper
                     variant="dialog"
-                    title={isEditing ? 'Edit Todo' : 'Create New Todo'}
+                    title={isEditing ? t("forms.todo.title.edit") : t("forms.todo.title.create")}
                     icon={CheckSquare}
                     description={isEditing
-                        ? 'Update your task details and priorities.'
-                        : 'Add a new task with priority levels, deadlines, and notifications.'
+                        ? t("forms.todo.description.edit")
+                        : t("forms.todo.description.create")
                     }>
                     <form className="space-y-8 py-3 md:py-6" onSubmit={handleSubmit(onSubmit)}>
                         {/* Basic Information */}
-                        <FormWrapper title='Basic Information' icon={Sparkles} variant="element">
+                        <FormWrapper title={t("forms.todo.sections.basic")} icon={Sparkles} variant="element">
                             <div className="flex flex-col md:flex-row gap-4">
                                 {/* Title */}
                                 <div className='flex-1 md:flex-2'>
@@ -200,8 +202,8 @@ const TodoForm: React.FC<TodoFormProps> = ({
                                         control={control}
                                         errors={errors}
                                         name="title"
-                                        label="Task Title"
-                                        placeholder="e.g., Schedule dentist appointment, Submit report, Call mom"
+                                        label={t("forms.todo.fields.task-title")}
+                                        placeholder={t("forms.todo.fields.placeholder")}
                                     />
                                 </div>
                                 <div className='md:flex-1'>
@@ -222,7 +224,7 @@ const TodoForm: React.FC<TodoFormProps> = ({
                         </FormWrapper>
 
                         {/* Priority Matrix */}
-                        <FormWrapper title="Priority Matrix" icon={Zap} variant="element">
+                        <FormWrapper title={t("forms.todo.sections.priority")} icon={Zap} variant="element">
                             <Badge className={priorityInfo.color} variant="secondary" >
                                 {priorityInfo.label}
                             </Badge>
@@ -234,13 +236,13 @@ const TodoForm: React.FC<TodoFormProps> = ({
                             />
                             <Alert className={priorityInfo.color}>
                                 <AlertDescription className={priorityInfo.color}>
-                                    <strong>Current Priority:</strong> {priorityInfo.explanation}
+                                    <strong>{t("forms.todo.fields.priority-explanation")}:</strong> {priorityInfo.explanation}
                                 </AlertDescription>
                             </Alert>
                         </FormWrapper>
 
                         {/* Schedule & Timing */}
-                        <FormWrapper title="Schedule & Timing" icon={Calendar} variant="element">
+                        <FormWrapper title={t("forms.todo.sections.schedule")} icon={Calendar} variant="element">
                             {/* Date and Time */}
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <DateRangePicker<TodoFormData>
@@ -272,7 +274,7 @@ const TodoForm: React.FC<TodoFormProps> = ({
                         </FormWrapper>
 
                         {/* Tags & Organization */}
-                        <FormWrapper title="Tags & Organization" icon={Tag} variant="element">
+                        <FormWrapper title={t("forms.todo.sections.tags")} icon={Tag} variant="element">
                             <TagsInput<TodoFormData>
                                 control={control}
                                 errors={errors}
@@ -295,7 +297,8 @@ const TodoForm: React.FC<TodoFormProps> = ({
 
                         <FormActions
                             isSubmitting={isSubmitting}
-                            submitLabel="Save Task"
+                            submitLabel={t("forms.todo.actions.save")}
+                            editLabel={t("forms.todo.actions.edit")}
                             onCancel={() => isOpen}
                             onDelete={handleDelete}
                             showDelete={!!editingTodo}
@@ -305,8 +308,8 @@ const TodoForm: React.FC<TodoFormProps> = ({
                             open={deleteConfirmOpen}
                             onClose={cancelDelete}
                             onConfirm={confirmDelete}
-                            title="Delete this task?"
-                            description="This will permanently remove your task from the system."
+                            title={t("forms.todo.delete.title")}
+                            description={t("forms.todo.delete.description")}
                         />
 
                     </form>

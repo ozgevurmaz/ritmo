@@ -4,11 +4,14 @@ import { useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import {  AlertCircle } from 'lucide-react'
+import { AlertCircle } from 'lucide-react'
 import LoginForm from '@/components/auth/loginForm'
 import { SignupForm } from '@/components/auth/signupForm'
+import { useTranslations } from 'next-intl'
 
 export default function LoginPage() {
+    const t = useTranslations('auth');
+
     const [error, setError] = useState<string | null>(null)
     const [activeTab, setActiveTab] = useState('login')
 
@@ -21,16 +24,16 @@ export default function LoginPage() {
         <div className="flex min-h-screen items-center justify-center bg-background px-4 py-12 sm:px-6 lg:px-8 h-14">
             <Card className="w-full max-w-md">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-bold text-center">Welcome</CardTitle>
+                    <CardTitle className="text-2xl font-bold text-center">{t('welcome')}</CardTitle>
                     <CardDescription className="text-center">
-                        Sign in to your account or create a new one
+                        {t("description")}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
                         <TabsList className="grid w-full grid-cols-2">
-                            <TabsTrigger value="login">Login</TabsTrigger>
-                            <TabsTrigger value="signup">Sign Up</TabsTrigger>
+                            <TabsTrigger value="login">{t("login.title")}</TabsTrigger>
+                            <TabsTrigger value="signup">{t("signup.title")}</TabsTrigger>
                         </TabsList>
 
                         {error && (

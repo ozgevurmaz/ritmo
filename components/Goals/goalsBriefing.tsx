@@ -1,7 +1,9 @@
 import { formatDate } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 export const GoalBriefing = ({ goal }: { goal: GoalType }) => {
+    const t = useTranslations()
     return (
         <div
             key={goal.id}
@@ -13,7 +15,7 @@ export const GoalBriefing = ({ goal }: { goal: GoalType }) => {
                 </h4>
                 <div className="flex items-center gap-2">
                     <span className="text-xs text-muted-foreground">
-                        Starts on
+                        {t("common.starts-on")}
                     </span>
                     <span className="text-xs font-medium text-goals bg-background px-2 py-1 rounded border border-goals">
                         {formatDate(new Date(goal.endDate), { day: '2-digit', month: '2-digit', weekday: 'short', year: false })}

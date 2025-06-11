@@ -3,13 +3,13 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import Link from "next/link"
-import { Edit, Plus } from "lucide-react"
+import { Edit } from "lucide-react"
 import SingleGoalInfoCard from "./singleGoalInfoCardType"
 import { useRouter } from "next/navigation"
 import { HabitsCard } from "../Habits/HabitsCard"
 import { useState } from "react"
 import HabitsForm from "../Forms/habitForm"
+import { useTranslations } from "next-intl"
 
 export const GoalSection = ({
     goals,
@@ -29,6 +29,7 @@ export const GoalSection = ({
     userId: string
 }) => {
 
+    const t = useTranslations()
     const router = useRouter();
     const [editingHabit, setEditingHabit] = useState<HabitType | []>([])
     const [showHabitEdit, setShowHabitEdit] = useState<boolean>(false)
@@ -72,7 +73,7 @@ export const GoalSection = ({
                                         className="ml-4 flex items-center gap-2 hover:bg-goals"
                                     >
                                         <Edit className="h-4 w-4" />
-                                        Edit
+                                        {t("forms.goal.edit-title")}
                                     </Button>
                                 </div>
                             </CardHeader>
@@ -83,7 +84,7 @@ export const GoalSection = ({
                                         <div className="flex items-center gap-2 mb-3">
                                             <div className="w-2 h-2 rounded-full bg-habits opacity-60"></div>
                                             <h4 className="text-sm font-semibold text-habits uppercase tracking-wide">
-                                                Related Habits
+                                                {t("goals.related-habits")}
                                             </h4>
                                             <Badge variant="outline" className="text-xs text-habits border-habits">
                                                 {goal.habits.length}

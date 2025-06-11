@@ -9,6 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { useHabits } from '@/lib/Queries/habits/useHabit';
 import { HabitsCard } from '../../Habits/HabitsCard';
 import { FormWrapper } from '../Wrapper/FormWrapper';
+import { useTranslations } from 'next-intl';
 
 interface HabitManagmentHabit {
     userId: string
@@ -36,7 +37,7 @@ export const HabitManagment = ({
     selectedHabits,
     defaultGoalHabit
 }: HabitManagmentHabit) => {
-
+    const t = useTranslations()
     const { data: allHabits } = useHabits(userId)
     let totalSelectedHabits = addedHabits.length + selectedHabits.length;
 
@@ -50,7 +51,7 @@ export const HabitManagment = ({
 
     return (
         <FormWrapper
-            title='Habit Management'
+            title={t("forms.goal.habit-management.title")}
             icon={RotateCcw}
             variant="element"
         >
@@ -65,13 +66,13 @@ export const HabitManagment = ({
                     }}
                     className="relative"
                 >
-                    Add New Habit
+                    {t("habits.add-button")}
                 </Button>
                 {totalSelectedHabits === 0 && (
                     <Alert variant="destructive">
                         <AlertCircle className="h-4 w-4" />
                         <AlertDescription>
-                            Please select at least one habit to link with this goal.
+                            {t("forms.goal.habit-management.alert.no-habit")}
                         </AlertDescription>
                     </Alert>
                 )}
@@ -79,7 +80,7 @@ export const HabitManagment = ({
                 {/* Selected Habits Section */}
                 {(selectedHabits.length > 0 || addedHabits.length > 0) && (
                     <div>
-                        <h4 className="font-medium mb-3">Selected Habits</h4>
+                        <h4 className="font-medium mb-3">{t("forms.goal.habit-management.section.selected")}</h4>
                         <div className="space-y-2">
                             {selectedHabits.map((habit) => (
                                 <HabitsCard
@@ -101,7 +102,7 @@ export const HabitManagment = ({
                 {/* New Habits Section */}
                 {addedHabits.length > 0 && (
                     <div>
-                        <h4 className="font-medium mb-3">New Habits</h4>
+                        <h4 className="font-medium mb-3">{t("forms.goal.habit-management.section.new")}</h4>
                         <div className="space-y-2">
                             {addedHabits.map((habit) => (
                                 <HabitsCard
@@ -124,7 +125,7 @@ export const HabitManagment = ({
                 {/* Available Habits Section */}
                 {filteredAvailableHabits && filteredAvailableHabits.length > 0 && (
                     <div>
-                        <h4 className="font-medium mb-3">Available Habits</h4>
+                        <h4 className="font-medium mb-3">{t("forms.goal.habit-management.section.available")}</h4>
                         <div className="space-y-2">
                             {filteredAvailableHabits.map((habit) => (
                                 <HabitsCard

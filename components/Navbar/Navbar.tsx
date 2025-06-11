@@ -32,13 +32,14 @@ import { useProfile } from '@/lib/Queries/useProfile';
 import StreakBadge from '../custom/StreakBadge';
 import LoadingScreen from '../shared/pageStyles/Loading';
 import { handleLogout } from '@/actions/auth';
+import { useTranslations } from 'use-intl';
 
 interface NavbarProps {
   isAdmin?: boolean
 }
-
 export function Navbar({ isAdmin = false }: NavbarProps) {
-  const { data: profile, isLoading, error } = useProfile();
+  const t = useTranslations("nav")
+  const { data: profile, isLoading } = useProfile();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -49,11 +50,6 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
 
   if (isLoading) return <LoadingScreen />
 
-  if (error) {
-    return (
-      <div>Something went wrong</div>
-    )
-  }
   return (
     <>
       <header className="z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 bg-background">
@@ -64,7 +60,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
             <Zap className="h-6 w-6 text-primary" />
             <span className="text-lg font-semibold tracking-tight">Ritmo {isAdmin && <span className='text-primary font-bold'>Admin</span>}</span>
           </Link>
-     
+
           {/* User Actions */}
           <div className="flex items-center">
             {
@@ -145,14 +141,14 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
                 <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted focus:text-muted-foreground  " asChild>
                   <Link href="/account">
                     <User className="mr-2 h-4 w-4" />
-                    Profile
+                    {t("profile")}
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted focus:text-muted-foreground" asChild>
                   <Link href="/settings">
                     <Settings className="mr-2 h-4 w-4" />
-                    Settings
+                    {t("settings")}
                   </Link>
                 </DropdownMenuItem>
 
@@ -160,7 +156,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
 
                 <DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer px-4 py-2">
                   <LogOut className="mr-2 h-4 w-4" />
-                  Log out
+                 {t("logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -209,7 +205,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <link.icon className="h-5 w-5" />
-                  <span>{link.name}</span>
+                  <span>{t(link.name)}</span>
                 </Link>
               ))}
             </nav>

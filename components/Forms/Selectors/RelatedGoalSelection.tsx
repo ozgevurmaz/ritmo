@@ -19,6 +19,7 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Link } from 'lucide-react';
 import { useGoals } from '@/lib/Queries/goals/useGoal';
+import { useTranslations } from 'next-intl';
 
 interface RelatedGoalSelectionProps<T extends FieldValues> {
     control: Control<T>;
@@ -37,13 +38,13 @@ export const RelatedGoalSelection = <T extends FieldValues>({
     goalTitle,
     disabled
 }: RelatedGoalSelectionProps<T>) => {
-
+    const t = useTranslations()
     const { data: goals, isLoading: goalsLoading } = useGoals(userId);
     const selectedGoal = useWatch({ control, name }) as string | null;
 
     return (
         <div className="space-y-2">
-            <Label htmlFor={name} className="text-sm font-medium">Link to Goal (Optional)</Label>
+            <Label htmlFor={name} className="text-sm font-medium">{t("forms.habit.fields.goal-selection.label")}</Label>
 
             <Controller
                 disabled={!!goalTitle}
@@ -55,13 +56,13 @@ export const RelatedGoalSelection = <T extends FieldValues>({
                             setValue(name, value === 'none' ? null : value as any, { shouldDirty: true })
                         }
                         value={field.value || 'none'}
-                        disabled={ disabled}
+                        disabled={disabled}
                     >
                         <SelectTrigger>
-                            <SelectValue placeholder={goalsLoading ? "Loading goals..." : "Select a goal"} />
+                            <SelectValue placeholder={goalsLoading ? t("forms.habit.fields.goal-selection.loading") : t("forms.habit.fields.goal-selection.placeholder")} />
                         </SelectTrigger>
                         <SelectContent className="bg-background">
-                            <SelectItem value="none">No Goal</SelectItem>
+                            <SelectItem value="none">{t("forms.habit.fields.goal-selection.no-goal")}</SelectItem>
                             {goals?.map((goal: GoalType) => (
                                 <SelectItem key={goal.id} value={goal.id}>
                                     <div className="flex items-center gap-2">
@@ -79,7 +80,7 @@ export const RelatedGoalSelection = <T extends FieldValues>({
                 <Alert className="border-goals bg-goals/20">
                     <Link className="h-4 w-4 text-goals/90" />
                     <AlertDescription className="text-goals">
-                        <strong>Linked to:</strong> {goals?.find((g: GoalType) => g.id === selectedGoal)?.title}
+                        <strong>{t("forms.habit.fields.goal-selection.linked-label")}</strong> {goals?.find((g: GoalType) => g.id === selectedGoal)?.title}
                     </AlertDescription>
                 </Alert>
             )}
@@ -88,7 +89,7 @@ export const RelatedGoalSelection = <T extends FieldValues>({
                 <Alert className="border-goals bg-goals/20">
                     <Link className="h-4 w-4 text-goals/90" />
                     <AlertDescription className="text-goals">
-                        <strong>Linked to:</strong> {goalTitle}
+                        <strong>{t("forms.habit.fields.goal-selection.linked-label")}</strong> {goalTitle}
                     </AlertDescription>
                 </Alert>
             )}

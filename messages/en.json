@@ -1,0 +1,610 @@
+{
+  "auth": {
+    "welcome": "Welcome",
+    "description": "Sign in to your account or create a new one",
+    "login": {
+      "title": "Login",
+      "error": "An error occurred during login",
+      "ask-account": "Don't have an account?"
+    },
+    "signup": {
+      "title": "Sign Up",
+      "creating": "Creating account...",
+      "error": "An error occurred during signup"
+    },
+    "forgot-password": {
+      "title": "Forgot Password?",
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "success": {
+        "title": "Check Your Email",
+        "description1": "We've sent a password reset link to your email address.",
+        "description2": "Click the link in your email to reset your password. The link will expire in 1 hour."
+      }
+    },
+    "reset-password": {
+      "loading": "Validating reset link...",
+      "title": "Set New Password",
+      "label": "New Password",
+      "updating": "Updating Password...",
+      "success": {
+        "title": "Password Updated Successfully",
+        "description": "Your password has been updated. You will be redirected to the login page shortly."
+      },
+      "error": {
+        "title": "Invalid reset link",
+        "invalid-link": "Invalid or expired reset link.",
+        "missing-link": "Reset link is missing."
+      }
+    },
+    "verification": {
+      "title": "Verify Your Email",
+      "success": "Verification mail sent",
+      "description": "Verify your mail address in",
+      "no-code": "Didn't receive the code?"
+    }
+  },
+  "common": {
+    "left-days": "d left",
+    "days": "days",
+    "completed": "Completed",
+    "almost-there": "Almost there",
+    "edit": "Edit",
+    "starts-on": "Starts on",
+    "tabs": {
+      "active": "Active",
+      "completed": "Completed",
+      "upcoming": "Upcoming",
+      "urgent": "Urgent",
+      "normal": "Normal"
+    },
+    "empty-states": {
+      "goals": {
+        "active": "No current goals. Start a new goal to begin your journey!",
+        "completed": "No completed goals yet. Keep working on your current goals!",
+        "upcoming": "No upcoming goals yet. Find new ones for yourself!"
+      },
+      "habits": {
+        "active": "No active habits yet. Start building your routine today!",
+        "completed": "You haven't completed any habits yet.",
+        "upcoming": "No upcoming habits planned. Set some up!",
+        "no-goal": "Regular Habits"
+      },
+      "todos": {
+        "active": "No active todos. Add one to get started!",
+        "completed": "All done! No completed todos yet.",
+        "upcoming": "No upcoming todos scheduled."
+      }
+    }
+  },
+  "goals": {
+    "title": "Goals",
+    "definition": "Track your progress and achieve your dreams",
+    "add-button": "Add New Goal",
+    "status": {
+      "active": "Active Goals",
+      "completed": "Completed Goals",
+      "upcoming": "Upcoming Goals",
+      "ending-soon": "Ending Soon",
+      "average-progress": "Avg. Progress"
+    },
+    "related-habits": "Related Habits"
+  },
+  "habits": {
+    "title": "Habits",
+    "definition": "Track and manage your daily habits",
+    "add-button": "Add New Habit",
+    "status": {
+      "active": "Active Habits",
+      "completed": "Completed Habits",
+      "upcoming": "Upcoming Habits",
+      "todays-progress": "Today's Progress",
+      "completion-rate": "Completion Rate",
+      "average-streak": "Avg. Streak"
+    },
+    "goal": "Goal"
+  },
+  "todos": {
+    "title": "Todos",
+    "definition": "Track and manage your daily todos",
+    "overdue": "Overdue",
+    "add-button": "Add New Todos",
+    "status": {
+      "active": "Active Habits",
+      "completed": "Completed Todos",
+      "upcoming": "Upcoming Habits",
+      "total-tasks": "Total Tasks",
+      "completion-rate": "Completion Rate",
+      "high-priorty": "High Priorty"
+    },
+    "goal": "Goal",
+    "empty": {
+      "urgent": {
+        "title": "No urgent todos",
+        "subtitle": "You're all caught up!"
+      },
+      "normal": {
+        "title": "No normal priority todos",
+        "subtitle": "Add some tasks to get started"
+      },
+      "completed": {
+        "title": "No completed todos",
+        "subtitle": "Complete some tasks to see them here"
+      }
+    }
+  },
+  "dashboard": {
+    "statistics": "Statistics",
+    "status": {
+      "active-habits": "Active Habits",
+      "completed-items": "Completed Items",
+      "todays-focus": "Today's Focus",
+      "total-items": "Total Items"
+    }
+  },
+  "errors": {
+    "user-error": "User cannot be found",
+    "unexpected": "An unexpected error occurred. Please try again."
+  },
+  "account": {
+    "title": "Account Settings",
+    "description": "Manage your account information and preferences",
+    "toasts": {
+      "user-error": "Failed to load user data. Please try again.",
+      "success": "Profile updated successfully",
+      "update-error": "Failed to update profile. Please try again.",
+      "username-error": " This username is already taken"
+    }
+  },
+  "buttons": {
+    "updating": "Updating",
+    "update": "Update",
+    "add-button": "Add New",
+    "logout": "Log Out",
+    "signup": "Create Account",
+    "signin": "Sign In",
+    "signing-in": "Signing in...",
+    "to-login": "Back to Login",
+    "send-link": "Send Reset Link",
+    "send-another": "Send Another Link",
+    "to-back": "Go Back",
+    "to-home": "Return Home",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "yes-delete": "Yes Delete"
+  },
+  "forms": {
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email",
+      "account-description": " Your email address cannot be changed"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "Enter your name"
+    },
+    "surname": {
+      "label": "Surname",
+      "placeholder": "Enter your surname"
+    },
+    "username": {
+      "label": "Username",
+      "placeholder": "Enter your username"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter your password",
+      "new-placeholder": "Create a password",
+      "confirm-label": "Confirm Password",
+      "confirm-placeholder": "Confirm your password",
+      "validation": {
+        "requirments": "Password Requirements",
+        "length": "At least 8 characters",
+        "uppercase": "One uppercase letter",
+        "lowercase": "One lowercase letter",
+        "number": "One number"
+      }
+    },
+    "privacy": {
+      "title": "Privacy & Sharing",
+      "label": "Visibility",
+      "private": "Private",
+      "private-description": "Only you can see this todo",
+      "public": "Public",
+      "public-description": "Others can view and encourage your progress",
+      "share": {
+        "label": "Share with specific people",
+        "description": "Choose people who can view and encourage your progress",
+        "status": "Sharing with {count} contact{count, plural, one {} other {s}}"
+      }
+    },
+    "description": {
+      "label": "Description",
+      "placeholder": "Enter a description for your goal..."
+    },
+    "motivation": {
+      "label": "Motivation",
+      "placeholder": "Enter a personal message to motivate you...",
+      "quick-suggestion": "Quick suggestions",
+      "suggestions": [
+        "Every step counts!",
+        "You're building a better you!",
+        "Consistency is key!",
+        "Small actions, big results!",
+        "Progress over perfection!",
+        "You've got this!",
+        "One day at a time!"
+      ]
+    },
+    "category": {
+      "label": "Category",
+      "placeholder": "Select category",
+      "categories": [
+        "Work",
+        "Personal",
+        "Health",
+        "Finance",
+        "Education",
+        "Shopping",
+        "Home",
+        "Travel"
+      ]
+    },
+    "date": {
+      "label": "Date",
+      "start": "Start Date",
+      "end": "End Date",
+      "placeholder": "Pick a date",
+      "monthNames": [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ],
+      "back-today": "Jump to Today",
+      "pick-end": "Pick end date",
+      "select-start-date": "Select start date first",
+      "leave-empty": "Leave empty for ongoing habit",
+      "start-date-err": "Please select a start date first"
+    },
+    "time-input": {
+      "label": "Time",
+      "placeholder": "Select time",
+      "description": "Pick a time if needed",
+      "quick-select": "Quick Select",
+      "selected": "Selected"
+    },
+    "repeat": {
+      "label": "Repeat",
+      "placeholder": "Select repeat option",
+      "options": {
+        "never": "Never",
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      }
+    },
+    "days-selection": {
+      "days-label": "Select Specific Days",
+      "days-error": "You can only select {count} days.",
+      "days-alert": "Please select exactly {count} days for your weekly habit.",
+      "days": {
+        "Mon": {
+          "short": "Mon",
+          "full": "Monday"
+        },
+        "Tue": {
+          "short": "Tue",
+          "full": "Tuesday"
+        },
+        "Wed": {
+          "short": "Wed",
+          "full": "Wednesday"
+        },
+        "Thu": {
+          "short": "Thu",
+          "full": "Thursday"
+        },
+        "Fri": {
+          "short": "Fri",
+          "full": "Friday"
+        },
+        "Sat": {
+          "short": "Sat",
+          "full": "Saturday"
+        },
+        "Sun": {
+          "short": "Sun",
+          "full": "Sunday"
+        }
+      }
+    },
+    "notifications": {
+      "label": "Notification",
+      "placeholder": "Select notification time",
+      "options": {
+        "never": "No notification",
+        "0": "At time",
+        "5": "5 minutes before",
+        "15": "15 minutes before",
+        "30": "30 minutes before",
+        "60": "1 hour before",
+        "120": "2 hours before",
+        "1440": "1 day before"
+      }
+    },
+    "tags": {
+      "label": "Tags (optional)",
+      "placeholder": "Press Enter or comma to add",
+      "error": "Invalid tag"
+    },
+    "goal": {
+      "create-title": "Create Goal",
+      "edit-title": "Edit Goal",
+      "create-description": "Set a meaningful goal and create or link habits that will help you achieve it.",
+      "edit-description": "Update your goal and manage associated habits.",
+      "goal-info": "Goal Information",
+      "title": {
+        "label": "Goal Title",
+        "placeholder": "e.g., Run a marathon, Build a portfolio, Learn Spanish"
+      },
+      "delete-confirm": {
+        "title": "Delete this goal?",
+        "description": "This will permanently remove your goal from the system."
+      },
+      "toasts": {
+        "create-success": "Goal and habits created successfully!",
+        "update-success": "Goal updated successfully!",
+        "delete-success": "Goal deleted successfully.",
+        "delete-error": "Failed to delete goal.",
+        "create-error": "An error occurred while saving the goal."
+      },
+      "habit-management": {
+        "title": "Habit Management",
+        "add-button": "Add New Habit",
+        "alert": {
+          "no-habit": "Please select at least one habit to link with this goal."
+        },
+        "section": {
+          "selected": "Selected Habits",
+          "new": "New Habits",
+          "available": "Available Habits"
+        }
+      },
+      "actions": {
+        "save": "Save Goal",
+        "edit": "Update Goal"
+      }
+    },
+    "habit": {
+      "create-title": "Create Habit",
+      "edit-title": "Edit Habit",
+      "create-description": "Build a new habit that will help you achieve your goals. Start small and be consistent.",
+      "edit-description": "Update your habit details to better align with your goals.",
+      "sections": {
+        "basic": "Basic Information",
+        "frequency": "Frequency Settings",
+        "schedule": "Schedule & Reminders",
+        "motivation": "Motivation & Settings"
+      },
+      "fields": {
+        "title": {
+          "label": "Habit Title",
+          "placeholder": "e.g., Drink 2L water, Meditate 10 mins, Read 10 pages"
+        },
+        "times-per-day": {
+          "label": "Times per Day",
+          "helper": "How many times per day?"
+        },
+        "days-per-week": {
+          "label": "Days per Week",
+          "helper": "How many days a week?"
+        },
+        "allow-skip": {
+          "label": "Allow skipping this habit",
+          "description": "Enable this if it's okay to skip this habit occasionally without breaking your streak"
+        },
+        "goal-selection": {
+          "label": "Link to Goal (Optional)",
+          "placeholder": "Select a goal",
+          "loading": "Loading goals...",
+          "no-goal": "No Goal",
+          "linked-label": "Linked to:"
+        }
+      },
+      "toasts": {
+        "create-success": "Habit created successfully!",
+        "update-success": "Habit updated successfully!",
+        "delete-success": "Habit deleted successfully.",
+        "create-error": "Error creating habit. Please try again.",
+        "update-error": "Error updating habit. Please try again.",
+        "invalid-days": "Please select exactly {count} days for your habit.",
+        "with-goal": "Habit will be created with goal!"
+      },
+      "delete": {
+        "title": "Delete this habit?",
+        "description": "This will permanently remove your habit from the system."
+      },
+      "actions": {
+        "save": "Save Habit",
+        "edit": "Update Habit"
+      }
+    },
+    "todo": {
+      "title": {
+        "create": "Create Todo",
+        "edit": "Edit Todo"
+      },
+      "description": {
+        "create": "Add a new task with priority levels, deadlines, and notifications.",
+        "edit": "Update your task details and priorities."
+      },
+      "sections": {
+        "basic": "Basic Information",
+        "priority": "Priority Matrix",
+        "schedule": "Schedule & Timing",
+        "tags": "Tags & Organization"
+      },
+      "fields": {
+        "task-title": "Task Title",
+        "placeholder": "e.g., Schedule dentist appointment, Submit report, Call mom",
+        "priority-explanation": "Current Priority"
+      },
+      "types": {
+        "task": {
+          "label": "Task",
+          "description": "A specific action to complete"
+        },
+        "event": {
+          "label": "Event",
+          "description": "A scheduled meeting or appointment"
+        },
+        "select": "Select type",
+        "label": "Type",
+        "error": "Please select a type"
+      },
+      "toasts": {
+        "success-create": "Todo created successfully!",
+        "success-update": "Todo updated successfully!",
+        "error-create": "Error creating todo. Please try again.",
+        "error-update": "Error updating todo. Please try again.",
+        "deleted": "Todo deleted successfully."
+      },
+      "delete": {
+        "title": "Delete this task?",
+        "description": "This will permanently remove your task from the system."
+      },
+      "priority": {
+        "High-High": "Do First - Critical and urgent tasks",
+        "High-Medium": "Do First - Important tasks with some urgency",
+        "High-Low": "Schedule - Important but not urgent",
+        "Medium-High": "Do Next - Urgent but less important",
+        "Medium-Medium": "Schedule - Moderate priority tasks",
+        "Medium-Low": "Delegate - Can be done later or by others",
+        "Low-High": "Do Next - Quick urgent tasks",
+        "Low-Medium": "Delegate - Low priority tasks",
+        "Low-Low": "Eliminate - Consider if really needed",
+        "urgency": "Urgency",
+        "importance": "Importance",
+        "selectUrgency": "Select urgency",
+        "selectImportance": "Select importance",
+        "required": "This field is required",
+        "levels": {
+          "Low": "Low",
+          "Medium": "Medium",
+          "High": "High"
+        }
+      },
+      "actions": {
+        "save": "Save Task",
+        "edit": "Update Task"
+      }
+    },
+    "delete": {
+      "title": "Are you sure?",
+      "description": "This action cannot be undone. This will permanently delete your item."
+    }
+  },
+  "support": {
+    "help": "Need help?",
+    "contact": "Contact Support"
+  },
+  "underConstruction": {
+    "title": "Under Development",
+    "message": "We're working hard to bring you this feature!",
+    "building": "Building amazing features",
+    "timeline": "Timeline",
+    "coming-soon": "Coming Soon",
+    "updates-note": "Stay updated on our progress",
+    "updates": "Development Updates",
+    "footerNote": "Building the future of habit tracking with"
+  },
+  "loading": {
+    "tagline": "Track • Build • Achieve",
+    "default-messages": [
+      "Loading your workspace",
+      "Preparing your dashboard",
+      "Syncing your data",
+      "Getting things ready"
+    ],
+    "custom-loading": "Loading",
+    "slogans": [
+      "Every habit counts.",
+      "Progress, not perfection.",
+      "You’re one step closer.",
+      "Built for achievers like you.",
+      "Stay focused, stay strong.",
+      "Little steps lead to big changes."
+    ]
+  },
+  "welcome-card": {
+    "dashboard": "Ritmo Dashboard",
+    "greeting": "{greeting}, {name}",
+    "good-morning": "Good Morning",
+    "good-afternoon": "Good Afternoon",
+    "good-evening": "Good Evening",
+    "quote": "Discipline is choosing between what you want now and what you want most."
+  },
+  "daily-card": {
+    "title": "Today's Things",
+    "layout-toggle": "Toggle Layout",
+    "complete": "{percentage}% Complete",
+    "progress": {
+      "overall": "Overall Progress",
+      "todos": "Todos",
+      "habits": "Habits"
+    },
+    "section": {
+      "todos": "Todos",
+      "habits": "Habits"
+    }
+  },
+  "goals-info": {
+    "title": "Active Goals",
+    "empty-title": "No Active Goals",
+    "empty-description": "There are no active goals yet. Create a goal to start upgrading your life and tracking your progress.",
+    "add-first-goal": "Add Your First Goal",
+    "upcoming-title": "Upcoming Goals",
+    "view-all": "View all upcoming goals"
+  },
+  "custom": {
+    "progress": "Progress"
+  },
+  "theme": {
+    "placeholder": "Themes",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "neutral": "Neutral"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "planner": "Planner",
+    "social": "Social",
+    "todos": "Todos",
+    "habits": "Habits",
+    "goals": "Goals",
+    "discover": "Discover",
+    "motivation": "Motivation",
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Log out",
+    "dashboard":"Dashboard",
+    "users":"Users",
+    "content":"Content",
+    "challenges":"Challenges",
+    "packs":"Packs",
+    "communications":"Communications",
+    "gamifications":"Gamifications"
+  }
+}

@@ -4,12 +4,9 @@ import AnalyticsCard from '@/components/shared/AnalyticsCard';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { useCombinedAnalytics } from '@/hooks/analytics';
 import {
-    Check,
-    Clock,
-    Target,
-    Trophy,
     BarChart
 } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function StatisticsCard(
     {
@@ -23,7 +20,7 @@ export default function StatisticsCard(
             habits: HabitType[]
         }
 ) {
-
+    const t = useTranslations('dashboard');
     const analyticsData = useCombinedAnalytics(habits = habits, todos = todos, goals = goals)
 
     return (
@@ -31,7 +28,7 @@ export default function StatisticsCard(
             <CardHeader className="pb-4">
                 <CardTitle className="text-base font-semibold flex items-center">
                     <BarChart className="h-4 w-4 mr-2" />
-                    <span>Statistics</span>
+                    <span>{t('statistics')}</span>
                 </CardTitle>
             </CardHeader>
 

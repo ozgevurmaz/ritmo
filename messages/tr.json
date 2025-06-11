@@ -1,0 +1,603 @@
+{
+  "auth": {
+    "welcome": "Hoş geldiniz",
+    "description": "Hesabınıza giriş yapın veya yeni bir tane oluşturun",
+    "login": {
+      "title": "Giriş Yap",
+      "error": "Giriş sırasında bir hata oluştu",
+      "ask-account": "Hesabınız yok mu?"
+    },
+    "signup": {
+      "title": "Kayıt Ol",
+      "creating": "Hesap oluşturuluyor...",
+      "error": "Kaydolma sırasında bir hata oluştu"
+    },
+    "forgot-password": {
+      "title": "Şifremi Unuttum?",
+      "description": "E-posta adresinizi girin, size şifre sıfırlama bağlantısı gönderelim.",
+      "success": {
+        "title": "E-postanızı Kontrol Edin",
+        "description1": "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.",
+        "description2": "Bağlantı 1 saat içinde geçerlidir."
+      }
+    },
+    "reset-password": {
+      "loading": "Sıfırlama bağlantısı doğrulanıyor...",
+      "title": "Yeni Şifre Belirleyin",
+      "label": "Yeni Şifre",
+      "updating": "Şifre güncelleniyor...",
+      "success": {
+        "title": "Şifre Başarıyla Güncellendi",
+        "description": "Şifreniz güncellendi. Kısa süre içinde giriş sayfasına yönlendirileceksiniz."
+      },
+      "error": {
+        "title": "Geçersiz sıfırlama bağlantısı",
+        "invalid-link": "Bağlantı geçersiz veya süresi dolmuş.",
+        "missing-link": "Sıfırlama bağlantısı eksik."
+      }
+    },
+    "verification": {
+      "title": "E-postanızı Doğrulayın",
+      "success": "Doğrulama e-postası gönderildi",
+      "description": "E-posta adresinizi doğrulayın",
+      "no-code": "Kod gelmediyse?"
+    }
+  },
+  "common": {
+    "left-days": "g kaldı",
+    "days": "gün",
+    "completed": "Tamamlandı",
+    "almost-there": "Neredeyse",
+    "edit": "Düzenle",
+    "starts-on": "Başlangıç",
+    "tabs": {
+      "active": "Aktif",
+      "completed": "Tamamlanan",
+      "upcoming": "Yaklaşan",
+      "urgent": "Acil",
+      "normal": "Normal"
+    },
+    "empty-states": {
+      "goals": {
+        "active": "Şu anda aktif hedef yok. Yeni bir hedef ekleyerek başlayın!",
+        "completed": "Henüz tamamlanan hedef yok. Devam edin!",
+        "upcoming": "Yaklaşan hedef yok. Yeni hedefler belirleyin!"
+      },
+      "habits": {
+        "active": "Henüz aktif alışkanlık yok. Rutininizi bugünden başlatın!",
+        "completed": "Henüz tamamlanan alışkanlık yok.",
+        "upcoming": "Henüz planlanmış yaklaşan alışkanlık yok. Ekleyin!",
+        "no-goal": "Düzenli Alışkanlıklar"
+      },
+      "todos": {
+        "active": "Henüz aktif yapılacak yok. Ekleyerek başlayın!",
+        "completed": "Her şey tamamlandı! Tamamlanan görev yok.",
+        "upcoming": "Yaklaşan görev yok."
+      }
+    }
+  },
+  "goals": {
+    "title": "Hedefler",
+    "definition": "İlerlemenizi takip edin ve hayallerinize ulaşın",
+    "add-button": "Yeni Hedef Ekle",
+    "status": {
+      "active": "Aktif Hedefler",
+      "completed": "Tamamlanan Hedefler",
+      "upcoming": "Yaklaşan Hedefler",
+      "ending-soon": "Yakında Bitecek",
+      "average-progress": "Ort. İlerleme"
+    },
+    "related-habits": "İlgili Alışkanlıklar"
+  },
+  "habits": {
+    "title": "Alışkanlıklar",
+    "definition": "Günlük alışkanlıklarınızı yönetin ve takip edin",
+    "add-button": "Yeni Alışkanlık Ekle",
+    "status": {
+      "active": "Aktif Alışkanlıklar",
+      "completed": "Tamamlanan Alışkanlıklar",
+      "upcoming": "Yaklaşan Alışkanlıklar",
+      "todays-progress": "Bugünün İlerlemesi",
+      "completion-rate": "Tamamlama Oranı",
+      "average-streak": "Ortalama Devam"
+    },
+    "goal": "Hedef"
+  },
+  "todos": {
+    "title": "Yapılacaklar",
+    "definition": "Günlük görevlerinizi yönetin ve takip edin",
+    "overdue": "Süresi Geçmiş",
+    "add-button": "Yeni Görev Ekle",
+    "status": {
+      "active": "Aktif Görevler",
+      "completed": "Tamamlanan Görevler",
+      "upcoming": "Yaklaşan Görevler",
+      "total-tasks": "Toplam Görev",
+      "completion-rate": "Tamamlama Oranı",
+      "high-priorty": "Yüksek Öncelik"
+    },
+    "goal": "Hedef",
+    "empty": {
+      "urgent": {
+        "title": "Acil yapılacak yok",
+        "subtitle": "Her şey yolunda!"
+      },
+      "normal": {
+        "title": "Normal öncelikli yapılacak yok",
+        "subtitle": "Başlamak için bir görev ekleyin"
+      },
+      "completed": {
+        "title": "Tamamlanan yapılacak yok",
+        "subtitle": "Görev tamamlayınca burada görünecek"
+      }
+    }
+  },
+  "dashboard": {
+    "statistics": "İstatistikler",
+    "status": {
+      "active-habits": "Aktif Alışkanlıklar",
+      "completed-items": "Tamamlanan Öğeler",
+      "todays-focus": "Bugünün Odak Noktası",
+      "total-items": "Toplam Öğeler"
+    }
+  },
+  "errors": {
+    "user-error": "Kullanıcı bulunamadı",
+    "unexpected": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
+  },
+  "account": {
+    "title": "Hesap Ayarları",
+    "description": "Hesap bilgilerinizi ve tercihlerinizi yönetin",
+    "toasts": {
+      "user-error": "Kullanıcı bilgileri yüklenemedi. Lütfen tekrar deneyin.",
+      "success": "Profil başarıyla güncellendi",
+      "update-error": "Profil güncellenirken hata oluştu. Lütfen tekrar deneyin.",
+      "username-error": " Bu kullanıcı adı zaten kullanılıyor"
+    }
+  },
+  "buttons": {
+    "updating": "Güncelleniyor",
+    "update": "Güncelle",
+    "add-button": "Yeni Ekle",
+    "logout": "Çıkış Yap",
+    "signup": "Hesap Oluştur",
+    "signin": "Giriş Yap",
+    "signing-in": "Giriş yapılıyor...",
+    "to-login": "Girişe Dön",
+    "send-link": "Sıfırlama Linki Gönder",
+    "send-another": "Başka Link Gönder",
+    "to-back": "Geri Dön",
+    "to-home": "Anasayfaya Dön",
+    "cancel": "İptal Et",
+    "confirm": "Onayla",
+    "delete": "Sil",
+    "yes-delete": "Evet, Sil"
+  },
+  "forms": {
+    "email": {
+      "label": "E-posta",
+      "placeholder": "E-posta adresinizi girin",
+      "account-description": " E-posta adresiniz değiştirilemez"
+    },
+    "name": {
+      "label": "Ad",
+      "placeholder": "Adınızı girin"
+    },
+    "surname": {
+      "label": "Soyad",
+      "placeholder": "Soyadınızı girin"
+    },
+    "username": {
+      "label": "Kullanıcı Adı",
+      "placeholder": "Kullanıcı adınızı girin"
+    },
+    "password": {
+      "label": "Şifre",
+      "placeholder": "Şifrenizi girin",
+      "new-placeholder": "Şifre oluşturun",
+      "confirm-label": "Şifreyi Onayla",
+      "confirm-placeholder": "Şifrenizi tekrar girin",
+      "validation": {
+        "requirments": "Şifre Gereksinimleri",
+        "length": "En az 8 karakter",
+        "uppercase": "Bir büyük harf",
+        "lowercase": "Bir küçük harf",
+        "number": "Bir sayı"
+      }
+    },
+    "privacy": {
+      "title": "Gizlilik & Paylaşım",
+      "label": "Görünürlük",
+      "private": "Özel",
+      "private-description": "Yalnızca siz görebilirsiniz",
+      "public": "Herkese Açık",
+      "public-description": "Diğerleri görebilir ve destek olabilir",
+      "share": {
+        "label": "Belirli kişilerle paylaş",
+        "description": "İlerlemenizi görebilecek kişileri seçin",
+        "status": "{count} kişiye paylaşılıyor"
+      }
+    },
+    "description": {
+      "label": "Açıklama",
+      "placeholder": "Hedefiniz için bir açıklama girin..."
+    },
+    "motivation": {
+      "label": "Motivasyon",
+      "placeholder": "Kişisel bir motivasyon mesajı girin...",
+      "quick-suggestion": "Hızlı öneriler",
+      "suggestions": [
+        "Her adım önemlidir!",
+        "Daha iyi bir sen inşa ediyorsun!",
+        "Süreklilik önemlidir!",
+        "Küçük adımlar, büyük sonuçlar!",
+        "Mükemmellik değil, ilerleme!",
+        "Sen bunu başarabilirsin!",
+        "Gün gün ilerle."
+      ]
+    },
+    "category": {
+      "label": "Kategori",
+      "placeholder": "Kategori seçin",
+      "categories": [
+        "İş",
+        "Kişisel",
+        "Sağlık",
+        "Finans",
+        "Eğitim",
+        "Alışveriş",
+        "Ev",
+        "Seyahat"
+      ]
+    },
+    "date": {
+      "label": "Tarih",
+      "start": "Başlangıç Tarihi",
+      "end": "Bitiş Tarihi",
+      "placeholder": "Bir tarih seçin",
+      "monthNames": [
+        "Ocak",
+        "Şubat",
+        "Mart",
+        "Nisan",
+        "Mayıs",
+        "Haziran",
+        "Temmuz",
+        "Ağustos",
+        "Eylül",
+        "Ekim",
+        "Kasım",
+        "Aralık"
+      ],
+      "back-today": "Bugüne Git",
+      "pick-end": "Bitiş tarihi seçin",
+      "select-start-date": "Önce başlangıç tarihini seçin",
+      "leave-empty": "Sürekli alışkanlık için boş bırakın",
+      "start-date-err": "Lütfen önce başlangıç tarihini seçin"
+    },
+    "time-input": {
+      "label": "Saat",
+      "placeholder": "Saat seçin",
+      "description": "Gerekirse saat seçin",
+      "quick-select": "Hızlı Seçim",
+      "selected": "Seçilenler"
+    },
+    "repeat": {
+      "label": "Tekrar",
+      "placeholder": "Tekrar seçeneği seçin",
+      "options": {
+        "never": "Asla",
+        "daily": "Günlük",
+        "weekly": "Haftalık",
+        "monthly": "Aylık",
+        "yearly": "Yıllık"
+      }
+    },
+    "days-selection": {
+      "days-label": "Günleri Seç",
+      "days-error": "Yalnızca {count} gün seçebilirsiniz.",
+      "days-alert": "Haftalık alışkanlık için tam olarak {count} gün seçmelisiniz.",
+      "days": {
+        "Mon": {
+          "short": "Pts",
+          "full": "Pazartesi"
+        },
+        "Tue": {
+          "short": "Sal",
+          "full": "Salı"
+        },
+        "Wed": {
+          "short": "Çar",
+          "full": "Çarşamba"
+        },
+        "Thu": {
+          "short": "Per",
+          "full": "Perşembe"
+        },
+        "Fri": {
+          "short": "Cum",
+          "full": "Cuma"
+        },
+        "Sat": {
+          "short": "Cts",
+          "full": "Cumartesi"
+        },
+        "Sun": {
+          "short": "Paz",
+          "full": "Pazar"
+        }
+      }
+    },
+    "notifications": {
+      "label": "Bildirim",
+      "placeholder": "Bildirim zamanını seçin",
+      "options": {
+        "never": "Bildirim yok",
+        "0": "Zamanında",
+        "5": "5 dakika önce",
+        "15": "15 dakika önce",
+        "30": "30 dakika önce",
+        "60": "1 saat önce",
+        "120": "2 saat önce",
+        "1440": "1 gün önce"
+      }
+    },
+    "tags": {
+      "label": "Etiketler (isteğe bağlı)",
+      "placeholder": "Etiket eklemek için Enter veya virgül basın",
+      "error": "Geçersiz etiket"
+    },
+    "goal": {
+      "create-title": "Hedef Oluştur",
+      "edit-title": "Hedefi Düzenle",
+      "create-description": "Anlamlı bir hedef ayarlayın ve ona yardımcı olacak alışkanlıklar oluşturun veya bağlayın.",
+      "edit-description": "Hedefi güncelleyin ve ilişkili alışkanlıkları yönetin.",
+      "goal-info": "Hedef Bilgisi",
+      "title": {
+        "label": "Hedef Başlığı",
+        "placeholder": "örn: Maraton Koş, Portföy Oluştur, İspanyolca Öğren"
+      },
+      "delete-confirm": {
+        "title": "Bu hedef silinsin mi?",
+        "description": "Bu işlem hedefi sistemden kalıcı olarak kaldıracaktır."
+      },
+      "toasts": {
+        "create-success": "Hedef ve alışkanlıklar başarıyla oluşturuldu!",
+        "update-success": "Hedef başarıyla güncellendi!",
+        "delete-success": "Hedef silindi.",
+        "delete-error": "Hedef silinirken hata oluştu.",
+        "create-error": "Hedef kaydedilirken hata oluştu."
+      },
+      "habit-management": {
+        "title": "Alışkanlık Yönetimi",
+        "add-button": "Yeni Alışkanlık Ekle",
+        "alert": {
+          "no-habit": "Lütfen en az bir alışkanlık seçin."
+        },
+        "section": {
+          "selected": "Seçilen Alışkanlıklar",
+          "new": "Yeni Alışkanlıklar",
+          "available": "Mevcut Alışkanlıklar"
+        }
+      },
+      "actions": {
+        "save": "Hedefi Kaydet",
+        "edit": "Hedefi Güncelle"
+      }
+    },
+    "habit": {
+      "create-title": "Alışkanlık Oluştur",
+      "edit-title": "Alışkanlığı Düzenle",
+      "create-description": "Hedeflerinize yardımcı olacak yeni bir alışkanlık oluşturun. Küçük başlayın, tutarlı olun.",
+      "edit-description": "Alışkanlık detaylarını hedeflerinize göre güncelleyin.",
+      "sections": {
+        "basic": "Temel Bilgiler",
+        "frequency": "Frekans Ayarları",
+        "schedule": "Takvim & Hatırlatmalar",
+        "motivation": "Motivasyon & Ayarlar"
+      },
+      "fields": {
+        "title": {
+          "label": "Alışkanlık Başlığı",
+          "placeholder": "örn: 2 L su iç, 10 dk meditasyon, 10 sayfa oku"
+        },
+        "times-per-day": {
+          "label": "Günlük Kaç Kez",
+          "helper": "Günde kaç kez?"
+        },
+        "days-per-week": {
+          "label": "Haftada Kaç Gün",
+          "helper": "Haftada kaç gün?"
+        },
+        "allow-skip": {
+          "label": "Atlanmasına izin ver",
+          "description": "Ara sıra atlamak sorun değilse etkinleştirin"
+        },
+        "goal-selection": {
+          "label": "Hedefe Bağla (İsteğe Bağlı)",
+          "placeholder": "Hedef seçin",
+          "loading": "Hedefler yükleniyor...",
+          "no-goal": "Hedef Yok",
+          "linked-label": "Şuna bağlı:"
+        }
+      },
+      "toasts": {
+        "create-success": "Alışkanlık başarıyla oluşturuldu!",
+        "update-success": "Alışkanlık başarıyla güncellendi!",
+        "delete-success": "Alışkanlık silindi.",
+        "create-error": "Alışkanlık oluşturulurken hata oluştu.",
+        "update-error": "Alışkanlık güncellenirken hata oluştu.",
+        "invalid-days": "{count} gün seçmelisiniz.",
+        "with-goal": "Alışkanlık hedefle birlikte oluşturulacak!"
+      },
+      "delete": {
+        "title": "Bu alışkanlık silinsin mi?",
+        "description": "Bu işlem alışkanlığı kalıcı olarak siler."
+      },
+      "actions": {
+        "save": "Alışkanlığı Kaydet",
+        "edit": "Alışkanlığı Güncelle"
+      }
+    },
+    "todo": {
+      "title": {
+        "create": "Görev Oluştur",
+        "edit": "Görevi Düzenle"
+      },
+      "description": {
+        "create": "Yeni bir görev ekleyin: öncelik, tarih ve hatırlatmalarla.",
+        "edit": "Görev detaylarını ve önceliğini güncelleyin."
+      },
+      "sections": {
+        "basic": "Temel Bilgiler",
+        "priority": "Öncelik Matrisi",
+        "schedule": "Takvim & Zamanlama",
+        "tags": "Etiketler & Organizasyon"
+      },
+      "fields": {
+        "task-title": "Görev Başlığı",
+        "placeholder": "örn: Dişçi randevusu ayarla, Raporu gönder, Anneni ara",
+        "priority-explanation": "Mevcut Öncelik"
+      },
+      "types": {
+        "task": {
+          "label": "Görev",
+          "description": "Tamamlanması gereken belirli bir eylem"
+        },
+        "event": {
+          "label": "Etkinlik",
+          "description": "Planlanmış bir toplantı veya randevu"
+        },
+        "select": "Türü seçin",
+        "label": "Tür",
+        "error": "Lütfen bir tür seçin"
+      },
+      "toasts": {
+        "success-create": "Görev başarıyla oluşturuldu!",
+        "success-update": "Görev başarıyla güncellendi!",
+        "error-create": "Görev oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
+        "error-update": "Görev güncellenirken hata oluştu. Lütfen tekrar deneyin.",
+        "deleted": "Görev başarıyla silindi."
+      },
+      "delete": {
+        "title": "Bu görevi silmek istediğinize emin misiniz?",
+        "description": "Bu işlem geri alınamaz. Göreviniz sistemden kalıcı olarak silinecek."
+      },
+      "priority": {
+        "High-High": "Önce Yap - Kritik ve acil görevler",
+        "High-Medium": "Önce Yap - Önemli ve acil görevler",
+        "High-Low": "Planla - Önemli ama acil olmayan görevler",
+        "Medium-High": "Sonra Yap - Acil ama daha az önemli görevler",
+        "Medium-Medium": "Planla - Orta öncelikli görevler",
+        "Medium-Low": "Delege Et - Daha sonra yapılabilecek veya başkasına verilebilecek görevler",
+        "Low-High": "Sonra Yap - Hızlı acil görevler",
+        "Low-Medium": "Delege Et - Düşük öncelikli görevler",
+        "Low-Low": "Ele - Gerçekten gerekli mi değerlendirin",
+        "urgency": "Aciliyet",
+        "importance": "Önem",
+        "selectUrgency": "Aciliyet seçin",
+        "selectImportance": "Önem derecesi seçin",
+        "required": "Bu alan zorunludur",
+        "levels": {
+          "Low": "Düşük",
+          "Medium": "Orta",
+          "High": "Yüksek"
+        }
+      },
+      "actions": {
+        "save": "Görevi Kaydet",
+        "edit": "Görevi Güncelle"
+      }
+    },
+    "delete": {
+      "title": "Emin misiniz?",
+      "description": "Bu işlem geri alınamaz. Bu öğe kalıcı olarak silinecek."
+    }
+  },
+  "support": {
+    "help": "Yardıma mı ihtiyacınız var?",
+    "contact": "Destek ile İletişime Geçin"
+  },
+  "underConstruction": {
+    "title": "Geliştirme Aşamasında",
+    "message": "Bu özelliği sunmak için çok çalışıyoruz!",
+    "building": "Harika özellikler geliştiriliyor",
+    "timeline": "Zaman Çizelgesi",
+    "coming-soon": "Çok Yakında",
+    "updates-note": "Gelişmelerden haberdar olun",
+    "updates": "Geliştirme Güncellemeleri",
+    "footerNote": "Alışkanlık takibinin geleceğini inşa ediyoruz"
+  },
+  "loading": {
+    "tagline": "Takip Et • İnşa Et • Başar",
+    "default-messages": [
+      "Çalışma alanınız yükleniyor",
+      "Paneliniz hazırlanıyor",
+      "Verileriniz senkronize ediliyor",
+      "Her şey hazırlanıyor"
+    ],
+    "custom-loading": "Yükleniyor",
+    "slogans": [
+      "Her alışkanlık önemlidir.",
+      "İlerleme, mükemmellikten önce gelir.",
+      "Bir adım daha yaklaştınız.",
+      "Sizin gibi başaranlar için üretildi.",
+      "Odaklan, güçlü kal.",
+      "Küçük adımlar büyük değişim yaratır."
+    ]
+  },
+  "welcome-card": {
+    "dashboard": "Ritmo Paneli",
+    "greeting": "{greeting}, {name}",
+    "good-morning": "Günaydın",
+    "good-afternoon": "Tünaydın",
+    "good-evening": "İyi Akşamlar",
+    "quote": "Disiplin, şu an istediğin ile en çok istediğin şey arasında seçim yapmaktır."
+  },
+  "daily-card": {
+    "title": "Bugünün Görevleri",
+    "layout-toggle": "Görünüm Değiştir",
+    "complete": "%{percentage} Tamamlandı",
+    "progress": {
+      "overall": "Genel İlerleme",
+      "todos": "Görevler",
+      "habits": "Alışkanlıklar"
+    },
+    "section": {
+      "todos": "Görevler",
+      "habits": "Alışkanlıklar"
+    }
+  },
+  "goals-info": {
+    "title": "Aktif Hedefler",
+    "empty-title": "Aktif Hedef Yok",
+    "empty-description": "Henüz aktif hedefiniz yok. Hedef oluşturarak hayatınızı iyileştirmeye başlayın.",
+    "add-first-goal": "İlk Hedefini Ekle",
+    "upcoming-title": "Yaklaşan Hedefler",
+    "view-all": "Tüm yaklaşan hedefleri görüntüle"
+  },
+  "custom": {
+    "progress": "İlerleme"
+  },
+  "theme": {
+    "placeholder": "Tema",
+    "themes": {
+      "light": "Açık",
+      "dark": "Koyu",
+      "neutral": "Nötral"
+    }
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "planner": "Planlayıcı",
+    "social": "Sosyal",
+    "todos": "Görevler",
+    "habits": "Alışkanlıklar",
+    "goals": "Hedefler",
+    "discover": "Keşfet",
+    "motivation": "Motivasyon",
+    "profile": "Profil",
+    "settings": "Ayarlar",
+    "logout": "Çıkış Yap"
+  }
+}

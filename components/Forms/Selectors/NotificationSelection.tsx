@@ -1,7 +1,10 @@
+"use client"
+
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { Ban, Bell, Calendar, Clock } from "lucide-react";
 import { Control, Controller, FieldErrors, FieldValues, Path } from "react-hook-form";
+import { useTranslations } from "next-intl";
 
 type NotificationSelectProps<T extends FieldValues> = {
     control: Control<T>;
@@ -10,14 +13,14 @@ type NotificationSelectProps<T extends FieldValues> = {
 };
 
 const NOTIFICATION_OPTIONS = [
-    { value: 'never', label: 'No notification', icon: Ban },
-    { value: '0', label: 'At time', icon: Bell },
-    { value: '5', label: '5 minutes before', icon: Clock },
-    { value: '15', label: '15 minutes before', icon: Clock },
-    { value: '30', label: '30 minutes before', icon: Clock },
-    { value: '60', label: '1 hour before', icon: Clock },
-    { value: '120', label: '2 hours before', icon: Clock },
-    { value: '1440', label: '1 day before', icon: Calendar }
+    { value: 'never', icon: Ban },
+    { value: '0', icon: Bell },
+    { value: '5', icon: Clock },
+    { value: '15', icon: Clock },
+    { value: '30', icon: Clock },
+    { value: '60', icon: Clock },
+    { value: '120', icon: Clock },
+    { value: '1440', icon: Calendar }
 ];
 
 export const NotificationSelect = <T extends FieldValues>({
@@ -25,16 +28,18 @@ export const NotificationSelect = <T extends FieldValues>({
     errors,
     name
 }: NotificationSelectProps<T>) => {
+    const t = useTranslations('forms.notifications');
+
     return (
         <div className="space-y-2">
-            <Label htmlFor={name} className="text-sm font-medium">Notification</Label>
+            <Label htmlFor={name} className="text-sm font-medium">{t('label')}</Label>
             <Controller
                 name={name}
                 control={control}
                 render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
                         <SelectTrigger className={errors[name] ? "border-destructive" : ""}>
-                            <SelectValue placeholder="Select notification time" />
+                            <SelectValue placeholder={t('placeholder')} />
                         </SelectTrigger>
                         <SelectContent className="bg-background">
                             {NOTIFICATION_OPTIONS.map(option => {
@@ -43,7 +48,7 @@ export const NotificationSelect = <T extends FieldValues>({
                                     <SelectItem key={option.value} value={option.value}>
                                         <div className="flex items-center gap-2">
                                             <IconComponent className="h-4 w-4" />
-                                            {option.label}
+                                            {t(`options.${option.value}`)}
                                         </div>
                                     </SelectItem>
                                 );

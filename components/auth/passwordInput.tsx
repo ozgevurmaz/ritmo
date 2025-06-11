@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Eye, EyeOff, Check, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface PasswordValidation {
   minLength: boolean;
@@ -23,7 +24,7 @@ interface PasswordInputProps<T extends FieldValues> {
   // Configuration
   requireConfirmation?: boolean;
   showValidation?: boolean;
-  label?: string;
+  label: string;
   disabled?: boolean;
 }
 
@@ -34,15 +35,18 @@ const ValidationItem = ({ isValid, text }: { isValid: boolean; text: string }) =
   </div>
 );
 
+
+
 export function PasswordInput<T extends FieldValues>({
   control,
   name,
   confirmName,
   requireConfirmation = false,
   showValidation = false,
-  label = "Password",
+  label,
   disabled = false,
 }: PasswordInputProps<T>) {
+  const t = useTranslations("forms.password")
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordValidation, setPasswordValidation] = useState<PasswordValidation>({
@@ -78,7 +82,7 @@ export function PasswordInput<T extends FieldValues>({
                 <div className="relative">
                   <Input
                     type={showPassword ? "text" : "password"}
-                    placeholder={`${requireConfirmation ? `Create a ${label.toLowerCase()}` : `Enter your password`}`}
+                    placeholder={`${requireConfirmation ? t("new-placeholder") : t("placeholder")}`}
                     disabled={disabled}
                     className="pr-10"
                     {...field}
@@ -113,11 +117,11 @@ export function PasswordInput<T extends FieldValues>({
           <>
             {field.value && showValidation && (
               <div className="space-y-2 p-3 bg-muted rounded-md text-muted-foreground">
-                <p className="text-sm font-medium text-accent">Password Requirements:</p>
-                <ValidationItem isValid={passwordValidation.minLength} text="At least 8 characters" />
-                <ValidationItem isValid={passwordValidation.hasUpperCase} text="One uppercase letter" />
-                <ValidationItem isValid={passwordValidation.hasLowerCase} text="One lowercase letter" />
-                <ValidationItem isValid={passwordValidation.hasNumber} text="One number" />
+                <p className="text-sm font-medium text-secondary">{t("validation.requirments")}:</p>
+                <ValidationItem isValid={passwordValidation.minLength} text={t("validation.length")} />
+                <ValidationItem isValid={passwordValidation.hasUpperCase} text={t("validation.uppercase")} />
+                <ValidationItem isValid={passwordValidation.hasLowerCase} text={t("validation.lowercase")} />
+                <ValidationItem isValid={passwordValidation.hasNumber} text={t("validation.number")} />
               </div>
             )}
           </>
@@ -131,12 +135,12 @@ export function PasswordInput<T extends FieldValues>({
           name={confirmName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm {label}</FormLabel>
+              <FormLabel>{t("confirm-label")}</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder={`Confirm your ${label.toLowerCase()}`}
+                    placeholder={t("confirm-placeholder")}
                     disabled={disabled}
                     className="pr-10 bg-background"
                     {...field}

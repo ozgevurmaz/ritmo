@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatDateForQuery } from "@/lib/utils";
 import { Calendar, Calendar1, CalendarDays } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Control, Controller, FieldErrors, FieldValues, Path, useWatch } from "react-hook-form";
 
@@ -26,6 +27,8 @@ export const DateRangePicker = <T extends FieldValues>({
     type = "goal"
 }: DateRangePickerProps<T>) => {
 
+    const t = useTranslations("forms.date")
+
     const [showStartCalendar, setShowStartCalendar] = useState(false);
     const [showEndCalendar, setShowEndCalendar] = useState(false);
 
@@ -38,7 +41,7 @@ export const DateRangePicker = <T extends FieldValues>({
     // Helper function to format date for minDate prop
     const formatDateForMinDate = (date: Date | string | null | undefined): string => {
         if (!date) return formatDateForQuery(new Date());
-        
+
         const dateObj = typeof date === 'string' ? new Date(date) : date;
         return dateObj.toISOString().split('T')[0];
     };
@@ -62,7 +65,7 @@ export const DateRangePicker = <T extends FieldValues>({
             <div className="space-y-2">
                 <Label htmlFor={startName} className="text-sm font-medium flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
-                    {type === "todo" ? "Date" : "Start Date"}
+                    {type === "todo" ? t("label") : t("start")}
                     <span className="text-destructive">*</span>
                 </Label>
                 <Controller
@@ -79,7 +82,7 @@ export const DateRangePicker = <T extends FieldValues>({
                                 <span className="flex-1 text-left">
                                     {field.value
                                         ? new Date(field.value).toLocaleDateString()
-                                        : "Pick a date"}
+                                        : t("placeholder")}
                                 </span>
                                 <CalendarDays className="h-4 w-4 ml-2" />
                             </Button>
@@ -110,7 +113,7 @@ export const DateRangePicker = <T extends FieldValues>({
                 <div className="space-y-2">
                     <Label htmlFor={endName} className="text-sm font-medium flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
-                        End Date
+                        {t("end")}
                         {type === "goal" && <span className="text-destructive">*</span>}
                     </Label>
                     <Controller
@@ -123,14 +126,14 @@ export const DateRangePicker = <T extends FieldValues>({
                                     onClick={() => setShowEndCalendar(true)}
                                     className="justify-start text-left bg-transparent border-input w-full"
                                     variant="outline"
-                                    disabled={!startDateValue} // Disable if no start date selected
+                                    disabled={!startDateValue}
                                 >
                                     <span className="flex-1 text-left">
                                         {field.value
                                             ? new Date(field.value).toLocaleDateString()
-                                            : startDateValue 
-                                                ? "Pick end date" 
-                                                : "Select start date first"}
+                                            : startDateValue
+                                                ? t("pick-end")
+                                                : t("select-start-date")}
                                     </span>
                                     <CalendarDays className="h-4 w-4 ml-2" />
                                 </Button>
@@ -154,9 +157,9 @@ export const DateRangePicker = <T extends FieldValues>({
                     {errors[endName] && (
                         <p className="text-xs text-destructive">{String(errors[endName]?.message)}</p>
                     )}
-                    {type === "habit" && <p className="text-xs text-muted-foreground">Leave empty for ongoing habit</p>}
+                    {type === "habit" && <p className="text-xs text-muted-foreground">{t("leave-empty")}</p>}
                     {!startDateValue && type !== "habit" && (
-                        <p className="text-xs text-muted-foreground">Please select a start date first</p>
+                        <p className="text-xs text-muted-foreground">{t("start-date-err")}</p>
                     )}
                 </div>}
         </div>

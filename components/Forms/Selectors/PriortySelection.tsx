@@ -1,9 +1,10 @@
+'use client';
+
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
-import { getPriorityColor, getPriorityLabel } from "@/lib/utils";
-import { useMemo } from "react";
-import { Control, Controller, FieldErrors, FieldValue, FieldValues, Path } from "react-hook-form";
+import { useTranslations } from "next-intl";
+import { Control, Controller, FieldErrors, FieldValues, Path } from "react-hook-form";
 
 interface PriorityMatrixProps<T extends FieldValues> {
     control: Control<T>;
@@ -12,8 +13,7 @@ interface PriorityMatrixProps<T extends FieldValues> {
     importanceName: Path<T>;
 }
 
-const urgencies = ["Low", "Medium", "High"];
-const importances = ["Low", "Medium", "High"];
+const levels = ["Low", "Medium", "High"];
 
 export const PriorityMatrixSection = <T extends FieldValues>({
     control,
@@ -21,13 +21,14 @@ export const PriorityMatrixSection = <T extends FieldValues>({
     urgencyName,
     importanceName,
 }: PriorityMatrixProps<T>) => {
+    const t = useTranslations('forms.todo.priority');
 
     return (
         <div className="grid grid-cols-2 gap-4">
             {/* Urgency */}
             <div className="space-y-2">
                 <Label className="text-sm font-medium flex items-center gap-1">
-                    Urgency
+                    {t('urgency')}
                     <span className="text-destructive">*</span>
                 </Label>
                 <Controller
@@ -36,12 +37,12 @@ export const PriorityMatrixSection = <T extends FieldValues>({
                     render={({ field }) => (
                         <Select onValueChange={field.onChange} value={field.value}>
                             <SelectTrigger className={errors[urgencyName] ? "border-destructive" : ""}>
-                                <SelectValue placeholder="Select urgency" />
+                                <SelectValue placeholder={t('selectUrgency')} />
                             </SelectTrigger>
                             <SelectContent className="bg-background">
-                                {urgencies.map((item) => (
-                                    <SelectItem key={item} value={item}>
-                                        {item}
+                                {levels.map((level) => (
+                                    <SelectItem key={level} value={level}>
+                                        {t(`levels.${level}`)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -49,14 +50,14 @@ export const PriorityMatrixSection = <T extends FieldValues>({
                     )}
                 />
                 {errors[urgencyName] && (
-                    <p className="text-xs text-destructive">{String(errors[urgencyName]?.message)}</p>
+                    <p className="text-xs text-destructive">{t('required')}</p>
                 )}
             </div>
 
             {/* Importance */}
             <div className="space-y-2">
                 <Label className="text-sm font-medium flex items-center gap-1">
-                    Importance
+                    {t('importance')}
                     <span className="text-destructive">*</span>
                 </Label>
                 <Controller
@@ -65,12 +66,12 @@ export const PriorityMatrixSection = <T extends FieldValues>({
                     render={({ field }) => (
                         <Select onValueChange={field.onChange} value={field.value}>
                             <SelectTrigger className={errors[importanceName] ? "border-destructive" : ""}>
-                                <SelectValue placeholder="Select importance" />
+                                <SelectValue placeholder={t('selectImportance')} />
                             </SelectTrigger>
                             <SelectContent className="bg-background">
-                                {importances.map((item) => (
-                                    <SelectItem key={item} value={item}>
-                                        {item}
+                                {levels.map((level) => (
+                                    <SelectItem key={level} value={level}>
+                                        {t(`levels.${level}`)}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -78,7 +79,7 @@ export const PriorityMatrixSection = <T extends FieldValues>({
                     )}
                 />
                 {errors[importanceName] && (
-                    <p className="text-xs text-destructive">{String(errors[importanceName]?.message)}</p>
+                    <p className="text-xs text-destructive">{t('required')}</p>
                 )}
             </div>
         </div>

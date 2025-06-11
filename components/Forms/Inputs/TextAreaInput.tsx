@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import {
     Control,
@@ -18,19 +19,9 @@ type MotivationInputProps<T extends FieldValues> = {
     name: Path<T>;
     setValue: UseFormSetValue<T>;
     showPredefinedMessages?: boolean;
-    label?: string
+    label?: string;
+    placeholder?: string
 };
-
-// Predefined motivation messages
-const MOTIVATION_MESSAGES = [
-    "Every step counts!",
-    "You're building a better you!",
-    "Consistency is key!",
-    "Small actions, big results!",
-    "Progress over perfection!",
-    "You've got this!",
-    "One day at a time!",
-];
 
 export const TextAreaInput = <T extends FieldValues>({
     control,
@@ -38,12 +29,17 @@ export const TextAreaInput = <T extends FieldValues>({
     name,
     setValue,
     showPredefinedMessages = true,
-    label = " Custom Motivation Message (Optional)"
+    label,
+    placeholder
 }: MotivationInputProps<T>) => {
+    const t = useTranslations("forms.motivation")
+
+    const MOTIVATION_MESSAGES: string[] = t.raw("suggestions");
+
     return (
         <div className="space-y-3">
             <Label htmlFor={name} className="text-sm font-medium">
-                {label}
+                {label || t("label")}
             </Label>
             <Controller
                 name={name}
@@ -51,7 +47,7 @@ export const TextAreaInput = <T extends FieldValues>({
                 render={({ field }) => (
                     <Textarea
                         {...field}
-                        placeholder="Enter a personal message to motivate you..."
+                        placeholder={placeholder || t("placeholder")}
                         className={`min-h-[80px] ${errors[name] ? 'border-destructive' : ''}`}
                         rows={3}
                     />
@@ -65,7 +61,7 @@ export const TextAreaInput = <T extends FieldValues>({
 
             {/* Predefined messages */}
             {showPredefinedMessages && <div className="space-y-2">
-                <p className="text-xs text-muted-foreground">Quick suggestions:</p>
+                <p className="text-xs text-muted-foreground">{t("quick-suggestion")}:</p>
                 <div className="flex flex-wrap gap-2">
                     {MOTIVATION_MESSAGES.map((message) => (
                         <Button

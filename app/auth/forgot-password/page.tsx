@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -13,10 +12,13 @@ import { Mail, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { forgotPasswordSchema } from "@/lib/zod/auth/auth";
 import { resetPasswordForEmail } from "@/actions/auth";
+import { useTranslations } from "next-intl";
 
 type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordPage() {
+  const t = useTranslations()
+
   const [isLoading, setIsLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -45,7 +47,7 @@ export default function ForgotPasswordPage() {
         setSuccess(true);
       }
     } catch (err) {
-      setError("An unexpected error occurred. Please try again.");
+      setError(t("error.unexpected"));
     } finally {
       setIsLoading(false);
     }
@@ -56,26 +58,26 @@ export default function ForgotPasswordPage() {
       <div className="space-y-4 max-w-md mx-auto mt-10">
         <div className="text-center">
           <Mail className="w-12 h-12 mx-auto mb-6 text-destructive" />
-          <h2 className="text-2xl font-semibold mb-2">Check Your Email</h2>
+          <h2 className="text-2xl font-semibold mb-2">{t("auth.forgot-password.success.title")}</h2>
           <p className="text-foreground mb-6">
-            We've sent a password reset link to your email address.
+            {t("auth.forgot-password.success.description")}
           </p>
         </div>
 
         <Alert>
           <AlertDescription>
-            Click the link in your email to reset your password. The link will expire in 1 hour.
+            {t("auth.forgot-password.success.description2")}
           </AlertDescription>
         </Alert>
 
         <div className="flex flex-col space-y-2">
           <Button onClick={() => setSuccess(false)} variant="outline" className="w-full">
-            Send Another Email
+            {t("auth.forgot-password.send-link")}
           </Button>
           <Link href="/auth" className="w-full">
             <Button variant="ghost" className="w-full">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Back to Login
+              {t("buttons.to-login")}
             </Button>
           </Link>
         </div>
@@ -87,9 +89,9 @@ export default function ForgotPasswordPage() {
     <div className="space-y-6 max-w-md mx-auto mt-10">
       <div className="text-center">
         <Mail className="w-12 h-12 mx-auto mb-6 text-destructive" />
-        <h2 className="text-2xl font-semibold">Forgot Password?</h2>
+        <h2 className="text-2xl font-semibold">{t("auth.forgot-password.title")}</h2>
         <p className="text-foreground mt-2">
-          Enter your email address and we'll send you a link to reset your password.
+          {t("auth.forgot-password.description")}
         </p>
       </div>
 
@@ -106,13 +108,13 @@ export default function ForgotPasswordPage() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email Address</FormLabel>
+                <FormLabel>{t("forms.email.label")}</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       type="email"
-                      placeholder="Enter your email address"
+                      placeholder={t("forms.email.placeholder")}
                       className="pl-10"
                       {...field}
                       disabled={isLoading}
@@ -125,7 +127,7 @@ export default function ForgotPasswordPage() {
           />
 
           <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? "Sending..." : "Send Reset Link"}
+            {t("buttons.send-link")}
           </Button>
         </form>
       </Form>
@@ -133,7 +135,7 @@ export default function ForgotPasswordPage() {
       <div className="text-center">
         <Link href="/auth" className="text-sm text-secondary hover:underline flex justify-center items-center">
           <ArrowLeft className="w-4 h-4 mr-1" />
-          Back to Login
+          {t("buttons.to-login")}
         </Link>
       </div>
     </div>

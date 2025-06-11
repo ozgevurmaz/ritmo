@@ -34,6 +34,7 @@ import { FrequencyInput } from './Inputs/FrequencyInput';
 import { WeeklyDaySelector } from './Selectors/WeeklyDaySelector';
 import { ReminderTimeInput } from './Inputs/ReminderTimes';
 import { CheckboxCard } from './Cards/CheckedBoxCard';
+import { useTranslations } from 'next-intl';
 
 type HabitFormData = z.infer<typeof habitSchema>;
 
@@ -58,6 +59,9 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     setGoalHabits,
     goalTitle
 }) => {
+
+    const t = useTranslations();
+
     const { mutateAsync: addHabit } = useAddHabit(userId);
     const { mutateAsync: updateHabit } = useUpdateHabit(userId);
     const { mutate: deleteHabit } = useDeleteHabit(userId);
@@ -72,7 +76,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
 
     const {
         handleSubmit,
-        formState: { errors, isSubmitting, isDirty },
+        formState: { errors, isSubmitting },
         setValue,
         reset,
         watch,
@@ -129,7 +133,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     const onSubmit = async (data: HabitFormData) => {
 
         if (!isDaySelectionValid) {
-            toast.error(`Please select exactly ${weeklyFrequency} days for your habit.`);
+            toast.error(t("forms.habit.toasts.invalid-days", { count: weeklyFrequency }));
             return;
         }
 
@@ -146,22 +150,22 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
             if (fromGoal && setGoalHabits) {
                 setGoalHabits(habitData);
                 handleClose();
-                toast.success("Habit will be created with goal!");
+                toast.success(t("forms.habit.toasts.with-goal"));
                 return;
             }
 
             if (isEditing) {
                 await updateHabit({ habitId: editingHabit!.id, updates: habitData });
-                toast.success("Habit updated successfully!");
+                toast.success(t("forms.habit.toasts.create-success"));
             } else {
                 await addHabit(habitData);
-                toast.success("Habit created successfully!");
+                toast.success(t("forms.habit.toasts.update-success"));
             }
 
             handleClose();
         } catch (error) {
             console.error('Error saving habit:', error);
-            toast.error(isEditing ? "Error updating habit. Please try again." : "Error creating habit. Please try again.");
+            toast.error(isEditing ? t("forms.habit.toasts.create-error") : t("forms.habit.toasts.update-error"));
         }
     };
 
@@ -189,7 +193,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     const confirmDelete = () => {
         if (editingHabit) {
             deleteHabit(editingHabit.id);
-            toast.success("Habit deleted successfully.");
+            toast.success(t("forms.habit.toasts.delete-success"));
             handleClose();
         }
     };
@@ -203,11 +207,11 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
             <DialogContent className="min-w-4/5 lg:min-w-2/3 max-h-[90vh] overflow-y-auto">
                 <FormWrapper
                     variant="dialog"
-                    title={isEditing ? 'Edit Habit' : 'Create New Habit'}
+                    title={isEditing ? t("forms.habit.edit-title") : t("forms.habit.create-title")}
                     icon={Target}
                     description={isEditing
-                        ? 'Update your habit details to better align with your goals.'
-                        : 'Build a new habit that will help you achieve your goals. Start small and be consistent.'
+                        ? t("forms.habit.edit-description")
+                        : t("forms.habit.create-description")
                     }
                 >
                     <form
@@ -218,7 +222,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                             handleSubmit(onSubmit)(e);
                         }}>
                         {/* Basic Information */}
-                        <FormWrapper title='Basic Information' icon={Sparkles} variant="element">
+                        <FormWrapper title={t("forms.habit.sections.basic")} icon={Sparkles} variant="element">
                             {/* Habit Title */}
                             <div className='flex flex-wrap gap-4'>
                                 <div className='flex-2'>
@@ -226,8 +230,8 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                                         control={control}
                                         errors={errors}
                                         name="title"
-                                        label="Habit Title"
-                                        placeholder="e.g., Drink 2L water, Meditate 10 mins, Read 10 pages"
+                                        label={t("forms.habit.fields.title.label")}
+                                        placeholder={t("forms.habit.fields.title.placeholder")}
                                     />
                                 </div>
 
@@ -252,25 +256,25 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                         </FormWrapper>
 
                         {/* Frequency Settings */}
-                        <FormWrapper title='Frequency Settings' icon={Calendar} variant="element">
+                        <FormWrapper title={t("forms.habit.sections.frequency")} icon={Calendar} variant="element">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FrequencyInput<HabitFormData>
                                     control={control}
                                     errors={errors}
                                     name="frequencyPerDay"
-                                    label="Times per Day"
+                                    label={t("forms.habit.fields.times-per-day.label")}
                                     max={20}
-                                    helperText="How many times per day?"
+                                    helperText={t("forms.habit.fields.times-per-day.helper")}
                                 />
 
                                 <FrequencyInput<HabitFormData>
                                     control={control}
                                     errors={errors}
                                     name="weeklyFrequency"
-                                    label="Days per Week"
+                                    label={t("forms.habit.fields.days-per-week.label")}
                                     min={1}
                                     max={7}
-                                    helperText="How many days a week?"
+                                    helperText={t("forms.habit.fields.days-per-week.helper")}
                                 />
                             </div>
 
@@ -286,7 +290,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                         </FormWrapper>
 
                         {/* Schedule & Reminders */}
-                        <FormWrapper title='Schedule & Reminders' icon={Clock} variant="element">
+                        <FormWrapper title={t("forms.habit.sections.schedule")} icon={Clock} variant="element">
                             {/* Dates */}
                             <DateRangePicker<HabitFormData>
                                 control={control}
@@ -307,7 +311,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                         </FormWrapper>
 
                         {/* Motivation & Settings */}
-                        <FormWrapper title='Motivation & Settings' icon={WandSparkles} variant="element">
+                        <FormWrapper title={t("forms.habit.sections.motivation")} icon={WandSparkles} variant="element">
                             <TextAreaInput<HabitFormData>
                                 control={control}
                                 errors={errors}
@@ -317,8 +321,8 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
 
                             {/* Allow Skip Option */}
                             <CheckboxCard<HabitFormData>
-                                label="Allow skipping this habit"
-                                description="Enable this if it's okay to skip this habit occasionally without breaking your streak"
+                                label={t("forms.habit.fields.allow-skip.label")}
+                                description={t("forms.habit.fields.allow-skip.description")}
                                 name="allowSkip"
                                 value={watch("allowSkip")}
                                 setValue={setValue}
@@ -337,7 +341,8 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
 
                         <FormActions
                             isSubmitting={isSubmitting}
-                            submitLabel="Save Habit"
+                            submitLabel={t("forms.habit.actions.save")}
+                            editLabel={t("forms.habit.actions.edit")}
                             onCancel={() => setIsOpen}
                             onDelete={handleDelete}
                             showDelete={!!editingHabit && !fromGoal}
@@ -348,8 +353,8 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                                 open={showDeleteConfirm}
                                 onClose={cancelDelete}
                                 onConfirm={confirmDelete}
-                                title="Delete this habit?"
-                                description="This will permanently remove your habit from the system."
+                                title={t("forms.habit.delete.title")}
+                                description={t("forms.habit.delete.description")}
                             />
                         )}
 

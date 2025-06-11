@@ -1,8 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {  Target } from "lucide-react";
+import { Target } from "lucide-react";
 import SingleGoalInfoCardType from "../../Goals/singleGoalInfoCardType";
 import Link from "next/link";
 import { GoalBriefing } from "../../Goals/goalsBriefing";
+import { useTranslations } from "next-intl";
 
 export default function GoalsInfoCard(
     {
@@ -13,13 +14,14 @@ export default function GoalsInfoCard(
         upcomingGoals: GoalType[]
     }
 ) {
+    const t = useTranslations("goals-info")
     return (
         <Card className="mb-5 border-primary max-h-max overflow-y-auto gap-2">
             <CardHeader className="pb-2 mb-0">
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-base font-semibold flex items-center text-foreground">
                         <Target className="h-4 w-4 mr-2 text-foreground" />
-                        <span>Active Goals</span>
+                        <span>{t("title")}</span>
                     </CardTitle>
                 </div>
             </CardHeader>
@@ -31,13 +33,15 @@ export default function GoalsInfoCard(
                             <Target className="h-8 w-8 text-muted-foreground" />
                         </div>
                         <h3 className="text-lg font-semibold text-foreground mb-2">
-                            No Active Goals
+                            {t("empty-title")}
                         </h3>
+
                         <p className="text-sm text-muted-foreground mb-6 max-w-sm">
-                            There are no active goals yet. Create a goal to start upgrading your life and tracking your progress.
+                            {t("empty-description")}
                         </p>
+
                         <Link href="/goals/add" className="text-primary">
-                            Add Your First Goal
+                            {t("add-first-goal")}
                         </Link>
                     </div>
                 }
@@ -55,13 +59,13 @@ export default function GoalsInfoCard(
                         <div className="flex items-center gap-2 mb-4">
                             <div className="w-2 h-2 rounded-full bg-muted-foreground opacity-60"></div>
                             <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
-                                Upcoming Goals
+                                {t("upcoming-title")}
                             </h3>
                         </div>
 
                         <div className="space-y-3">
                             {upcomingGoals.map((goal) => (
-                               <GoalBriefing goal={goal} key={goal.id} />
+                                <GoalBriefing goal={goal} key={goal.id} />
                             ))}
                         </div>
 
@@ -69,7 +73,7 @@ export default function GoalsInfoCard(
                             href="/goals"
                             className="inline-flex items-center gap-1 mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors"
                         >
-                            <span>View all upcoming goals</span>
+                            <span>{t("view-all")}</span>
                             <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                             </svg>

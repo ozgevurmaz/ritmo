@@ -26,6 +26,7 @@ import { HabitManagment } from './Cards/HabitManagment';
 import { PrivacyCard } from './Cards/PrivacyCard';
 import { FormActions } from './Cards/FormActions';
 import { DeleteConfirmDialog } from '../shared/DeleteConfirmDialog';
+import { useTranslations } from 'next-intl';
 
 type GoalFormData = z.infer<typeof goalSchema>;
 
@@ -48,6 +49,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
   editingGoal = null,
   userId,
 }) => {
+  const t = useTranslations();
   const router = useRouter();
 
   const { data: allHabits } = useHabits(userId)
@@ -101,6 +103,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
     sharedWith: sharedWith || [],
   }), [addedHabits.length, motivation, category, startDate, endDate, visibility, sharedWith]);
 
+
   const [selectedHabits, setSelectedHabits] = useState<HabitType[]>([]);
 
   useEffect(() => {
@@ -128,7 +131,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
 
   const handleNewHabitSave = (habitData: HabitFormValues) => {
     setAddedHabits(prev => [...prev, habitData]);
-    toast.success("Quick habit added!");
+    toast.success(t("forms.habit.toasts.create-success"));
   };
 
   const handleSelectExistingHabit = (habitData: HabitType) => {
@@ -180,21 +183,22 @@ const GoalForm: React.FC<GoalFormProps> = ({
           newaddedHabits: addedHabits,
         });
 
-        toast.success("Goal updated successfully!");
+        toast.success(t("forms.goal.update-success"));
       } else {
         await addGoal({
           goalData: goalPayload,
           newHabits: newQuickHabits,
           linkedHabits: updatedExistingHabits,
         });
+        toast.success(t("forms.goal.create-success"));
       }
 
-      toast.success("Goal and habits created successfully!");
+
       handleClose();
     } catch (err) {
       const errorMessage = err instanceof Error
         ? err.message
-        : "An error occurred while saving the goal.";
+        : t("forms.goal.create-error");
       toast.error(errorMessage);
       console.error('Goal save error:', err);
     }
@@ -224,11 +228,11 @@ const GoalForm: React.FC<GoalFormProps> = ({
 
     try {
       await deleteGoal(editingGoal.id);
-      toast.success("Goal deleted successfully.");
+      toast.success(t("forms.goal.delete-success"));
       handleClose();
       router.push("/goals");
     } catch (err) {
-      toast.error("Failed to delete goal.");
+      toast.error(t("forms.goal.delete-error"));
       console.error('Delete error:', err);
     }
   }, [editingGoal, deleteGoal, handleClose, router]);
@@ -238,118 +242,119 @@ const GoalForm: React.FC<GoalFormProps> = ({
   };
 
   return (
-      <div className="w-full overflow-y-auto">
-        <FormWrapper
-          icon={Target}
-          title={isEditing ? 'Edit Goal' : 'Create New Goal'}
-          description={isEditing
-            ? 'Update your goal and manage associated habits.'
-            : 'Set a meaningful goal and create or link habits that will help you achieve it.'
-          }
-          variant='page'
-          textColor='text-goals'
-        >
+    <div className="w-full overflow-y-auto">
+      <FormWrapper
+        icon={Target}
+        title={isEditing ? t("forms.goal.edit-title") : t("forms.goal.create-title")}
+        description={isEditing
+          ? t("forms.goal.edit-description")
+          : t("forms.goal.create-description")
+        }
+        variant='page'
+        textColor='text-goals'
+      >
 
-          <form className="space-y-8 py-6 w-full" onSubmit={handleSubmit(onSubmit)}>
-            {/* Goal Information */}
-            <FormWrapper
-              variant='element'
-              title=" Goal Information"
-              icon={Flag}    
-              >
+        <form className="space-y-8 py-6 w-full" onSubmit={handleSubmit(onSubmit)}>
+          {/* Goal Information */}
+          <FormWrapper
+            variant='element'
+            title={t("forms.goal.goal-info")}
+            icon={Flag}
+          >
 
-              {/* Title */}
-              <TitleInput<GoalFormData>
-                control={control}
-                errors={errors}
-                name="title"
-                label="Goal Title"
-                placeholder="e.g., Run a marathon, Build a portfolio, Learn Spanish"
-              />
-
-              {/* Description */}
-
-              <TextAreaInput<GoalFormData>
-                control={control}
-                errors={errors}
-                name="description"
-                setValue={setValue}
-                showPredefinedMessages={false}
-                label="Description"
-              />
-
-              {/* Motivation */}
-              <TextAreaInput<GoalFormData>
-                control={control}
-                errors={errors}
-                name="motivation"
-                setValue={setValue}
-              />
-
-              <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
-                {/* Category */}
-                <CategorySelection<GoalFormData>
-                  control={control}
-                  controlName="category"
-                  errors={errors}
-                />
-                <div className='col-span-2'>
-                  {/*Dates */}
-                  <DateRangePicker<GoalFormData>
-                    control={control}
-                    errors={errors}
-                    startMinDate="2025-01-01"
-                    startName='startDate'
-                    endName='endDate' />
-                </div>
-              </div>
-            </FormWrapper>
-
-            {/* Habit Management */}
-            <HabitManagment
-              userId={userId}
-              addedHabits={addedHabits}
-              selectedHabits={selectedHabits}
-              handleNewHabitSave={handleNewHabitSave}
-              handleSelectExistingHabit={handleSelectExistingHabit}
-              handleRemoveNewHabit={handleRemoveNewHabit}
-              handleRemoveExistingHabit={handleRemoveExistingHabit}
-              goalTitle={GoalTitle}
-              enableAddHabit={enableAddHabit}
-              defaultGoalHabit={editingHabit}
-            />
-
-            {/* Privacy & Sharing */}
-            <PrivacyCard<GoalFormData>
-              userId={userId}
+            {/* Title */}
+            <TitleInput<GoalFormData>
               control={control}
-              visibility={visibility}
-              visibilityName='visibility'
-              selectedContacts={selectedContacts}
-              handleContactChange={handleContactChange}
+              errors={errors}
+              name="title"
+              label={t("forms.goal.title.label")}
+              placeholder={t("forms.goal.title.placeholder")}
             />
 
-            <FormActions
-              isSubmitting={isSubmitting}
-              submitLabel="Create Goal"
-              editLabel="Edit Goal"
-              isEdit={isEditing}
-              cancelHref="/goals"
-              onDelete={handleDeleteGoal}
-              showDelete={!!editingGoal}
+            {/* Description */}
+
+            <TextAreaInput<GoalFormData>
+              control={control}
+              errors={errors}
+              name="description"
+              setValue={setValue}
+              showPredefinedMessages={false}
+              label={t("forms.description.label")}
+              placeholder={t("forms.description.placeholder")}
             />
 
-            <DeleteConfirmDialog
-              open={showDeleteConfirm}
-              onClose={cancelDelete}
-              onConfirm={handleDeleteGoal}
-              title="Delete this goal?"
-              description="This will permanently remove your goal from the system."
+            {/* Motivation */}
+            <TextAreaInput<GoalFormData>
+              control={control}
+              errors={errors}
+              name="motivation"
+              setValue={setValue}
             />
 
-          </form>
-        </FormWrapper>
-      </div>
+            <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
+              {/* Category */}
+              <CategorySelection<GoalFormData>
+                control={control}
+                controlName="category"
+                errors={errors}
+              />
+              <div className='col-span-2'>
+                {/*Dates */}
+                <DateRangePicker<GoalFormData>
+                  control={control}
+                  errors={errors}
+                  startMinDate="2025-01-01"
+                  startName='startDate'
+                  endName='endDate' />
+              </div>
+            </div>
+          </FormWrapper>
+
+          {/* Habit Management */}
+          <HabitManagment
+            userId={userId}
+            addedHabits={addedHabits}
+            selectedHabits={selectedHabits}
+            handleNewHabitSave={handleNewHabitSave}
+            handleSelectExistingHabit={handleSelectExistingHabit}
+            handleRemoveNewHabit={handleRemoveNewHabit}
+            handleRemoveExistingHabit={handleRemoveExistingHabit}
+            goalTitle={GoalTitle}
+            enableAddHabit={enableAddHabit}
+            defaultGoalHabit={editingHabit}
+          />
+
+          {/* Privacy & Sharing */}
+          <PrivacyCard<GoalFormData>
+            userId={userId}
+            control={control}
+            visibility={visibility}
+            visibilityName='visibility'
+            selectedContacts={selectedContacts}
+            handleContactChange={handleContactChange}
+          />
+
+          <FormActions
+            isSubmitting={isSubmitting}
+            submitLabel={t("forms.goal.actions.save")}
+            editLabel={t("forms.goal.actions.edit")}
+            isEdit={isEditing}
+            cancelHref="/goals"
+            onDelete={handleDeleteGoal}
+            showDelete={!!editingGoal}
+          />
+
+          <DeleteConfirmDialog
+            open={showDeleteConfirm}
+            onClose={cancelDelete}
+            onConfirm={handleDeleteGoal}
+            title={t("forms.goal.delete-confirm.title")}
+            description={t("forms.goal.delete-confirm.description")}
+          />
+
+        </form>
+      </FormWrapper>
+    </div>
   );
 };
 

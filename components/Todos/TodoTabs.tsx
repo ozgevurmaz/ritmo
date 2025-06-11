@@ -3,7 +3,8 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CheckCircle2, AlertTriangle, ListTodo } from "lucide-react";
 import { useMemo } from "react";
-import TodosChecklist from "./todosCheckbox";
+import TodosSection from "./todosSection";
+import { useTranslations } from "next-intl";
 
 interface TodoTabsProps {
     todos: TodoType[];
@@ -29,7 +30,8 @@ interface TodoType {
 }
 
 export default function TodoTabs({ todos, userId }: TodoTabsProps) {
-   
+    const t = useTranslations("common")
+
     const categorizedTodos = useMemo(() => {
         const now = new Date();
 
@@ -81,82 +83,46 @@ export default function TodoTabs({ todos, userId }: TodoTabsProps) {
                         className="flex items-center gap-2 data-[state=active]:text-todos"
                     >
                         <AlertTriangle className="h-4 w-4" />
-                        Urgent ({categorizedTodos.urgent.length})
+                        {t("tabs.urgent")} ({categorizedTodos.urgent.length})
                     </TabsTrigger>
                     <TabsTrigger
                         value="normal"
                         className="flex items-center gap-2 data-[state=active]:text-todos"
                     >
                         <ListTodo className="h-4 w-4" />
-                        Normal ({categorizedTodos.normal.length})
+                        {t("tabs.normal")}  ({categorizedTodos.normal.length})
                     </TabsTrigger>
                     <TabsTrigger
                         value="completed"
                         className="flex items-center gap-2 data-[state=active]:text-todos"
                     >
                         <CheckCircle2 className="h-4 w-4" />
-                        Completed ({categorizedTodos.completed.length})
+                        {t("tabs.completed")}  ({categorizedTodos.completed.length})
                     </TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="urgent" className="mt-6">
-                    <div className="space-y-2">
-                        {categorizedTodos.urgent.length === 0 ? (
-                            <div className="text-center py-8 text-muted-foreground">
-                                <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                                <p>No urgent todos</p>
-                                <p className="text-sm">You're all caught up!</p>
-                            </div>
-                        ) : (
-                            categorizedTodos.urgent.map((todo) => (
-                                <TodosChecklist
-                                    key={todo.id}
-                                    todo={todo}
-                                    userId={userId}
-                                />
-                            ))
-                        )}
-                    </div>
+                    <TodosSection
+                        todos={categorizedTodos.urgent}
+                        type="urgent"
+                        userId={userId}
+                    />
                 </TabsContent>
 
                 <TabsContent value="normal" className="mt-6">
-                    <div className="space-y-2">
-                        {categorizedTodos.normal.length === 0 ? (
-                            <div className="text-center py-8 text-muted-foreground">
-                                <ListTodo className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                                <p>No normal priority todos</p>
-                                <p className="text-sm">Add some tasks to get started</p>
-                            </div>
-                        ) : (
-                            categorizedTodos.normal.map((todo) => (
-                                <TodosChecklist
-                                    key={todo.id}
-                                    todo={todo}
-                                    userId={userId}
-                                />
-                            ))
-                        )}
-                    </div>
+                    <TodosSection
+                        todos={categorizedTodos.normal}
+                        type="normal"
+                        userId={userId}
+                    />
                 </TabsContent>
 
                 <TabsContent value="completed" className="mt-6">
-                    <div className="space-y-2">
-                        {categorizedTodos.completed.length === 0 ? (
-                            <div className="text-center py-8 text-muted-foreground">
-                                <CheckCircle2 className="h-12 w-12 mx-auto mb-3 opacity-50" />
-                                <p>No completed todos</p>
-                                <p className="text-sm">Complete some tasks to see them here</p>
-                            </div>
-                        ) : (
-                            categorizedTodos.completed.map((todo) => (
-                                <TodosChecklist
-                                    key={todo.id}
-                                    todo={todo}
-                                    userId={userId}
-                                />
-                            ))
-                        )}
-                    </div>
+                    <TodosSection
+                        todos={categorizedTodos.completed}
+                        type="completed"
+                        userId={userId}
+                    />
                 </TabsContent>
             </Tabs>
         </div>

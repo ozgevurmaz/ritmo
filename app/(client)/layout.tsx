@@ -8,14 +8,14 @@ export default function RootLayout({
 }>) {
   return (
     <div>
-      <NavbarWrapper>
-        {children}
-        <Toaster position="top-right"
-          theme="system"
-          toastOptions={{
-            duration: 3000,
-          }} />
-      </NavbarWrapper>
+        <NavbarWrapper>
+          {children}
+          <Toaster position="top-right"
+            theme="system"
+            toastOptions={{
+              duration: 3000,
+            }} />
+        </NavbarWrapper>
     </div>
   );
 }

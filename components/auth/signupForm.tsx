@@ -12,10 +12,12 @@ import { Loader2, Mail } from 'lucide-react'
 import { PasswordInput } from '@/components/auth/passwordInput'
 import { signupSchema } from '@/lib/zod/auth/auth'
 import LoadingScreen from '../shared/pageStyles/Loading'
+import { useTranslations } from 'next-intl'
 
 type SignupFormData = z.infer<typeof signupSchema>
 
 export function SignupForm() {
+    const t = useTranslations()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [error, setError] = useState<string | null>(null)
 
@@ -40,12 +42,11 @@ export function SignupForm() {
 
             const result = await signup(formData)
 
-            // Handle signup result if your action returns error info
             if (result?.error) {
                 setError(result.error)
             }
         } catch (error: any) {
-            setError(error.message || 'An error occurred during signup')
+            setError(error.message || t("auth.signup-error"))
         } finally {
             setIsLoading(false)
         }
@@ -61,14 +62,14 @@ export function SignupForm() {
                     name="email"
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>{t("forms.email.label")} </FormLabel>
                             <FormControl>
                                 <div className="relative">
                                     <Mail className="absolute left-3 top-3 h-4 w-4 text-foreground" />
                                     <Input
                                         type="email"
                                         autoComplete='none'
-                                        placeholder="Enter your email"
+                                        placeholder={t("forms.email.placeholder")}
                                         className="pl-10"
                                         {...field}
                                         disabled={isLoading}
@@ -80,7 +81,6 @@ export function SignupForm() {
                     )}
                 />
 
-                {/* Replace the individual password fields with the PasswordInput component */}
                 <PasswordInput
                     control={signupForm.control}
                     name="password"
@@ -88,6 +88,7 @@ export function SignupForm() {
                     requireConfirmation={true}
                     disabled={isLoading}
                     showValidation={true}
+                    label={t("forms.password.label")}
                 />
 
                 <Button
@@ -98,10 +99,10 @@ export function SignupForm() {
                     {isLoading ? (
                         <>
                             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                            Creating account...
+                            {t("auth.signup.creating")}
                         </>
                     ) : (
-                        'Create Account'
+                        t("buttons.signup")
                     )}
                 </Button>
 

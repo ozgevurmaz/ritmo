@@ -6,6 +6,7 @@ import { getRedirectPath } from '@/lib/middleware/logic';
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next()
 
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,

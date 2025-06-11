@@ -8,6 +8,7 @@ import { Clock, Edit } from "lucide-react";
 import { useState } from "react";
 import TodoForm from "../Forms/todoForm";
 import { useToggleTodo } from "@/lib/Mutations/todos/useToggleTodo";
+import { useTranslations } from "next-intl";
 
 interface TodosChecklistProps {
     todo: TodoType;
@@ -15,6 +16,7 @@ interface TodosChecklistProps {
 }
 
 export default function TodosChecklist({ todo, userId }: TodosChecklistProps) {
+    const t = useTranslations("todos")
     const [isEditFormOpen, setIsEditFormOpen] = useState<boolean>(false);
     const [editingTodo, setEditingTodo] = useState<TodoType | null>(null);
 
@@ -70,7 +72,7 @@ export default function TodosChecklist({ todo, userId }: TodosChecklistProps) {
                             })}
                             {isOverdue && todo.type === "task" && (
                                 <span className="ml-1 text-xs font-medium">
-                                    (Overdue)
+                                    ({t("overdue")})
                                 </span>
                             )}
                         </div>

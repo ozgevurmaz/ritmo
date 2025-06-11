@@ -5,7 +5,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { contacts } from '@/lib/constants'
 import { Label } from '@radix-ui/react-label'
 import { Eye, EyeOff, Users } from 'lucide-react'
-import React, { ReactElement } from 'react'
+import { useTranslations } from 'next-intl'
+import React from 'react'
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
 interface PrivacyCardProps<T extends FieldValues> {
@@ -17,27 +18,26 @@ interface PrivacyCardProps<T extends FieldValues> {
     handleContactChange: (contact: string, checked: boolean) => void;
 }
 
-
 export const PrivacyCard = <T extends FieldValues>({
-    userId,
     control,
     visibility,
     selectedContacts,
     visibilityName,
     handleContactChange,
 }: PrivacyCardProps<T>) => {
+    const t = useTranslations("forms.privacy")
     return (
         <Card>
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
                     <Users className="h-5 w-5" />
-                    Privacy & Sharing
+                    {t("title")}
                 </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
                 {/* Visibility Settings */}
                 <div className="space-y-3">
-                    <Label className="text-sm font-medium">Visibility</Label>
+                    <Label className="text-sm font-medium">{t("label")}</Label>
                     <Controller
                         name={visibilityName}
                         control={control}
@@ -52,8 +52,8 @@ export const PrivacyCard = <T extends FieldValues>({
                                     <Label htmlFor="private" className="flex items-center gap-2 cursor-pointer flex-1">
                                         <EyeOff className="h-4 w-4" />
                                         <div>
-                                            <div className="font-medium">Private</div>
-                                            <div className="text-xs text-muted-foreground">Only you can see this todo</div>
+                                            <div className="font-medium">{t("private")}</div>
+                                            <div className="text-xs text-muted-foreground">{t("private-description")}</div>
                                         </div>
                                     </Label>
                                 </div>
@@ -62,8 +62,8 @@ export const PrivacyCard = <T extends FieldValues>({
                                     <Label htmlFor="public" className="flex items-center gap-2 cursor-pointer flex-1">
                                         <Eye className="h-4 w-4" />
                                         <div>
-                                            <div className="font-medium">Public</div>
-                                            <div className="text-xs text-muted-foreground">Others can view and encourage your progress</div>
+                                            <div className="font-medium">{t("public")}</div>
+                                            <div className="text-xs text-muted-foreground">{t("public-description")}</div>
                                         </div>
                                     </Label>
                                 </div>
@@ -77,9 +77,9 @@ export const PrivacyCard = <T extends FieldValues>({
                     <div className="space-y-3">
                         <div className='bg-muted w-full h-[1px]' />
                         <div>
-                            <Label className="text-sm font-medium">Share with specific people</Label>
+                            <Label className="text-sm font-medium">{t("share.label")}</Label>
                             <p className="text-sm text-muted-foreground mt-1">
-                                Choose people who can view and encourage your progress
+                                {t("share.description")}
                             </p>
                         </div>
                         <div className="max-h-40 overflow-y-auto border rounded-lg p-3 space-y-2 bg-background">
@@ -98,10 +98,10 @@ export const PrivacyCard = <T extends FieldValues>({
                             ))}
                         </div>
                         {selectedContacts.length > 0 && (
-                            <Alert className="border-green-200 bg-green-50">
-                                <Users className="h-4 w-4 text-green-600" />
-                                <AlertDescription className="text-green-800">
-                                    Sharing with {selectedContacts.length} contact{selectedContacts.length !== 1 ? 's' : ''}
+                            <Alert className="border-friends bg-friends/20 text-friends">
+                                <Users className="h-4 w-4" />
+                                <AlertDescription className="text-friends">
+                                    {t("share.status", { count: selectedContacts.length })}
                                 </AlertDescription>
                             </Alert>
                         )}

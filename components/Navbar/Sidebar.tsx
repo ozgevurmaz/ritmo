@@ -15,8 +15,11 @@ import { useProfile } from '@/lib/Queries/useProfile';
 import { Button } from '../ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { getInitials } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
+import SteakBadge from '../custom/StreakBadge';
 
 export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
+  const t = useTranslations("nav")
   const { data: profile, isLoading, error } = useProfile();
   const [collapsed, setCollapsed] = useState(false);
   const Links = isAdmin ? ADMIN_NAV_LINKS : NAV_LINKS
@@ -63,7 +66,7 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
             className={`flex items-center gap-3 px-3 py-2 mb-2 rounded-lg text-md font-medium transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${collapsed ? 'justify-center' : ''}`}
           >
             <link.icon className="h-4 w-4 shrink-0" />
-            {!collapsed && <span>{link.name}</span>}
+            {!collapsed && <span>{t(link.name)}</span>}
           </Link>
         ))}
         {!isAdmin && (
@@ -77,37 +80,34 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
         )}
       </nav>
 
-      {/* User Profile - Fixed at bottom */}
-      <div className="p-4 border-t border-sidebar-border bg-sidebar">
+      {/* User Profile*/}
+      <div className="px-4 py-1 border-t border-border">
         {collapsed ? (
           <div className="flex justify-center">
-            <Avatar className="h-8 w-8">
+            <Avatar className="h-9 w-9">
               {profile?.avatar ? (
                 <AvatarImage src={profile?.avatar} alt={profile?.name} />
               ) : (
-                <AvatarFallback className="bg-primary/20 text-primary text-xs">
+                <AvatarFallback className="bg-primary/20 text-primary text-lg">
                   {getInitials(profile?.name || "User")}
                 </AvatarFallback>
               )}
             </Avatar>
           </div>
         ) : (
-          <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8">
+          <div className="flex items-center gap-2">
+            <Avatar className="h-9 w-9">
               {profile?.avatar ? (
                 <AvatarImage src={profile?.avatar} alt={profile?.name} />
               ) : (
-                <AvatarFallback className="bg-primary/20 text-primary text-xs">
+                <AvatarFallback className="bg-primary/20 text-primary text-lg">
                   {getInitials(profile?.name || "User")}
                 </AvatarFallback>
               )}
             </Avatar>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium truncate">{profile?.name}</p>
-              <div className="flex items-center gap-1 text-xs text-sidebar-foreground/70">
-                <Flame className="h-3 w-3" />
-                <span>Streak: {profile?.streak || 0}</span>
-              </div>
+            <div className="flex-1 flex flex-col items-center p-0 w-full">
+              <p className="text-sm px-2 py-1">{profile?.name}</p>
+              <SteakBadge streak={profile?.streak || 0} border={false} isTextShown />
             </div>
           </div>
         )}

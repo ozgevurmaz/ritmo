@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function CustomCalendar({
     isCalendarOpen,
@@ -19,6 +20,7 @@ export default function CustomCalendar({
     minDate?: string
     maxDate?: string
 }) {
+     const t = useTranslations("forms.date")
     const calendarRef = useRef<HTMLDivElement>(null);
     const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
     const today = new Date();
@@ -142,10 +144,7 @@ export default function CustomCalendar({
         });
     };
 
-    const monthNames = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
+    const monthNames : string[] = t.raw("monthNames")
 
     const calendarDays = generateCalendarDays();
 
@@ -246,7 +245,7 @@ export default function CustomCalendar({
                     className="w-full text-xs hover:bg-primary/10"
                     onClick={() => handleDateClick(today)}
                 >
-                    Jump to Today - {today.toLocaleDateString('en-US', {
+                    {t("back-today")} - {today.toLocaleDateString('en-US', {
                         month: 'short',
                         day: 'numeric'
                     })}

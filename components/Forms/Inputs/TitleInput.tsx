@@ -14,7 +14,7 @@ type TitleInputProps<T extends FieldValues> = {
     control: Control<T>;
     errors: FieldErrors<T>;
     name: Path<T>;
-    label?: string;
+    label: string;
     placeholder: string;
 };
 
@@ -22,7 +22,7 @@ export const TitleInput = <T extends FieldValues>({
     control,
     errors,
     name,
-    label = "Title",
+    label,
     placeholder
 }: TitleInputProps<T>) => {
     return (

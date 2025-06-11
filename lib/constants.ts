@@ -59,38 +59,28 @@ export const slogans = [
   "Your rhythm. Your growth."
 ];
 
+
 {/* Nav links */ }
 export const NAV_LINKS = [
-  { name: 'Home', icon: Home, href: '/' },
-  { name: 'Planner', icon: Calendar, href: '/planner' },
-  { name: 'Social', icon: Users, href: '/planner' },
-  { name: 'Todos', icon: CheckSquare, href: '/todos' },
-  { name: 'Habits', icon: RotateCcw, href: '/habits' },
-  { name: 'Goals', icon: Target, href: '/goals' },
-  { name: 'Discover', icon: Search, href: '/discover' },
-  { name: 'Motivation', icon: Zap, href: '/discover' },
+  { name: 'home', icon: Home, href: '/' },
+  { name: 'planner', icon: Calendar, href: '/planner' },
+  { name: 'social', icon: Users, href: '/planner' },
+  { name: 'todos', icon: CheckSquare, href: '/todos' },
+  { name: 'habits', icon: RotateCcw, href: '/habits' },
+  { name: 'goals', icon: Target, href: '/goals' },
+  { name: 'discover', icon: Search, href: '/discover' },
+  { name: 'motivation', icon: Zap, href: '/discover' },
 ];
 
 export const ADMIN_NAV_LINKS = [
-  { icon: LayoutDashboard, name: 'Dashboard', href: '/admin/dashboard' },
-  { icon: Users, name: 'Users', href: '/admin/users' },
-  { icon: FileText, name: 'Content', href: '/admin/content' },
-  { icon: Trophy, name: 'Challenges', href: '/admin/challenges' },
-  { icon: Package, name: 'Packs', href: '/admin/packs' },
-  { icon: MessageSquare, name: 'Communications', href: '/admin/communications' },
-  { icon: Gamepad2, name: 'Gamifications', href: '/admin/gamifications' },
-  { icon: Settings, name: 'Settings', href: '/admin/settings' },
-];
-
-export const categories = [
-  'Work',
-  'Personal',
-  'Health',
-  'Finance',
-  'Education',
-  'Shopping',
-  'Home',
-  'Travel'
+  { icon: LayoutDashboard, name: 'dashboard', href: '/admin/dashboard' },
+  { icon: Users, name: 'users', href: '/admin/users' },
+  { icon: FileText, name: 'content', href: '/admin/content' },
+  { icon: Trophy, name: 'challenges', href: '/admin/challenges' },
+  { icon: Package, name: 'packs', href: '/admin/packs' },
+  { icon: MessageSquare, name: 'communications', href: '/admin/communications' },
+  { icon: Gamepad2, name: 'gamifications', href: '/admin/gamifications' },
+  { icon: Settings, name: 'settings', href: '/admin/settings' },
 ];
 
 export const contacts = [
@@ -100,24 +90,6 @@ export const contacts = [
   "emma"
 ];
 
-export const PRIORITY_EXPLANATIONS = {
-    'High-High': 'Do First - Critical and urgent tasks',
-    'High-Medium': 'Do First - Important tasks with some urgency',
-    'High-Low': 'Schedule - Important but not urgent',
-    'Medium-High': 'Do Next - Urgent but less important',
-    'Medium-Medium': 'Schedule - Moderate priority tasks',
-    'Medium-Low': 'Delegate - Can be done later or by others',
-    'Low-High': 'Do Next - Quick urgent tasks',
-    'Low-Medium': 'Delegate - Low priority tasks',
-    'Low-Low': 'Eliminate - Consider if really needed'
-};
-
 export const DAYS_OF_WEEK = [
-    { short: "Mon", full: "Monday" },
-    { short: "Tue", full: "Tuesday" },
-    { short: "Wed", full: "Wednesday" },
-    { short: "Thu", full: "Thursday" },
-    { short: "Fri", full: "Friday" },
-    { short: "Sat", full: "Saturday" },
-    { short: "Sun", full: "Sunday" }
+  "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"
 ];

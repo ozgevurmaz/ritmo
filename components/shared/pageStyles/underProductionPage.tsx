@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Construction, Clock, ArrowLeft, Hammer, Zap, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 interface UnderProductionPageProps {
     title?: string
@@ -15,12 +16,13 @@ interface UnderProductionPageProps {
 }
 
 export default function UnderProductionPage({
-    title = "Under Development",
-    message = "We're working hard to bring you this feature!",
-    estimatedTime = "Coming Soon",
+    title,
+    message,
+    estimatedTime,
     showBackButton = true,
     backUrl = "/",
 }: UnderProductionPageProps) {
+    const t = useTranslations()
     const router = useRouter()
     const [dots, setDots] = useState('')
 
@@ -62,17 +64,17 @@ export default function UnderProductionPage({
                 {/* Main Content */}
                 <div className="space-y-4">
                     <h1 className="text-3xl font-bold text-foreground">
-                        {title}
+                        {title || t("underConstruction.title")}
                     </h1>
 
                     <p className="text-lg text-muted-foreground">
-                        {message}
+                        {message || t("underConstruction.message")}
                     </p>
 
                     {/* Loading Animation */}
                     <div className="flex items-center justify-center gap-2 text-primary">
                         <Zap className="h-5 w-5" />
-                        <span className="font-medium">Building amazing features{dots}</span>
+                        <span className="font-medium">{t("underConstruction.building")}{dots}</span>
                     </div>
                 </div>
 
@@ -80,9 +82,9 @@ export default function UnderProductionPage({
                 <div className="bg-accent border border-border rounded-lg p-4">
                     <div className="flex items-center justify-center text-accent-foreground gap-2 mb-2">
                         <Clock className="h-5 w-5" />
-                        <span className="font-semibold">Timeline</span>
+                        <span className="font-semibold">{t("underConstruction.timeline")}</span>
                     </div>
-                    <p className="text-foreground font-medium">{estimatedTime}</p>
+                    <p className="text-foreground text-sm">{estimatedTime || t("underConstruction.coming-soon")}</p>
                 </div>
 
                 {/* Progress Bar Animation */}
@@ -101,20 +103,20 @@ export default function UnderProductionPage({
                             className="w-full font-semibold"
                         >
                             <ArrowLeft className="mr-2 h-4 w-4" />
-                            {backUrl === 'back' ? 'Go Back' : 'Return Home'}
+                            {backUrl === 'back' ? t("buttons.to-back") : t("buttons.to-home")}
                         </Button>
                     )}
                 </div>
 
                 {/* Footer Links */}
                 <div className="text-center text-sm text-muted-foreground space-y-2 pt-4 border-t border-border">
-                    <p>Stay updated on our progress</p>
+                    <p> {t("underConstruction.updates-note")}</p>
                     <div className="flex justify-center gap-4">
                         <Link href="/updates" className="text-secondary hover:underline">
-                            Development Updates
+                            {t("underConstruction.updates")}
                         </Link>
                         <Link href="/support" className="text-secondary hover:underline">
-                            Contact Support
+                            {t("support.contact")}
                         </Link>
                     </div>
                 </div>
@@ -122,7 +124,7 @@ export default function UnderProductionPage({
                 {/* Ritmo Branding */}
                 <div className="text-center pt-4">
                     <p className="text-xs text-muted-foreground">
-                        Building the future of habit tracking with{' '}
+                        {t("underConstruction.footerNote")}{' '}
                         <span className="text-primary font-semibold">Ritmo</span>
                     </p>
                 </div>

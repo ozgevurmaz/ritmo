@@ -9,8 +9,10 @@ import {
   Zap,
   Trophy,
 } from "lucide-react";
+import { useTranslations } from 'next-intl';
 
 export const useHabitsAnalytics = (habits: HabitType[]): BaseAnalyticsData[] => {
+  const t = useTranslations("habits.status")
   return useMemo(() => {
     const totalHabits = habits.length;
     const activeHabits = habits.filter(h => {
@@ -18,7 +20,7 @@ export const useHabitsAnalytics = (habits: HabitType[]): BaseAnalyticsData[] => 
       const endDate = h.endDate ? new Date(h.endDate) : null;
       return !endDate || endDate >= today;
     }).length;
-    
+
     const completedToday = habits.reduce((sum, habit) => sum + habit.completedToday, 0);
     const totalDailyTarget = habits.reduce((sum, habit) => sum + habit.frequencyPerDay, 0);
     const averageStreak = habits.length > 0
@@ -30,25 +32,25 @@ export const useHabitsAnalytics = (habits: HabitType[]): BaseAnalyticsData[] => 
 
     return [
       {
-        label: "Active Habits",
+        label: t("active"),
         value: activeHabits,
         icon: Activity,
         colorClass: "text-habits"
       },
       {
-        label: "Avg. Streak",
+        label: t("average-streak"),
         value: Math.round(averageStreak * 10) / 10,
         icon: TrendingUp,
         colorClass: "text-success"
       },
       {
-        label: "Today's Progress",
+        label: t("todays-progress"),
         value: `${completedToday}/${totalDailyTarget}`,
         icon: Calendar,
         colorClass: "text-activities"
       },
       {
-        label: "Completion Rate",
+        label: t("completion-rate"),
         value: `${Math.round(completionRate)}%`,
         icon: BarChart3,
         colorClass: "text-primary",
@@ -61,14 +63,14 @@ export const useHabitsAnalytics = (habits: HabitType[]): BaseAnalyticsData[] => 
 
 // Todos Analytics Hook
 export const useTodosAnalytics = (todos: TodoType[]): BaseAnalyticsData[] => {
+  const t = useTranslations("todos.status")
+
   return useMemo(() => {
     const totalTodos = todos.length;
     const completedTodos = todos.filter(t => t.completed).length;
-    const pendingTodos = totalTodos - completedTodos;
     const completionRate = totalTodos > 0 ? (completedTodos / totalTodos) * 100 : 0;
 
     const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
 
     // High priority pending tasks
     const highPriorityPending = todos.filter(t =>
@@ -84,25 +86,25 @@ export const useTodosAnalytics = (todos: TodoType[]): BaseAnalyticsData[] => {
 
     return [
       {
-        label: "Total Tasks",
+        label: t("total-tasks"),
         value: totalTodos,
         icon: CheckCircle,
         colorClass: "text-todos"
       },
       {
-        label: "Completed",
+        label: t("completed"),
         value: completedTodos,
         icon: Trophy,
         colorClass: "text-success"
       },
       {
-        label: "High Priority",
+        label: t("high-priorty"),
         value: highPriorityPending,
         icon: Zap,
         colorClass: "text-destructive"
       },
       {
-        label: "Completion Rate",
+        label: t("completion-rate"),
         value: `${Math.round(completionRate)}%`,
         icon: BarChart3,
         colorClass: "text-primary",
@@ -115,6 +117,8 @@ export const useTodosAnalytics = (todos: TodoType[]): BaseAnalyticsData[] => {
 
 // Goals Analytics Hook
 export const useGoalsAnalytics = (goals: GoalType[]): BaseAnalyticsData[] => {
+  const t = useTranslations("goals");
+
   return useMemo(() => {
     const totalGoals = goals.length;
     const completedGoals = goals.filter(g => g.completed).length;
@@ -145,19 +149,19 @@ export const useGoalsAnalytics = (goals: GoalType[]): BaseAnalyticsData[] => {
 
     return [
       {
-        label: "Active Goals",
+        label: t("status.active"),
         value: activeGoals,
         icon: Target,
         colorClass: "text-goals"
       },
       {
-        label: "Completed",
+        label: t("status.completed"),
         value: completedGoals,
         icon: Trophy,
         colorClass: "text-success"
       },
       {
-        label: "Avg. Progress",
+        label: t("status.average-progress"),
         value: `${Math.round(averageProgress)}%`,
         icon: TrendingUp,
         colorClass: "text-primary",
@@ -165,7 +169,7 @@ export const useGoalsAnalytics = (goals: GoalType[]): BaseAnalyticsData[] => {
         progressValue: averageProgress
       },
       {
-        label: "Ending Soon",
+        label: t("status.ending-soon"),
         value: endingSoon,
         icon: Calendar,
         colorClass: "text-activities"
@@ -180,6 +184,8 @@ export const useCombinedAnalytics = (
   todos: TodoType[],
   goals: GoalType[]
 ): BaseAnalyticsData[] => {
+
+  const t = useTranslations("dashboard.status")
   return useMemo(() => {
     const totalItems = habits.length + todos.length + goals.length;
     const completedTodos = todos.filter(t => t.completed).length;
@@ -205,25 +211,25 @@ export const useCombinedAnalytics = (
 
     return [
       {
-        label: "Total Items",
+        label: t("total-items"),
         value: totalItems,
         icon: Activity,
         colorClass: "text-activities"
       },
       {
-        label: "Active Habits",
+        label: t("active-habits"),
         value: activeHabits,
         icon: Zap,
         colorClass: "text-habits"
       },
       {
-        label: "Completed Items",
+        label: t("completed-items"),
         value: completedTodos + completedGoals,
         icon: CheckCircle,
         colorClass: "text-success"
       },
       {
-        label: "Today's Focus",
+        label: t("todays-focus"),
         value: `${Math.round(todayProductivity)}%`,
         icon: Target,
         colorClass: "text-primary",

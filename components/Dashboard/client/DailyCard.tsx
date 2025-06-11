@@ -9,6 +9,7 @@ import { CustomProgress } from "@/components/custom/customProgress";
 import TodosChecklist from "../../Todos/todosCheckbox";
 import { useGoals } from "@/lib/Queries/goals/useGoal";
 import { HabitsCard } from "../../Habits/HabitsCard";
+import { useTranslations } from "next-intl";
 
 interface DailyCardProps {
     className?: string
@@ -18,9 +19,10 @@ interface DailyCardProps {
 }
 
 export default function DailyCard({ className, todos, habits, userId }: DailyCardProps) {
+    const t = useTranslations("daily-card");
 
     const [isRowLayout, setIsRowLayout] = useState(false);
-   
+
     const { data: goals } = useGoals(userId)
 
     // Calculate progress
@@ -38,7 +40,7 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
         <Card className={`border-primary ${className}`}>
             <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg font-semibold">Today's Things</CardTitle>
+                    <CardTitle className="text-lg font-semibold">{t("title")}</CardTitle>
                     <div className="flex items-center gap-2">
                         <Button
                             variant="outline"
@@ -49,7 +51,7 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                             {isRowLayout ? <Columns className="h-4 w-4" /> : <Rows className="h-4 w-4" />}
                         </Button>
                         <Badge variant="outline" className="text-xs">
-                            {Math.round(overallProgress)}% Complete
+                            {t("complete", { percentage: Math.round(overallProgress) })}
                         </Badge>
                     </div>
                 </div>
@@ -57,12 +59,12 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                 {/* Progress Section */}
                 <div className="space-y-3 mt-4">
                     <div>
-                        <CustomProgress value={overallProgress} fillColor="bg-primary" backgroundColor="bg-primary/20" textColor="text-primary" animated showPercentage title="Overall Progress" />
+                        <CustomProgress value={overallProgress} fillColor="bg-primary" backgroundColor="bg-primary/20" textColor="text-primary" animated showPercentage title={t("progress.overall")} />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4 text-sm">
-                        <CustomProgress value={todoProgress} fillColor="bg-todos" backgroundColor="bg-todos/20" textColor="text-todos" animated showPercentage title="Todos" />
-                        <CustomProgress value={habitProgress} fillColor="bg-habits" backgroundColor="bg-habits/20" textColor="text-habits" animated showPercentage title="Habits" />
+                        <CustomProgress value={todoProgress} fillColor="bg-todos" backgroundColor="bg-todos/20" textColor="text-todos" animated showPercentage title={t("progress.todos")} />
+                        <CustomProgress value={habitProgress} fillColor="bg-habits" backgroundColor="bg-habits/20" textColor="text-habits" animated showPercentage title={t("progress.habits")} />
                     </div>
                 </div>
             </CardHeader>
@@ -73,7 +75,7 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                     <div className="flex flex-col h-full">
                         <h3 className="text-md font-medium text-todo flex items-center gap-2 mb-3">
                             <CheckSquare className="h-4 w-4" />
-                            Todos
+                            {t("section.todos")}
                         </h3>
                         <div className="space-y-2 flex-1 overflow-y-auto">
                             {todos.map((todo) => (
@@ -86,7 +88,7 @@ export default function DailyCard({ className, todos, habits, userId }: DailyCar
                     <div className="flex flex-col h-full">
                         <h3 className="text-md font-medium text-habit flex items-center gap-2 mb-3">
                             <RotateCcw className="h-4 w-4" />
-                            Habits
+                            {t("section.habits")}
                         </h3>
                         <div className="space-y-2 flex-1 overflow-y-auto">
                             {habits.map((habit) => (

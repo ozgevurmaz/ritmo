@@ -13,11 +13,13 @@ import { passwordSchemas } from "@/lib/zod/auth/auth";
 import { PasswordInput } from "@/components/auth/passwordInput";
 import { TriangleAlert } from "lucide-react";
 import LoadingScreen from "@/components/shared/pageStyles/Loading";
+import { useTranslations } from "next-intl";
 
 const resetPasswordSchema = passwordSchemas.withConfirmation();
 type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 export default function ResetPasswordPage() {
+    const t = useTranslations()
     const router = useRouter();
     const [success, setSuccess] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -38,14 +40,14 @@ export default function ResetPasswordPage() {
             const code = new URLSearchParams(window.location.search).get("code");
 
             if (!code) {
-                setError("Reset link is missing.");
+                setError(t("auth.reset-password.error.missing-link"));
                 setValidating(false);
                 return;
             }
 
             const session = await supabase.auth.getSession();
             if (error) {
-                setError("Invalid or expired reset link.");
+                setError(t("auth.reset-password.error.invalid-link"));
             }
 
             setValidating(false);
@@ -81,43 +83,41 @@ export default function ResetPasswordPage() {
 
     if (validating) {
         return (
-            <LoadingScreen customMessage="Validating reset link..." />
+            <LoadingScreen customMessage={t("auth.reset-password.loading")} />
         );
     }
 
-    // Success state
     if (success) {
         return (
             <div className="space-y-4 max-w-sm mx-auto mt-10 text-center">
                 <div className="text-primary text-4xl mb-4">✓</div>
-                <h2 className="text-2xl font-semibold">Password Updated Successfully</h2>
+                <h2 className="text-2xl font-semibold">{t("auth.reset-password.success.title")} </h2>
                 <Alert>
                     <AlertDescription>
-                        Your password has been updated. You will be redirected to the login page shortly.
+                        {t("auth.reset-password.success.description")}
                     </AlertDescription>
                 </Alert>
                 <Button onClick={() => router.push("/auth")} className="w-full">
-                    Go to Login
+                    {t("buttons.to-login")}
                 </Button>
             </div>
         );
     }
 
-    // Error state (invalid/expired link)
     if (error && validating === false && !form.formState.isSubmitting) {
         return (
             <div className="space-y-4 max-w-md mx-auto mt-10 text-center">
                 <TriangleAlert className="w-12 h-12 mx-auto mb-6 text-destructive" />
-                <h2 className="text-2xl font-semibold">Invalid Reset Link</h2>
+                <h2 className="text-2xl font-semibold">{t("auth.reset-password.error.title")}</h2>
                 <Alert variant="destructive">
                     <AlertDescription>{error}</AlertDescription>
                 </Alert>
                 <div className="space-y-2">
                     <Button onClick={() => router.push("/auth/forgot-password")} className="w-full">
-                        Request New Reset Link
+                        {t("buttons.send-another")}
                     </Button>
                     <Button onClick={() => router.push("/auth")} variant="outline" className="w-full">
-                        Back to Login
+                        {t("buttons.to-login")}
                     </Button>
                 </div>
             </div>
@@ -126,7 +126,7 @@ export default function ResetPasswordPage() {
 
     return (
         <div className="space-y-6 max-w-md mx-auto mt-10">
-            <h2 className="text-2xl font-semibold text-center">Set New Password</h2>
+            <h2 className="text-2xl font-semibold text-center">{t("auth.reset-password.title")}</h2>
 
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -135,13 +135,13 @@ export default function ResetPasswordPage() {
                         name="password"
                         confirmName="confirmPassword"
                         requireConfirmation={true}
-                        label="New Password"
+                        label={t("auth.reset-password.label")}
                         disabled={loading}
                         showValidation={true}
                     />
 
                     <Button type="submit" disabled={loading} className="w-full">
-                        {loading ? "Updating Password..." : "Update Password"}
+                        {loading ? t("auth.reset-password.updating") : t("buttons.update")}
                     </Button>
                 </form>
             </Form>

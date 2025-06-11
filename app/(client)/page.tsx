@@ -15,8 +15,11 @@ import { formatDateForQuery } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import LoadingScreen from "@/components/shared/pageStyles/Loading";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
+  const t = useTranslations('auth');
+
   const router = useRouter();
   const { data: profile, isLoading, error } = useProfile();
   const [currentDate, setCurrentDate] = useState(new Date());

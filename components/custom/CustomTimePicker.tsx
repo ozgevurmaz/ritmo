@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface CustomTimePickerProps {
     isTimePickerOpen: boolean;
@@ -19,6 +20,7 @@ export default function CustomTimePicker({
     onTimeSelect,
     use24Hour = true
 }: CustomTimePickerProps) {
+    const t = useTranslations()
     const timePickerRef = useRef<HTMLDivElement>(null);
 
     // Parse the selected time or default to current time
@@ -217,7 +219,7 @@ export default function CustomTimePicker({
 
             {/* Quick Select Times */}
             <div className="border-t border-primary/20 pt-4 mb-4">
-                <h4 className="text-sm font-medium mb-2 text-center">Quick Select</h4>
+                <h4 className="text-sm font-medium mb-2 text-center">{t("forms.time-input.quick-select")}</h4>
                 <div className="grid grid-cols-4 gap-1 max-h-32 overflow-y-auto">
                     {[
                         { h: 9, m: 0 }, { h: 12, m: 0 }, { h: 13, m: 0 }, { h: 17, m: 0 },
@@ -250,7 +252,7 @@ export default function CustomTimePicker({
                     className="flex-1 hover:bg-primary/10"
                     onClick={() => setIsTimePickerOpen(false)}
                 >
-                    Cancel
+                    {t("buttons.cancel")}
                 </Button>
                 <Button
                     type="button"
@@ -258,14 +260,14 @@ export default function CustomTimePicker({
                     className="flex-1"
                     onClick={handleTimeConfirm}
                 >
-                    Confirm
+                       {t("buttons.confirm")}
                 </Button>
             </div>
 
             {/* Current Selection Display */}
             <div className="mt-3 pt-3 border-t border-primary/20 text-center">
                 <p className="text-sm text-muted-foreground">
-                    Selected: {use24Hour
+                    {t("forms.time-input.selected")}: {use24Hour
                         ? `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`
                         : `${displayHours}:${minutes.toString().padStart(2, '0')} ${period}`
                     }

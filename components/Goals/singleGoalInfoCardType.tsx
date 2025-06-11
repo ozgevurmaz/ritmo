@@ -2,12 +2,14 @@ import { CustomProgress } from "@/components/custom/customProgress";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Calendar, Target } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface SingleGoalInfoCardType {
     goal: GoalType
 }
 
 export default function SingleGoalInfoCard({ goal }: SingleGoalInfoCardType) {
+    const t = useTranslations()
     const daysDuration = ((new Date(goal.endDate).getTime() - new Date(goal.startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
     const progressPercent = Math.round((goal.completedDays / daysDuration) * 100);
@@ -53,7 +55,7 @@ export default function SingleGoalInfoCard({ goal }: SingleGoalInfoCardType) {
                         </Badge>
                         {daysRemaining > 0 && (
                             <span className="text-xs text-muted-foreground font-medium">
-                                {daysRemaining}d left
+                                {daysRemaining}{t("common.left-days")}
                             </span>
                         )}
                     </div>
@@ -80,7 +82,7 @@ export default function SingleGoalInfoCard({ goal }: SingleGoalInfoCardType) {
                         <div className="flex items-center gap-1">
                             <div className="w-8 border-t border-dashed border-muted-foreground/40"></div>
                             <span className="text-xs text-muted-foreground font-medium">
-                                {Math.ceil(daysDuration)} days
+                                {Math.ceil(daysDuration)} {t("common.days")}
                             </span>
                             <div className="w-8 border-t border-dashed border-muted-foreground/40"></div>
                         </div>
@@ -94,18 +96,18 @@ export default function SingleGoalInfoCard({ goal }: SingleGoalInfoCardType) {
                     {/* Progress Stats */}
                     <div className="flex items-center justify-between pt-2 border-t border-border/30">
                         <div className="text-xs">
-                            <span className="text-muted-foreground">Completed: </span>
+                            <span className="text-muted-foreground">{t("common.completed")}: </span>
                             <span className="font-semibold text-goals">{goal.completedDays}</span>
-                            <span className="text-muted-foreground"> / {Math.ceil(daysDuration)} days</span>
+                            <span className="text-muted-foreground"> / {Math.ceil(daysDuration)} {t("common.days")}</span>
                         </div>
 
                         {progressPercent >= 100 ? (
-                            <Badge variant="default" className="bg-green-100 text-green-800 border-green-200 text-xs">
-                                ✓ Complete
+                            <Badge variant="default" className="bg-succett/10 text-success border-success text-xs">
+                                ✓ {t("common.completed")}
                             </Badge>
                         ) : progressPercent >= 75 ? (
                             <Badge variant="outline" className="border-goals text-goals bg-goals/5 text-xs">
-                                Almost there!
+                                {t("common.almost-there")}
                             </Badge>
                         ) : null}
                     </div>

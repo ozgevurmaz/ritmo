@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Loader2, Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 type FormActionsProps = {
@@ -16,8 +17,8 @@ type FormActionsProps = {
 
 export const FormActions = ({
   isSubmitting,
-  submitLabel = "Submit",
-  cancelLabel = "Cancel",
+  submitLabel,
+  cancelLabel,
   onCancel,
   cancelHref,
   isEdit,
@@ -25,6 +26,7 @@ export const FormActions = ({
   onDelete,
   showDelete = false,
 }: FormActionsProps) => {
+  const t = useTranslations("buttons");
   const router = useRouter();
 
   const handleCancel = () => {
@@ -42,7 +44,7 @@ export const FormActions = ({
           disabled={isSubmitting}
         >
           <Trash2 className="h-4 w-4 mr-2" />
-          Delete
+          {t("delete")}
         </Button>
       )}
 
@@ -54,7 +56,7 @@ export const FormActions = ({
             onClick={handleCancel}
             disabled={isSubmitting}
           >
-            {cancelLabel}
+            {cancelLabel || t("cancel")}
           </Button>
         )}
         <Button type="submit" disabled={isSubmitting}>
