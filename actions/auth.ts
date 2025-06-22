@@ -63,7 +63,7 @@ export async function signup(formData: FormData) {
   }
 
   revalidatePath('/', 'layout')
-  redirect('/verify-mail')
+  redirect('/auth/verify-mail')
 }
 
 export async function resetPasswordForEmail(formData: FormData) {

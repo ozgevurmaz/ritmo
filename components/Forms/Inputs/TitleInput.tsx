@@ -16,6 +16,7 @@ type TitleInputProps<T extends FieldValues> = {
     name: Path<T>;
     label: string;
     placeholder: string;
+    type?: string
 };
 
 export const TitleInput = <T extends FieldValues>({
@@ -23,7 +24,8 @@ export const TitleInput = <T extends FieldValues>({
     errors,
     name,
     label,
-    placeholder
+    placeholder,
+    type = "text"
 }: TitleInputProps<T>) => {
     return (
         <div className="space-y-2">
@@ -36,6 +38,7 @@ export const TitleInput = <T extends FieldValues>({
                 control={control}
                 render={({ field }) => (
                     <Input
+                        type={type}
                         id={name}
                         {...field}
                         placeholder={placeholder}

@@ -25,10 +25,10 @@ export const RepeatSelection = <T extends FieldValues>({ control, name }: Repeat
 
     return (
         <div className="space-y-2">
-            <Label htmlFor={name} className="text-sm font-medium flex items-center gap-1">
+            <div className="text-sm font-medium flex items-center gap-1">
                 <Repeat className="h-4 w-4" />
                 {t('label')}
-            </Label>
+            </div>
             <Controller
                 name={name}
                 control={control}

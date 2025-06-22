@@ -35,7 +35,7 @@ export default function WelcomeCard({
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-2">
                             <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                            <span className="text-xs font-semibold text-primary uppercase tracking-wider">  {t("welcome-card.quote")}</span>
+                            <span className="text-xs font-semibold text-primary uppercase tracking-wider">Ritmo</span>
                         </div>
                         <div className="flex">
                             <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-3">
@@ -50,7 +50,7 @@ export default function WelcomeCard({
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="p-1 h-8 w-8 hover:bg-primary/10 rounded-full transition-all duration-200 hover:scale-110"
+                                className="p-1 h-8 w-8 rounded-full transition-all duration-200 hover:scale-110"
                                 onClick={() => handleDayChange(-1)}
                             >
                                 <ChevronLeft className="h-4 w-4" />
@@ -59,7 +59,7 @@ export default function WelcomeCard({
                             <div className="relative">
                                 <Button
                                     variant="ghost"
-                                    className="flex items-center gap-2 hover:bg-primary/10 hover:text-primary transition-all duration-200"
+                                    className="flex items-center gap-2 hover:text-primary transition-all duration-200"
                                     onClick={() => setIsCalendarOpen(!isCalendarOpen)}
                                 >
                                     <Calendar className="h-4 w-4 text-primary" />
@@ -81,7 +81,7 @@ export default function WelcomeCard({
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                className="p-1 h-8 w-8 hover:bg-primary/10 rounded-full transition-all duration-200 hover:scale-110"
+                                className="p-1 h-8 w-8 rounded-full transition-all duration-200 hover:scale-110"
                                 onClick={() => handleDayChange(1)}
                             >
                                 <ChevronRight className="h-4 w-4" />
@@ -94,7 +94,7 @@ export default function WelcomeCard({
                         <Button
                             size="sm"
                             variant="outline"
-                            className="border-todos bg-transparent text-todos hover:bg-todos hover:text-primary-foreground transition-all duration-200"
+                            className="bg-transparent border-border hover:text-todos text-todos transition-all duration-200"
                             onClick={setTodoFormOpen}
                         >
                             <PlusCircle className="h-4 w-4 mr-2" />
@@ -104,7 +104,7 @@ export default function WelcomeCard({
                         <Button
                             size="sm"
                             variant="outline"
-                            className="border-habits bg-transparent text-habits hover:bg-habits hover:text-primary-foreground transition-all duration-200"
+                            className="border-habits bg-transparent text-habits hover:text-habits transition-all duration-200"
                             onClick={setHabitFormOpen}
                         >
                             <PlusCircle className="h-4 w-4 mr-2" />

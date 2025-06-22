@@ -27,10 +27,10 @@ export const PriorityMatrixSection = <T extends FieldValues>({
         <div className="grid grid-cols-2 gap-4">
             {/* Urgency */}
             <div className="space-y-2">
-                <Label className="text-sm font-medium flex items-center gap-1">
+                <div className="text-sm font-medium flex items-center gap-1">
                     {t('urgency')}
                     <span className="text-destructive">*</span>
-                </Label>
+                </div>
                 <Controller
                     name={urgencyName}
                     control={control}

@@ -13,6 +13,7 @@ import { PasswordInput } from '@/components/auth/passwordInput'
 import { signupSchema } from '@/lib/zod/auth/auth'
 import LoadingScreen from '../shared/pageStyles/Loading'
 import { useTranslations } from 'next-intl'
+import { InputElement } from '../Forms/Inputs/inputElement'
 
 type SignupFormData = z.infer<typeof signupSchema>
 
@@ -57,30 +58,14 @@ export function SignupForm() {
     return (
         <Form {...signupForm}>
             <form onSubmit={signupForm.handleSubmit(onSignupSubmit)} className="space-y-4" noValidate>
-                <FormField
+                <InputElement
                     control={signupForm.control}
+                    errors={signupForm.formState.errors}
                     name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t("forms.email.label")} </FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-foreground" />
-                                    <Input
-                                        type="email"
-                                        autoComplete='none'
-                                        placeholder={t("forms.email.placeholder")}
-                                        className="pl-10"
-                                        {...field}
-                                        disabled={isLoading}
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label={t("forms.email.label")}
+                    placeholder={t("forms.email.placeholder")}
+                    type="email"
                 />
-
                 <PasswordInput
                     control={signupForm.control}
                     name="password"

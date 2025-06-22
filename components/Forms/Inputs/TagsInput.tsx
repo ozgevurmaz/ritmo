@@ -55,6 +55,7 @@ export const TagsInput = <T extends FieldValues>({
                 render={({ field }) => (
                     <>
                         <Input
+                            id={name}
                             value={inputValue}
                             onChange={(e) => setInputValue(e.target.value)}
                             onKeyDown={(e) => {

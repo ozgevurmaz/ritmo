@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { contacts } from '@/lib/constants'
-import { Label } from '@radix-ui/react-label'
+import { Label } from '@/components/ui/label'
 import { Eye, EyeOff, Users } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import React from 'react'
@@ -37,7 +37,6 @@ export const PrivacyCard = <T extends FieldValues>({
             <CardContent className="space-y-4">
                 {/* Visibility Settings */}
                 <div className="space-y-3">
-                    <Label className="text-sm font-medium">{t("label")}</Label>
                     <Controller
                         name={visibilityName}
                         control={control}
@@ -77,7 +76,7 @@ export const PrivacyCard = <T extends FieldValues>({
                     <div className="space-y-3">
                         <div className='bg-muted w-full h-[1px]' />
                         <div>
-                            <Label className="text-sm font-medium">{t("share.label")}</Label>
+                            <div className="text-md font-medium">{t("share.label")}</div>
                             <p className="text-sm text-muted-foreground mt-1">
                                 {t("share.description")}
                             </p>

@@ -53,10 +53,10 @@ export const ReminderTimeInput: React.FC<ReminderTimeInputProps> = ({
 
   return (
     <div className="space-y-3">
-      <Label htmlFor="time" className="text-sm font-medium flex items-center gap-1">
+      <div className="text-sm font-medium flex items-center gap-1">
         <Bell className="h-4 w-4" />
         Reminder Times (Optional)
-      </Label>
+      </div>
 
       <div className="flex gap-2">
         <div className="flex-1 relative">

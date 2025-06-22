@@ -18,10 +18,10 @@ export const CategorySelection = <T extends FieldValues>({ control, errors, cont
 
     return (
         <div className="space-y-2 w-auto md:w-1/3">
-            <Label className="text-sm font-medium flex items-center gap-1">
+            <div className="text-sm font-medium flex items-center gap-1">
                 {t("label")}
                 <span className="text-destructive">*</span>
-            </Label>
+            </div>
             <Controller
                 name={controlName}
                 control={control}

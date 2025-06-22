@@ -43,10 +43,10 @@ export const TimeInput = <T extends FieldValues>({
 
   return (
     <div className="space-y-2">
-      <Label htmlFor={controlName} className="text-sm font-medium flex items-center gap-1">
+      <div className="text-sm font-medium flex items-center gap-1">
         <Clock className="h-4 w-4" />
         {label || t("label")}
-      </Label>
+      </div>
       <Controller
         name={controlName}
         control={control}

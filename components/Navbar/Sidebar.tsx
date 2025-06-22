@@ -5,18 +5,16 @@ import {
   ChevronRight,
   ChevronLeft,
   ShieldUser,
-  Flame,
-  Zap,
 } from 'lucide-react';
 
 import { ADMIN_NAV_LINKS, NAV_LINKS } from '@/lib/constants';
 import Link from 'next/link';
 import { useProfile } from '@/lib/Queries/useProfile';
 import { Button } from '../ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import { getInitials } from '@/lib/utils';
 import { useTranslations } from 'next-intl';
 import SteakBadge from '../custom/StreakBadge';
+import ProfilePhoto from '../shared/profilePhoto';
+import LoadingScreen from '../shared/pageStyles/Loading';
 
 export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   const t = useTranslations("nav")
@@ -38,6 +36,12 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  if(isLoading) return <LoadingScreen/>
+
+  if(!profile){
+    return
+  }
 
   return (
     <aside
@@ -83,28 +87,12 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
       {/* User Profile*/}
       <div className="px-4 py-1 border-t border-border">
         {collapsed ? (
-          <div className="flex justify-center">
-            <Avatar className="h-9 w-9">
-              {profile?.avatar ? (
-                <AvatarImage src={profile?.avatar} alt={profile?.name} />
-              ) : (
-                <AvatarFallback className="bg-primary/20 text-primary text-lg">
-                  {getInitials(profile?.name || "User")}
-                </AvatarFallback>
-              )}
-            </Avatar>
+          <div className="flex justify-center py-3">
+            <ProfilePhoto profile={profile} size="sm"/>
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <Avatar className="h-9 w-9">
-              {profile?.avatar ? (
-                <AvatarImage src={profile?.avatar} alt={profile?.name} />
-              ) : (
-                <AvatarFallback className="bg-primary/20 text-primary text-lg">
-                  {getInitials(profile?.name || "User")}
-                </AvatarFallback>
-              )}
-            </Avatar>
+            <ProfilePhoto profile={profile}  size="md"/>
             <div className="flex-1 flex flex-col items-center p-0 w-full">
               <p className="text-sm px-2 py-1">{profile?.name}</p>
               <SteakBadge streak={profile?.streak || 0} border={false} isTextShown />

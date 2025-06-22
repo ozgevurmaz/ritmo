@@ -33,10 +33,10 @@ export const TypeSelection = <T extends FieldValues>({ control, name, errors }: 
 
   return (
     <div className="space-y-2 flex-1">
-      <Label htmlFor={name} className="text-sm font-medium flex items-center gap-1">
+      <div className="text-sm font-medium flex items-center gap-1">
         {t('types.label')}
         <span className="text-destructive">*</span>
-      </Label>
+      </div>
       <Controller
         name={name}
         control={control}

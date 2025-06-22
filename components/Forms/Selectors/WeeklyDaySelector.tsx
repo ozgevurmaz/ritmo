@@ -24,10 +24,10 @@ export const WeeklyDaySelector = <T extends FieldValues>({
     const isValid = weeklyFrequency === 7 || selectedDays.length === weeklyFrequency;
     return (
         <div className="space-y-3">
-            <Label className="text-sm font-medium flex items-center gap-1">
+            <div className="text-sm font-medium flex items-center gap-1">
                 {t("days-label")}
                 <span className="text-destructive">*</span>
-            </Label>
+            </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                 {DAYS_OF_WEEK.map(day => (
                     <div

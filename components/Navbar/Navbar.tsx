@@ -33,11 +33,14 @@ import StreakBadge from '../custom/StreakBadge';
 import LoadingScreen from '../shared/pageStyles/Loading';
 import { handleLogout } from '@/actions/auth';
 import { useTranslations } from 'use-intl';
+import ProfilePhoto from '../shared/profilePhoto';
+import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
   isAdmin?: boolean
 }
 export function Navbar({ isAdmin = false }: NavbarProps) {
+  const router = useRouter()
   const t = useTranslations("nav")
   const { data: profile, isLoading } = useProfile();
 
@@ -49,7 +52,10 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
   };
 
   if (isLoading) return <LoadingScreen />
-
+  if (!profile) {
+    router.push("/auth")
+    return null
+  }
   return (
     <>
       <header className="z-40 w-full drop-shadow-sm shadow-sm shadow-foreground/10 bg-background">
@@ -110,15 +116,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
             <DropdownMenu>
               <DropdownMenuTrigger className='hover:bg-muted/70 p-0' asChild>
                 <Button variant="ghost" className="gap-1 p-1 md:p-2 rounded-lg cursor-pointer">
-                  <Avatar className="h-7 w-7">
-                    {profile?.avatar ? (
-                      <AvatarImage src={profile?.avatar} alt={profile?.name} />
-                    ) : (
-                      <AvatarFallback className="bg-primary/20 text-primary text-xs">
-                        {getInitials(profile?.name || "My Ritmo")}
-                      </AvatarFallback>
-                    )}
-                  </Avatar>
+                  <ProfilePhoto profile={profile} />
                   <span className="hidden sm:inline-block text-sm font-medium">
                     {profile?.name}
                   </span>
@@ -156,7 +154,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
 
                 <DropdownMenuItem variant="destructive" onClick={handleLogout} className="cursor-pointer px-4 py-2">
                   <LogOut className="mr-2 h-4 w-4" />
-                 {t("logout")}
+                  {t("logout")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -213,15 +211,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
             {/* Mobile User Info */}
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-background">
               <div className="flex items-center gap-3">
-                <Avatar className="h-10 w-10">
-                  {profile?.avatar ? (
-                    <AvatarImage src={profile?.avatar} alt={profile?.name} />
-                  ) : (
-                    <AvatarFallback className="bg-primary/20 text-primary">
-                      {getInitials(profile?.avatar || "My Ritmo")}
-                    </AvatarFallback>
-                  )}
-                </Avatar>
+                <ProfilePhoto profile={profile} size="sm"/>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{profile?.name}</p>
                   <p className="text-xs text-muted-foreground truncate">

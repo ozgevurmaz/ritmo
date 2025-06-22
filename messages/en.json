@@ -146,8 +146,57 @@
     "unexpected": "An unexpected error occurred. Please try again."
   },
   "account": {
-    "title": "Account Settings",
-    "description": "Manage your account information and preferences",
+    "profile": {
+      "title": "Profile Information",
+      "description": "Update your personal information and username",
+      "profile-picture": "Profile Picture",
+      "profile-picture-description": "Click the camera icon to upload a new profile picture",
+      "email-description": "You cannot change your email address here."
+    },
+    "security": {
+      "title": "Security",
+      "description": "Manage your password and security settings"
+    },
+    "appearance": {
+      "title": "Appearance & Language",
+      "description": "Customize your visual preferences"
+    },
+    "visibility": {
+      "title": "Privacy & Visibility",
+      "description": "Control who can find and interact with your account",
+      "visibility": {
+        "private_account": "Private Account",
+        "private_account_description": "Only approved friends can see your habits, goals, and activities",
+        "allow_friend_requests": "Allow Friend Requests",
+        "allow_friend_requests_description": "Others can send you friend requests",
+        "discoverable": "Show in Search",
+        "discoverable_description": "Others can find your account when searching",
+        "updated": "Visibility settings updated successfully",
+        "error": "Failed to update visibility settings"
+      }
+    },
+    "danger": {
+      "title": "Danger Zone",
+      "description": "Sign out or delete account",
+      "logout": "Sign Out",
+      "logout_description": "Sign out of your account on this device",
+      "delete_account": "Delete Account",
+      "delete_account_description": "Permanently delete your account and all data",
+      "delete": "Delete",
+      "confirm_delete_title": "Delete Account",
+      "confirm_delete_description": "This action cannot be undone. This will permanently delete your account, all your habits, goals, todos, and remove you from all friend connections.",
+      "cancel": "Cancel",
+      "delete_permanently": "Delete Permanently",
+      "deleting": "Deleting...",
+      "logged_out": "Successfully signed out",
+      "logout_error": "Failed to sign out",
+      "account_deleted": "Account deleted successfully",
+      "delete_error": "Failed to delete account",
+      "security": {
+        "confirm_delete_title": "Delete Account Permanently",
+        "confirm_delete_description": "This will permanently delete your account, all your habits, goals, todos, and remove you from all friend connections. This action cannot be undone."
+      }
+    },
     "toasts": {
       "user-error": "Failed to load user data. Please try again.",
       "success": "Profile updated successfully",
@@ -584,8 +633,12 @@
     "themes": {
       "light": "Light",
       "dark": "Dark",
-      "neutral": "Neutral"
+      "neutral": "Neutral",
+      "system": "System"
     }
+  },
+  "languages": {
+    "placeholder": "App Language"
   },
   "nav": {
     "home": "Home",
@@ -599,12 +652,12 @@
     "profile": "Profile",
     "settings": "Settings",
     "logout": "Log out",
-    "dashboard":"Dashboard",
-    "users":"Users",
-    "content":"Content",
-    "challenges":"Challenges",
-    "packs":"Packs",
-    "communications":"Communications",
-    "gamifications":"Gamifications"
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "content": "Content",
+    "challenges": "Challenges",
+    "packs": "Packs",
+    "communications": "Communications",
+    "gamifications": "Gamifications"
   }
 }

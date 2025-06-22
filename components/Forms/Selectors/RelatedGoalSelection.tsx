@@ -44,7 +44,7 @@ export const RelatedGoalSelection = <T extends FieldValues>({
 
     return (
         <div className="space-y-2">
-            <Label htmlFor={name} className="text-sm font-medium">{t("forms.habit.fields.goal-selection.label")}</Label>
+            <div className="text-sm font-medium">{t("forms.habit.fields.goal-selection.label")}</div>
 
             <Controller
                 disabled={!!goalTitle}

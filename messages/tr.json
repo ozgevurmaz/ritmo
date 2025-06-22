@@ -145,16 +145,65 @@
     "user-error": "Kullanıcı bulunamadı",
     "unexpected": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
   },
-  "account": {
-    "title": "Hesap Ayarları",
-    "description": "Hesap bilgilerinizi ve tercihlerinizi yönetin",
-    "toasts": {
-      "user-error": "Kullanıcı bilgileri yüklenemedi. Lütfen tekrar deneyin.",
-      "success": "Profil başarıyla güncellendi",
-      "update-error": "Profil güncellenirken hata oluştu. Lütfen tekrar deneyin.",
-      "username-error": " Bu kullanıcı adı zaten kullanılıyor"
+ "account": {
+  "profile": {
+    "title": "Profil Bilgileri",
+    "description": "Kişisel bilgilerinizi ve kullanıcı adınızı güncelleyin",
+    "profile-picture": "Profil Fotoğrafı",
+    "profile-picture-description": "Yeni bir profil fotoğrafı yüklemek için kamera simgesine tıklayın",
+    "email-description": "E-posta adresinizi buradan değiştiremezsiniz."
+  },
+  "security": {
+    "title": "Güvenlik",
+    "description": "Şifrenizi ve güvenlik ayarlarınızı yönetin"
+  },
+  "appearance": {
+    "title": "Tema ve Görünüm",
+    "description": "Görsel tercihlerinizi özelleştirin"
+  },
+  "toasts": {
+    "user-error": "Kullanıcı bilgileri yüklenemedi. Lütfen tekrar deneyin.",
+    "success": "Profil başarıyla güncellendi",
+    "update-error": "Profil güncellenirken hata oluştu. Lütfen tekrar deneyin.",
+    "username-error": "Bu kullanıcı adı zaten kullanılıyor"
+  },
+  "visibility": {
+    "title": "Gizlilik ve Görünürlük",
+    "description": "Hesabınızı kimlerin bulabileceğini ve sizinle nasıl etkileşim kurabileceğini kontrol edin",
+    "visibility": {
+      "private_account": "Gizli Hesap",
+      "private_account_description": "Yalnızca onaylı arkadaşlar alışkanlıklarınızı, hedeflerinizi ve etkinliklerinizi görebilir",
+      "allow_friend_requests": "Arkadaşlık İsteklerine İzin Ver",
+      "allow_friend_requests_description": "Diğer kullanıcılar size arkadaşlık isteği gönderebilir",
+      "discoverable": "Aramalarda Görünsün",
+      "discoverable_description": "Diğer kullanıcılar sizi arama yoluyla bulabilir",
+      "updated": "Görünürlük ayarları başarıyla güncellendi",
+      "error": "Görünürlük ayarları güncellenemedi"
     }
   },
+  "danger": {
+    "title": "Tehlikeli Alan",
+    "description": "Hesabınızdan çıkış yapın veya hesabınızı silin",
+    "logout": "Çıkış Yap",
+    "logout_description": "Bu cihazdan hesabınızdan çıkış yapın",
+    "delete_account": "Hesabı Sil",
+    "delete_account_description": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin",
+    "delete": "Sil",
+    "confirm_delete_title": "Hesabı Sil",
+    "confirm_delete_description": "Bu işlem geri alınamaz. Hesabınız, tüm alışkanlıklarınız, hedefleriniz, görevleriniz silinecek ve tüm arkadaş bağlantılarınız kaldırılacaktır.",
+    "cancel": "İptal",
+    "delete_permanently": "Kalıcı Olarak Sil",
+    "deleting": "Siliniyor...",
+    "logged_out": "Başarıyla çıkış yapıldı",
+    "logout_error": "Çıkış yapılamadı",
+    "account_deleted": "Hesap başarıyla silindi",
+    "delete_error": "Hesap silinirken hata oluştu",
+    "security": {
+      "confirm_delete_title": "Hesabı Kalıcı Olarak Sil",
+      "confirm_delete_description": "Bu işlem hesabınızı, alışkanlıklarınızı, hedeflerinizi, görevlerinizi kalıcı olarak silecek ve tüm arkadaş bağlantılarınızı kaldıracaktır. Bu işlem geri alınamaz."
+    }
+  }
+},  
   "buttons": {
     "updating": "Güncelleniyor",
     "update": "Güncelle",
@@ -584,8 +633,12 @@
     "themes": {
       "light": "Açık",
       "dark": "Koyu",
-      "neutral": "Nötral"
+      "neutral": "Nötral",
+      "system": "System"
     }
+  },
+    "languages": {
+    "placeholder": "Uygulama Dili"
   },
   "nav": {
     "home": "Ana Sayfa",
@@ -598,6 +651,13 @@
     "motivation": "Motivasyon",
     "profile": "Profil",
     "settings": "Ayarlar",
-    "logout": "Çıkış Yap"
+    "logout": "Çıkış Yap",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "content": "Content",
+    "challenges": "Challenges",
+    "packs": "Packs",
+    "communications": "Communications",
+    "gamifications": "Gamifications"
   }
 }

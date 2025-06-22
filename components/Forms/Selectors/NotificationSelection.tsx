@@ -32,7 +32,7 @@ export const NotificationSelect = <T extends FieldValues>({
 
     return (
         <div className="space-y-2">
-            <Label htmlFor={name} className="text-sm font-medium">{t('label')}</Label>
+            <div className="text-sm font-medium">{t('label')}</div>
             <Controller
                 name={name}
                 control={control}

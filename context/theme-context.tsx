@@ -1,5 +1,7 @@
 'use client'
 
+import { useUpdateProfile } from '@/lib/Mutations/profiles/useUpdateProfile'
+import { useProfile } from '@/lib/Queries/useProfile'
 import {
   createContext,
   useContext,
@@ -20,9 +22,19 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [themePreference, setThemePreference] = useState<ThemePreference>('system')
+  const [themePreference, setThemePreferenceState] = useState<ThemePreference>('system')
   const [theme, setTheme] = useState<Theme>('light')
   const [mounted, setMounted] = useState(false)
+
+  const { data: profile } = useProfile()
+  const updateProfile = useUpdateProfile(profile?.id || "")
+
+  const setThemePreference = (preference: ThemePreference) => {
+    setThemePreferenceState(preference)
+    if (profile?.id) {
+      updateProfile.mutate({ updates: { theme: preference } })
+    }
+  }
 
   useEffect(() => {
     setMounted(true)
@@ -48,6 +60,12 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
       target.setAttribute('data-theme', theme)
     }
   }, [theme, mounted])
+
+  useEffect(() => {
+  if (profile?.theme) {
+    setThemePreferenceState(profile.theme as ThemePreference)
+  }
+}, [profile])
 
   if (!mounted) return null
 

@@ -77,10 +77,11 @@ export function PasswordInput<T extends FieldValues>({
 
           return (
             <FormItem>
-              <FormLabel>{label}</FormLabel>
+              <FormLabel htmlFor={name}>{label}</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
+                    id={name}
                     type={showPassword ? "text" : "password"}
                     placeholder={`${requireConfirmation ? t("new-placeholder") : t("placeholder")}`}
                     disabled={disabled}
@@ -135,10 +136,11 @@ export function PasswordInput<T extends FieldValues>({
           name={confirmName}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t("confirm-label")}</FormLabel>
+              <FormLabel htmlFor="confirm-pass">{t("confirm-label")}</FormLabel>
               <FormControl>
                 <div className="relative">
                   <Input
+                    id="confirm-pass"
                     type={showConfirmPassword ? "text" : "password"}
                     placeholder={t("confirm-placeholder")}
                     disabled={disabled}

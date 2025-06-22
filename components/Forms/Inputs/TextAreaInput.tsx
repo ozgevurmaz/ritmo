@@ -47,6 +47,7 @@ export const TextAreaInput = <T extends FieldValues>({
                 render={({ field }) => (
                     <Textarea
                         {...field}
+                        id={name}
                         placeholder={placeholder || t("placeholder")}
                         className={`min-h-[80px] ${errors[name] ? 'border-destructive' : ''}`}
                         rows={3}

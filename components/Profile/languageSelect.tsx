@@ -30,7 +30,7 @@ export const LanguageSelect = () => {
         <Languages className="h-5 w-5 mr-2" />
         <SelectValue placeholder="Select Language" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="bg-background">
         <SelectItem value="en">🇺🇸 English</SelectItem>
         <SelectItem value="tr">🇹🇷 Türkçe</SelectItem>
       </SelectContent>

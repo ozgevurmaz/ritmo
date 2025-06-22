@@ -63,11 +63,11 @@ export const DateRangePicker = <T extends FieldValues>({
         <div className={`grid grid-cols-1 gap-4 ${type !== "todo" && "md:grid-cols-2"}`}>
             {/* Start Date */}
             <div className="space-y-2">
-                <Label htmlFor={startName} className="text-sm font-medium flex items-center gap-1">
+                <div className="text-sm font-medium flex items-center gap-1">
                     <Calendar className="h-4 w-4" />
                     {type === "todo" ? t("label") : t("start")}
                     <span className="text-destructive">*</span>
-                </Label>
+                </div>
                 <Controller
                     name={startName}
                     control={control}
@@ -111,11 +111,11 @@ export const DateRangePicker = <T extends FieldValues>({
             {/* End Date */}
             {type !== "todo" && endName &&
                 <div className="space-y-2">
-                    <Label htmlFor={endName} className="text-sm font-medium flex items-center gap-1">
+                    <div className="text-sm font-medium flex items-center gap-1">
                         <Calendar className="h-4 w-4" />
                         {t("end")}
                         {type === "goal" && <span className="text-destructive">*</span>}
-                    </Label>
+                    </div>
                     <Controller
                         name={endName}
                         control={control}

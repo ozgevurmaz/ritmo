@@ -6,9 +6,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import { login } from '@/actions/auth'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Loader2, Mail } from 'lucide-react'
+import { Form } from '@/components/ui/form'
+import { Loader2, } from 'lucide-react'
 
 import Link from 'next/link'
 import { loginSchema } from '@/lib/zod/auth/auth'
@@ -16,6 +15,7 @@ import { PasswordInput } from './passwordInput'
 import LoadingScreen from '../shared/pageStyles/Loading'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { InputElement } from '../Forms/Inputs/inputElement'
 
 type LoginFormData = z.infer<typeof loginSchema>
 
@@ -59,27 +59,13 @@ export default function LoginForm() {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 text-foreground" noValidate>
-                <FormField
+                <InputElement
                     control={form.control}
+                    errors={form.formState.errors}
                     name="email"
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel>{t("forms.email.label")} </FormLabel>
-                            <FormControl>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-3 h-4 w-4 text-foreground" />
-                                    <Input
-                                        type="email"
-                                        placeholder={t("forms.email.placeholder")}
-                                        className="pl-10"
-                                        {...field}
-                                        disabled={isLoading}
-                                    />
-                                </div>
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
+                    label={t("forms.email.label")}
+                    placeholder={t("forms.email.placeholder")}
+                    type="email"
                 />
 
                 <div className="space-y-2">
@@ -88,7 +74,7 @@ export default function LoginForm() {
                         name="password"
                         disabled={isLoading}
                         label={t("forms.password.label")}
-                        
+
                     />
 
                     <div className="text-right">
