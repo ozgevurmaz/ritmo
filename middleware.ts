@@ -4,8 +4,12 @@ import { createServerClient } from '@supabase/ssr';
 import { getRedirectPath } from '@/lib/middleware/logic';
 
 export async function middleware(request: NextRequest) {
-  const response = NextResponse.next()
-
+  console.log('=== MIDDLEWARE START ===')
+  console.log('Middleware running for:', request.nextUrl.pathname)
+  // Create the response first
+  let response = NextResponse.next({
+    request,
+  })
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,34 +28,48 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  // Refresh the session and get user in one call
+  const { data: { user }, error } = await supabase.auth.getUser()
+  console.log('User state:', !!user)
+  // If there's an auth error, treat as no user
+  if (error) {
+    console.error('Auth error:', error)
+  }
 
   const pathname = request.nextUrl.pathname
 
   let profile = null
-  if (user) {
-    const { data } = await supabase
-      .from('profiles')
-      .select('role')
-      .eq('id', user.id)
-      .single()
-    profile = data
+  if (user && !error) {
+    try {
+      const { data, error: profileError } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single()
+
+      if (profileError) {
+        console.error('Profile fetch error:', profileError)
+      } else {
+        profile = data
+      }
+    } catch (error) {
+      console.error('Profile query failed:', error)
+    }
   }
+
+  console.log('Profile:', profile)
 
   const redirectPath = getRedirectPath(user, pathname, profile);
-
+  console.log('Redirect path:', redirectPath)
   if (redirectPath) {
+      console.log('REDIRECTING TO:', redirectPath)
     return NextResponse.redirect(new URL(redirectPath, request.url));
   }
-
-  await updateSession(request)
+  console.log('NO REDIRECT - CONTINUING TO PAGE')
+  console.log('=== MIDDLEWARE END ===')
   return response
 }
 
 export const config = {
-  matcher: [
-    '/((?!auth/reset-password|auth/forgot-password|auth|_next|favicon.ico|api).*)',
-  ],
-};
+  matcher: ['/dashboard/:path*', '/admin/:path*', '/dashboard', '/admin'],
+}
