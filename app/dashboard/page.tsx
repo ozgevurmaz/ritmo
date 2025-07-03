@@ -27,10 +27,12 @@ export default function Home() {
   const { data: upcomingGoals, isLoading: upcomingGoalsLoading } = useUpcomingGoals({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
 
   useEffect(() => {
-    if (!profile) {
+    if (isLoading) return
+
+    if (!isLoading && !profile) {
       router.push("/auth")
     }
-  }, [profile, router])
+  }, [profile, router, isLoading])
 
   if (!profile) return null
 

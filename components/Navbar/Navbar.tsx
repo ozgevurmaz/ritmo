@@ -135,14 +135,14 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted focus:text-muted-foreground  " asChild>
-                  <Link href="/account">
+                  <Link href="/dashborad/account">
                     <User className="mr-2 h-4 w-4" />
                     {t("profile")}
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem className="cursor-pointer px-4 py-2 focus:bg-muted focus:text-muted-foreground" asChild>
-                  <Link href="/settings">
+                  <Link href="/dashborad/settings">
                     <Settings className="mr-2 h-4 w-4" />
                     {t("settings")}
                   </Link>
