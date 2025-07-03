@@ -1,14 +1,23 @@
 export function getRedirectPath(user: any, pathname: string, profile?: { role: string } | null) {
-  if (!user && !pathname.startsWith('/auth'))
+  // Unauthenticated users should go to auth for protected routes
+  if (!user && (pathname.startsWith('/dashboard') || pathname.startsWith('/admin'))) {
     return '/auth';
+  }
 
-  if (user && pathname.startsWith('/auth'))
+  // Authenticated users shouldn't access auth pages
+  if (user && pathname.startsWith('/auth')) {
     return '/dashboard';
+  }
 
-  if (user && pathname.startsWith('/admin') && profile?.role !== 'admin')
+  // Admin route protection
+  if (user && pathname.startsWith('/admin') && profile?.role !== 'admin') {
     return '/unauthorized';
+  }
 
-  if (user && (pathname.startsWith('/auth') || pathname === '/'))
+  // Redirect root to dashboard for authenticated users
+  if (user && pathname === '/') {
     return '/dashboard';
+  }
+
   return null;
 }

@@ -61,61 +61,6 @@ export const useHabitsAnalytics = (habits: HabitType[]): BaseAnalyticsData[] => 
   }, [habits]);
 };
 
-// Todos Analytics Hook
-export const useTodosAnalytics = (todos: TodoType[]): BaseAnalyticsData[] => {
-  const t = useTranslations("todos.status")
-
-  return useMemo(() => {
-    const totalTodos = todos.length;
-    const completedTodos = todos.filter(t => t.completed).length;
-    const completionRate = totalTodos > 0 ? (completedTodos / totalTodos) * 100 : 0;
-
-    const today = new Date();
-
-    // High priority pending tasks
-    const highPriorityPending = todos.filter(t =>
-      !t.completed && (t.urgent === "High" || t.importance === "High")
-    ).length;
-
-    // Overdue tasks
-    const overdueTodos = todos.filter(t => {
-      if (t.completed) return false;
-      const deadlineDate = new Date(t.deadline);
-      return deadlineDate < today;
-    }).length;
-
-    return [
-      {
-        label: t("total-tasks"),
-        value: totalTodos,
-        icon: CheckCircle,
-        colorClass: "text-todos"
-      },
-      {
-        label: t("completed"),
-        value: completedTodos,
-        icon: Trophy,
-        colorClass: "text-success"
-      },
-      {
-        label: t("high-priorty"),
-        value: highPriorityPending,
-        icon: Zap,
-        colorClass: "text-destructive"
-      },
-      {
-        label: t("completion-rate"),
-        value: `${Math.round(completionRate)}%`,
-        icon: BarChart3,
-        colorClass: "text-primary",
-        showProgress: true,
-        progressValue: completionRate
-      }
-    ];
-  }, [todos]);
-};
-
-// Goals Analytics Hook
 export const useGoalsAnalytics = (goals: GoalType[]): BaseAnalyticsData[] => {
   const t = useTranslations("goals");
 
@@ -178,7 +123,6 @@ export const useGoalsAnalytics = (goals: GoalType[]): BaseAnalyticsData[] => {
   }, [goals]);
 };
 
-// Combined Analytics Hook (for dashboard overview)
 export const useCombinedAnalytics = (
   habits: HabitType[],
   goals: GoalType[]

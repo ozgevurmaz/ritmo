@@ -1,9 +1,8 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { createServerClient } from '@supabase/ssr';
-import { getRedirectPath } from '@/lib/middleware/logic';
+import { getRedirectPath } from './lib/middleware/logic';
 
 export async function middleware(request: NextRequest) {
-  // Create the response first
   let response = NextResponse.next({
     request,
   })
@@ -25,17 +24,23 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh the session and get user in one call
+  const pathname = request.nextUrl.pathname
+  
+  // Get user - this includes session validation
   const { data: { user }, error } = await supabase.auth.getUser()
 
   if (error) {
     console.error('Auth error:', error)
+    // Handle JWT errors by redirecting to auth
+    if (error.message.includes('JWT') || error.message.includes('expired')) {
+      return NextResponse.redirect(new URL('/auth', request.url))
+    }
   }
 
-  const pathname = request.nextUrl.pathname
-
   let profile = null
-  if (user && !error) {
+
+  // Only fetch profile for admin routes to optimize performance
+  if (user && pathname.startsWith('/admin')) {
     try {
       const { data, error: profileError } = await supabase
         .from('profiles')
@@ -55,21 +60,17 @@ export async function middleware(request: NextRequest) {
 
   const redirectPath = getRedirectPath(user, pathname, profile);
   if (redirectPath) {
-      console.log('REDIRECTING TO:', redirectPath)
     return NextResponse.redirect(new URL(redirectPath, request.url));
   }
+  
   return response
 }
 
 export const config = {
   matcher: [
-  "/dashboard/:path*",
-  "/admin/:path*",
-  "/auth/:path*",
-  "/:path*",
-  "/",
-  "/dashboard",
-  "/admin",
-  "/auth",
+    "/dashboard/:path*",
+    "/admin/:path*", 
+    "/auth/:path*",
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],
 };

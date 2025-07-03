@@ -15,11 +15,7 @@ const Navbar = (props: Props) => {
                         <span className="text-2xl font-bold text-foreground">Ritmo</span>
                     </div>
 
-                    <div className="hidden md:flex items-center space-x-8">
-                        <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
-                        <a href="#how-it-works" className="text-muted-foreground hover:text-foreground transition-colors">How it Works</a>
-                        <a href="#testimonials" className="text-muted-foreground hover:text-foreground transition-colors">Stories</a>
-                    </div>
+                    <a href="#features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a>
 
                     <div className="flex items-center space-x-4">
                         <Link href="/auth" className="text-muted-foreground hover:text-foreground transition-colors">Sign In</Link>
