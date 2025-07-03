@@ -31,18 +31,12 @@ export default function WelcomeCard({
             <CardContent className="py-6">
                 <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
                     <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                            <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
-                            <span className="text-xs font-semibold text-primary uppercase tracking-wider">Ritmo</span>
-                        </div>
-                        <div className="flex">
-                            <h1 className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-3">
-                                {t('welcome-card.greeting', {
-                                    greeting: t(`welcome-card.${greetingKey}`),
-                                    name
-                                })}
-                            </h1>
-                        </div>
+                        <h1 className="max-w-max text-3xl lg:text-4xl py-2 font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-3">
+                            {t('welcome-card.greeting', {
+                                greeting: t(`welcome-card.${greetingKey}`),
+                                name
+                            })}
+                        </h1>
 
                         <div className="flex items-center gap-2 text-sm">
                             <Button
