@@ -181,14 +181,12 @@ export const useGoalsAnalytics = (goals: GoalType[]): BaseAnalyticsData[] => {
 // Combined Analytics Hook (for dashboard overview)
 export const useCombinedAnalytics = (
   habits: HabitType[],
-  todos: TodoType[],
   goals: GoalType[]
 ): BaseAnalyticsData[] => {
 
   const t = useTranslations("dashboard.status")
   return useMemo(() => {
-    const totalItems = habits.length + todos.length + goals.length;
-    const completedTodos = todos.filter(t => t.completed).length;
+    const totalItems = habits.length  + goals.length;
     const completedGoals = goals.filter(g => g.completed).length;
 
     // Active habits (not expired)
@@ -223,12 +221,6 @@ export const useCombinedAnalytics = (
         colorClass: "text-habits"
       },
       {
-        label: t("completed-items"),
-        value: completedTodos + completedGoals,
-        icon: CheckCircle,
-        colorClass: "text-success"
-      },
-      {
         label: t("todays-focus"),
         value: `${Math.round(todayProductivity)}%`,
         icon: Target,
@@ -237,5 +229,5 @@ export const useCombinedAnalytics = (
         progressValue: todayProductivity
       }
     ];
-  }, [habits, todos, goals]);
+  }, [habits, goals]);
 };

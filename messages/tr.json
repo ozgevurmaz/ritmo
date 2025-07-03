@@ -68,11 +68,6 @@
         "completed": "Henüz tamamlanan alışkanlık yok.",
         "upcoming": "Henüz planlanmış yaklaşan alışkanlık yok. Ekleyin!",
         "no-goal": "Düzenli Alışkanlıklar"
-      },
-      "todos": {
-        "active": "Henüz aktif yapılacak yok. Ekleyerek başlayın!",
-        "completed": "Her şey tamamlandı! Tamamlanan görev yok.",
-        "upcoming": "Yaklaşan görev yok."
       }
     }
   },
@@ -102,35 +97,6 @@
       "average-streak": "Ortalama Devam"
     },
     "goal": "Hedef"
-  },
-  "todos": {
-    "title": "Yapılacaklar",
-    "definition": "Günlük görevlerinizi yönetin ve takip edin",
-    "overdue": "Süresi Geçmiş",
-    "add-button": "Yeni Görev Ekle",
-    "status": {
-      "active": "Aktif Görevler",
-      "completed": "Tamamlanan Görevler",
-      "upcoming": "Yaklaşan Görevler",
-      "total-tasks": "Toplam Görev",
-      "completion-rate": "Tamamlama Oranı",
-      "high-priorty": "Yüksek Öncelik"
-    },
-    "goal": "Hedef",
-    "empty": {
-      "urgent": {
-        "title": "Acil yapılacak yok",
-        "subtitle": "Her şey yolunda!"
-      },
-      "normal": {
-        "title": "Normal öncelikli yapılacak yok",
-        "subtitle": "Başlamak için bir görev ekleyin"
-      },
-      "completed": {
-        "title": "Tamamlanan yapılacak yok",
-        "subtitle": "Görev tamamlayınca burada görünecek"
-      }
-    }
   },
   "dashboard": {
     "statistics": "İstatistikler",
@@ -190,7 +156,7 @@
     "delete_account_description": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin",
     "delete": "Sil",
     "confirm_delete_title": "Hesabı Sil",
-    "confirm_delete_description": "Bu işlem geri alınamaz. Hesabınız, tüm alışkanlıklarınız, hedefleriniz, görevleriniz silinecek ve tüm arkadaş bağlantılarınız kaldırılacaktır.",
+    "confirm_delete_description": "Bu işlem geri alınamaz. Hesabınız, tüm alışkanlıklarınız, hedefleriniz silinecek ve tüm arkadaş bağlantılarınız kaldırılacaktır.",
     "cancel": "İptal",
     "delete_permanently": "Kalıcı Olarak Sil",
     "deleting": "Siliniyor...",
@@ -200,7 +166,7 @@
     "delete_error": "Hesap silinirken hata oluştu",
     "security": {
       "confirm_delete_title": "Hesabı Kalıcı Olarak Sil",
-      "confirm_delete_description": "Bu işlem hesabınızı, alışkanlıklarınızı, hedeflerinizi, görevlerinizi kalıcı olarak silecek ve tüm arkadaş bağlantılarınızı kaldıracaktır. Bu işlem geri alınamaz."
+      "confirm_delete_description": "Bu işlem hesabınızı, alışkanlıklarınızı, hedeflerinizi kalıcı olarak silecek ve tüm arkadaş bağlantılarınızı kaldıracaktır. Bu işlem geri alınamaz."
     }
   }
 },  
@@ -488,76 +454,6 @@
         "edit": "Alışkanlığı Güncelle"
       }
     },
-    "todo": {
-      "title": {
-        "create": "Görev Oluştur",
-        "edit": "Görevi Düzenle"
-      },
-      "description": {
-        "create": "Yeni bir görev ekleyin: öncelik, tarih ve hatırlatmalarla.",
-        "edit": "Görev detaylarını ve önceliğini güncelleyin."
-      },
-      "sections": {
-        "basic": "Temel Bilgiler",
-        "priority": "Öncelik Matrisi",
-        "schedule": "Takvim & Zamanlama",
-        "tags": "Etiketler & Organizasyon"
-      },
-      "fields": {
-        "task-title": "Görev Başlığı",
-        "placeholder": "örn: Dişçi randevusu ayarla, Raporu gönder, Anneni ara",
-        "priority-explanation": "Mevcut Öncelik"
-      },
-      "types": {
-        "task": {
-          "label": "Görev",
-          "description": "Tamamlanması gereken belirli bir eylem"
-        },
-        "event": {
-          "label": "Etkinlik",
-          "description": "Planlanmış bir toplantı veya randevu"
-        },
-        "select": "Türü seçin",
-        "label": "Tür",
-        "error": "Lütfen bir tür seçin"
-      },
-      "toasts": {
-        "success-create": "Görev başarıyla oluşturuldu!",
-        "success-update": "Görev başarıyla güncellendi!",
-        "error-create": "Görev oluşturulurken hata oluştu. Lütfen tekrar deneyin.",
-        "error-update": "Görev güncellenirken hata oluştu. Lütfen tekrar deneyin.",
-        "deleted": "Görev başarıyla silindi."
-      },
-      "delete": {
-        "title": "Bu görevi silmek istediğinize emin misiniz?",
-        "description": "Bu işlem geri alınamaz. Göreviniz sistemden kalıcı olarak silinecek."
-      },
-      "priority": {
-        "High-High": "Önce Yap - Kritik ve acil görevler",
-        "High-Medium": "Önce Yap - Önemli ve acil görevler",
-        "High-Low": "Planla - Önemli ama acil olmayan görevler",
-        "Medium-High": "Sonra Yap - Acil ama daha az önemli görevler",
-        "Medium-Medium": "Planla - Orta öncelikli görevler",
-        "Medium-Low": "Delege Et - Daha sonra yapılabilecek veya başkasına verilebilecek görevler",
-        "Low-High": "Sonra Yap - Hızlı acil görevler",
-        "Low-Medium": "Delege Et - Düşük öncelikli görevler",
-        "Low-Low": "Ele - Gerçekten gerekli mi değerlendirin",
-        "urgency": "Aciliyet",
-        "importance": "Önem",
-        "selectUrgency": "Aciliyet seçin",
-        "selectImportance": "Önem derecesi seçin",
-        "required": "Bu alan zorunludur",
-        "levels": {
-          "Low": "Düşük",
-          "Medium": "Orta",
-          "High": "Yüksek"
-        }
-      },
-      "actions": {
-        "save": "Görevi Kaydet",
-        "edit": "Görevi Güncelle"
-      }
-    },
     "delete": {
       "title": "Emin misiniz?",
       "description": "Bu işlem geri alınamaz. Bu öğe kalıcı olarak silinecek."
@@ -609,11 +505,9 @@
     "complete": "%{percentage} Tamamlandı",
     "progress": {
       "overall": "Genel İlerleme",
-      "todos": "Görevler",
       "habits": "Alışkanlıklar"
     },
     "section": {
-      "todos": "Görevler",
       "habits": "Alışkanlıklar"
     }
   },
@@ -644,7 +538,6 @@
     "home": "Ana Sayfa",
     "planner": "Planlayıcı",
     "social": "Sosyal",
-    "todos": "Görevler",
     "habits": "Alışkanlıklar",
     "goals": "Hedefler",
     "discover": "Keşfet",

@@ -4,17 +4,15 @@ import {
   Settings,
   Calendar,
   Users,
-  CheckSquare,
-  RotateCcw,
   Search,
   Zap,
   FileText,
-  FileEdit,
   Trophy,
   Package,
   MessageSquare,
   Gamepad2,
   LayoutDashboard,
+  CheckCircle,
 } from 'lucide-react';
 
 // Dummy data imports
@@ -45,12 +43,14 @@ export const CONNECTIONS = [
     streak: 5
   }
 ];
+
 export const CATEGORIES = [
   { name: 'Fitness', count: 5 },
   { name: 'Work', count: 7 },
   { name: 'Learning', count: 3 },
   { name: 'Personal', count: 4 }
 ];
+
 export const slogans = [
   "Find your rhythm, stay on track.",
   "Design your days. Define your life.",
@@ -58,18 +58,15 @@ export const slogans = [
   "Align with your rhythm. Elevate your life.",
   "Your rhythm. Your growth."
 ];
-
-
 {/* Nav links */ }
 export const NAV_LINKS = [
-  { name: 'home', icon: Home, href: '/' },
-  { name: 'planner', icon: Calendar, href: '/planner' },
-  { name: 'social', icon: Users, href: '/planner' },
-  { name: 'todos', icon: CheckSquare, href: '/todos' },
-  { name: 'habits', icon: RotateCcw, href: '/habits' },
-  { name: 'goals', icon: Target, href: '/goals' },
-  { name: 'discover', icon: Search, href: '/discover' },
-  { name: 'motivation', icon: Zap, href: '/discover' },
+  { name: 'home', icon: Home, href: '/dashboard/' },
+  { name: 'planner', icon: Calendar, href: '/dashboard/planner' },
+  { name: 'social', icon: Users, href: '/dashboard/planner' },
+  { name: 'habits', icon: CheckCircle, href: '/dashboard/habits' },
+  { name: 'goals', icon: Target, href: '/dashboard/goals' },
+  { name: 'discover', icon: Search, href: '/dashboard/discover' },
+  { name: 'motivation', icon: Zap, href: '/dashboard/motivation' },
 ];
 
 export const ADMIN_NAV_LINKS = [

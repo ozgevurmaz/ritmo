@@ -16,7 +16,7 @@ export default function GoalsInfoCard(
 ) {
     const t = useTranslations("goals-info")
     return (
-        <Card className="mb-5 border-primary max-h-max overflow-y-auto gap-2">
+        <Card className="mb-5 border-primary overflow-y-auto gap-2">
             <CardHeader className="pb-2 mb-0">
                 <div className="flex justify-between items-center">
                     <CardTitle className="text-base font-semibold flex items-center text-foreground">

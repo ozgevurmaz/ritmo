@@ -2,11 +2,8 @@
 
 import DailyCard from "@/components/Dashboard/client/DailyCard";
 import GoalsInfoCard from "@/components/Dashboard/client/goalsInfoCard";
-import StatisticsCard from "@/components/Dashboard/client/statisticsCard";
 import WelcomeCard from "@/components/Dashboard/client/WelcomeCard";
 import HabitsForm from "@/components/Forms/habitForm";
-import TodoForm from "@/components/Forms/todoForm";
-import { useDailyTodos } from "@/lib/Queries/todos/useDailyTodo";
 import { useValidGoals } from "@/lib/Queries/goals/useValidGoals";
 import { useUpcomingGoals } from "@/lib/Queries/goals/useUpcomingGoals";
 import { useValidHabits } from "@/lib/Queries/habits/useValidHabits";
@@ -23,10 +20,7 @@ export default function Home() {
   const router = useRouter();
   const { data: profile, isLoading, error } = useProfile();
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [isTodoFormOpen, setTodoFormOpen] = useState<boolean>(false)
-  const [isHabitFormOpen, setHabitFormOpen] = useState<boolean>(false)
-
-  const { data: todos, isLoading: todosLoading } = useDailyTodos({ userId: profile?.id || "", date: formatDateForQuery(currentDate) });
+  const [isHabitFormOpen, setHabitFormOpen] = useState<boolean>(false);
 
   const { data: habits, isLoading: habitsLoading } = useValidHabits({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
   const { data: goals, isLoading: goalsLoading } = useValidGoals({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
@@ -50,7 +44,7 @@ export default function Home() {
     });
   };
 
-  if (todosLoading && habitsLoading && goalsLoading && upcomingGoalsLoading) return <LoadingScreen />
+  if (habitsLoading && goalsLoading && upcomingGoalsLoading) return <LoadingScreen />
 
   return (
     <div>
@@ -60,13 +54,6 @@ export default function Home() {
         handleDayChange={changeDay}
         onDateSelect={setCurrentDate}
         setHabitFormOpen={() => setHabitFormOpen(true)}
-        setTodoFormOpen={() => setTodoFormOpen(true)}
-      />
-
-      <TodoForm
-        userId={profile.id}
-        isOpen={isTodoFormOpen}
-        setIsOpen={() => setTodoFormOpen(false)}
       />
 
       <HabitsForm
@@ -76,9 +63,8 @@ export default function Home() {
       />
 
       <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <DailyCard className="col-span-1 md:col-span-2" todos={todos || []} habits={habits || []} userId={profile.id} />
+        <DailyCard className="col-span-1 md:col-span-2" habits={habits || []} userId={profile.id} />
         <div>
-          <StatisticsCard todos={todos || []} goals={goals || []} habits={habits || []} />
           <GoalsInfoCard goals={goals || []} upcomingGoals={upcomingGoals || []} />
         </div>
       </div>

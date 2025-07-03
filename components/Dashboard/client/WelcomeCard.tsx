@@ -4,7 +4,7 @@ import CustomCalendar from "@/components/custom/customCalendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatDate, getGreetingKey } from "@/lib/utils";
-import { ChevronLeft, ChevronRight, PlusCircle, Calendar, Target } from "lucide-react";
+import { ChevronLeft, ChevronRight, PlusCircle, Calendar } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -13,14 +13,12 @@ export default function WelcomeCard({
     selectedDate,
     handleDayChange,
     onDateSelect,
-    setTodoFormOpen,
     setHabitFormOpen
 }: {
     name: string,
     selectedDate: Date,
     handleDayChange: (count: number) => void
     onDateSelect?: (date: Date) => void,
-    setTodoFormOpen?: () => void,
     setHabitFormOpen?: () => void,
 }) {
     const t = useTranslations()
@@ -90,17 +88,6 @@ export default function WelcomeCard({
                     </div>
 
                     <div className="flex flex-wrap gap-3">
-
-                        <Button
-                            size="sm"
-                            variant="outline"
-                            className="bg-transparent border-border hover:text-todos text-todos transition-all duration-200"
-                            onClick={setTodoFormOpen}
-                        >
-                            <PlusCircle className="h-4 w-4 mr-2" />
-                            {t("todos.add-button")}
-                        </Button>
-
                         <Button
                             size="sm"
                             variant="outline"

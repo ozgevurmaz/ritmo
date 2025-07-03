@@ -44,8 +44,8 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
   }
 
   return (
-    <aside
-      className={`hidden ${profile && "lg:flex"} relative flex-col h-screen bg-sidebar border-r border-border text-sidebar-foreground transition-all duration-300 ${collapsed ? 'w-16' : 'w-50'}`}
+   <aside
+      className={`hidden ${profile && "lg:flex"} relative flex-col h-full bg-sidebar border-r border-border text-sidebar-foreground transition-all duration-300 ${collapsed ? 'w-16' : 'w-50'}`}
     >
       {/* Toggle Button */}
       <Button

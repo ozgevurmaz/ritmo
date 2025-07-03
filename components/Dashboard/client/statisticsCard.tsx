@@ -11,17 +11,15 @@ import { useTranslations } from 'next-intl';
 export default function StatisticsCard(
     {
         goals,
-        todos,
         habits
     }:
         {
             goals: GoalType[],
-            todos: TodoType[],
             habits: HabitType[]
         }
 ) {
     const t = useTranslations('dashboard');
-    const analyticsData = useCombinedAnalytics(habits = habits, todos = todos, goals = goals)
+    const analyticsData = useCombinedAnalytics(habits = habits, goals = goals)
 
     return (
         <Card className="col-span-2 md:col-span-1 mb-5 border-primary">

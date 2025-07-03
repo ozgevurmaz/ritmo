@@ -68,11 +68,6 @@
         "completed": "You haven't completed any habits yet.",
         "upcoming": "No upcoming habits planned. Set some up!",
         "no-goal": "Regular Habits"
-      },
-      "todos": {
-        "active": "No active todos. Add one to get started!",
-        "completed": "All done! No completed todos yet.",
-        "upcoming": "No upcoming todos scheduled."
       }
     }
   },
@@ -102,35 +97,6 @@
       "average-streak": "Avg. Streak"
     },
     "goal": "Goal"
-  },
-  "todos": {
-    "title": "Todos",
-    "definition": "Track and manage your daily todos",
-    "overdue": "Overdue",
-    "add-button": "Add New Todos",
-    "status": {
-      "active": "Active Habits",
-      "completed": "Completed Todos",
-      "upcoming": "Upcoming Habits",
-      "total-tasks": "Total Tasks",
-      "completion-rate": "Completion Rate",
-      "high-priorty": "High Priorty"
-    },
-    "goal": "Goal",
-    "empty": {
-      "urgent": {
-        "title": "No urgent todos",
-        "subtitle": "You're all caught up!"
-      },
-      "normal": {
-        "title": "No normal priority todos",
-        "subtitle": "Add some tasks to get started"
-      },
-      "completed": {
-        "title": "No completed todos",
-        "subtitle": "Complete some tasks to see them here"
-      }
-    }
   },
   "dashboard": {
     "statistics": "Statistics",
@@ -184,7 +150,7 @@
       "delete_account_description": "Permanently delete your account and all data",
       "delete": "Delete",
       "confirm_delete_title": "Delete Account",
-      "confirm_delete_description": "This action cannot be undone. This will permanently delete your account, all your habits, goals, todos, and remove you from all friend connections.",
+      "confirm_delete_description": "This action cannot be undone. This will permanently delete your account, all your habits, goal, and remove you from all friend connections.",
       "cancel": "Cancel",
       "delete_permanently": "Delete Permanently",
       "deleting": "Deleting...",
@@ -194,7 +160,7 @@
       "delete_error": "Failed to delete account",
       "security": {
         "confirm_delete_title": "Delete Account Permanently",
-        "confirm_delete_description": "This will permanently delete your account, all your habits, goals, todos, and remove you from all friend connections. This action cannot be undone."
+        "confirm_delete_description": "This will permanently delete your account, all your habits, goals, and remove you from all friend connections. This action cannot be undone."
       }
     },
     "toasts": {
@@ -258,7 +224,7 @@
       "title": "Privacy & Sharing",
       "label": "Visibility",
       "private": "Private",
-      "private-description": "Only you can see this todo",
+      "private-description": "Only you can see this",
       "public": "Public",
       "public-description": "Others can view and encourage your progress",
       "share": {
@@ -488,76 +454,6 @@
         "edit": "Update Habit"
       }
     },
-    "todo": {
-      "title": {
-        "create": "Create Todo",
-        "edit": "Edit Todo"
-      },
-      "description": {
-        "create": "Add a new task with priority levels, deadlines, and notifications.",
-        "edit": "Update your task details and priorities."
-      },
-      "sections": {
-        "basic": "Basic Information",
-        "priority": "Priority Matrix",
-        "schedule": "Schedule & Timing",
-        "tags": "Tags & Organization"
-      },
-      "fields": {
-        "task-title": "Task Title",
-        "placeholder": "e.g., Schedule dentist appointment, Submit report, Call mom",
-        "priority-explanation": "Current Priority"
-      },
-      "types": {
-        "task": {
-          "label": "Task",
-          "description": "A specific action to complete"
-        },
-        "event": {
-          "label": "Event",
-          "description": "A scheduled meeting or appointment"
-        },
-        "select": "Select type",
-        "label": "Type",
-        "error": "Please select a type"
-      },
-      "toasts": {
-        "success-create": "Todo created successfully!",
-        "success-update": "Todo updated successfully!",
-        "error-create": "Error creating todo. Please try again.",
-        "error-update": "Error updating todo. Please try again.",
-        "deleted": "Todo deleted successfully."
-      },
-      "delete": {
-        "title": "Delete this task?",
-        "description": "This will permanently remove your task from the system."
-      },
-      "priority": {
-        "High-High": "Do First - Critical and urgent tasks",
-        "High-Medium": "Do First - Important tasks with some urgency",
-        "High-Low": "Schedule - Important but not urgent",
-        "Medium-High": "Do Next - Urgent but less important",
-        "Medium-Medium": "Schedule - Moderate priority tasks",
-        "Medium-Low": "Delegate - Can be done later or by others",
-        "Low-High": "Do Next - Quick urgent tasks",
-        "Low-Medium": "Delegate - Low priority tasks",
-        "Low-Low": "Eliminate - Consider if really needed",
-        "urgency": "Urgency",
-        "importance": "Importance",
-        "selectUrgency": "Select urgency",
-        "selectImportance": "Select importance",
-        "required": "This field is required",
-        "levels": {
-          "Low": "Low",
-          "Medium": "Medium",
-          "High": "High"
-        }
-      },
-      "actions": {
-        "save": "Save Task",
-        "edit": "Update Task"
-      }
-    },
     "delete": {
       "title": "Are you sure?",
       "description": "This action cannot be undone. This will permanently delete your item."
@@ -609,11 +505,9 @@
     "complete": "{percentage}% Complete",
     "progress": {
       "overall": "Overall Progress",
-      "todos": "Todos",
       "habits": "Habits"
     },
     "section": {
-      "todos": "Todos",
       "habits": "Habits"
     }
   },
@@ -644,7 +538,6 @@
     "home": "Home",
     "planner": "Planner",
     "social": "Social",
-    "todos": "Todos",
     "habits": "Habits",
     "goals": "Goals",
     "discover": "Discover",

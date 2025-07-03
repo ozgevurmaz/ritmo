@@ -17,7 +17,6 @@ import {
 import { NAV_LINKS } from '@/lib/constants';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,7 +25,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '../ui/dropdown-menu';
-import { getInitials } from '@/lib/utils';
 import Link from 'next/link';
 import { useProfile } from '@/lib/Queries/useProfile';
 import StreakBadge from '../custom/StreakBadge';
