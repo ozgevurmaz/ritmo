@@ -119,6 +119,6 @@ export const handleLogout = async () => {
   if (error) {
     console.error("Logout error:", error.message)
   } else {
-    redirect('/auth')
+    redirect('/')
   }
 }

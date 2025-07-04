@@ -58,7 +58,7 @@ export default function ForgotPasswordPage() {
       <div className="space-y-4 max-w-md mx-auto mt-10">
         <div className="text-center">
           <Mail className="w-12 h-12 mx-auto mb-6 text-destructive" />
-          <h2 className="text-2xl font-semibold mb-2">{t("auth.forgot-password.success.title")}</h2>
+          <h4 className="text-2xl font-semibold mb-2">{t("auth.forgot-password.success.title")}</h4>
           <p className="text-foreground mb-6">
             {t("auth.forgot-password.success.description")}
           </p>

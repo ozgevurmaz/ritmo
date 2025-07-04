@@ -1,11 +1,21 @@
 "use client"
 
 import { ArrowRight, Check, Zap } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { features } from './constants'
+import { Badge } from '../ui/badge'
+import { Link } from '../ui/link'
 
 const Features = () => {
     const [activeFeature, setActiveFeature] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveFeature(prev => (prev + 1) % 3);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
         <section id="features" className="p-20 bg-card">
 
@@ -13,7 +23,7 @@ const Features = () => {
                 <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
                     Everything You Need to Succeed
                 </h2>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                     Powerful features designed to help you build lasting habits with the support of your community
                 </p>
             </div>
@@ -63,7 +73,9 @@ const Features = () => {
                         <div className="bg-card rounded-2xl p-6 shadow-xl border border-border">
                             <div className="flex items-center justify-between mb-4">
                                 <h4 className="font-semibold text-foreground">Today's Things</h4>
-                                <div className="text-sm text-muted-foreground">3/4 completed</div>
+                                <Badge variant="outline" className="text-xs">
+                                    75% Completed
+                                </Badge>
                             </div>
                             <div className="space-y-3">
                                 {[
@@ -91,7 +103,7 @@ const Features = () => {
                 </div>
             </div>
 
-            <div className="bg-gradient-to-r from-primary to-accent rounded-3xl p-7 text-white max-w-4xl mx-auto text-center mt-20">
+            <div className="bg-gradient-to-r from-primary to-secondary rounded-3xl p-7 text-white max-w-4xl mx-auto text-center mt-20">
                 <h2 className="text-4xl md:text-5xl font-bold mb-6">
                     Ready to Start Your Journey?
                 </h2>
@@ -99,10 +111,14 @@ const Features = () => {
                     Join thousands of people who are building better habits together
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                    <button className="bg-white text-primary px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 flex items-center gap-2">
+                    <Link
+                        href='/auth'
+                        className="bg-white text-primary px-8 py-4 text-lg font-semibold hover:bg-white/90 transition-all transform hover:scale-105 flex items-center gap-2 group"
+                        variant="ctalink"
+                    >
                         Get Started Free
-                        <ArrowRight className="w-5 h-5" />
-                    </button>
+                        <ArrowRight className="w-5 h-5 transition-all duration-300 group-hover:translate-x-1" />
+                    </Link>
                 </div>
             </div>
 

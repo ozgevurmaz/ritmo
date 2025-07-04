@@ -91,7 +91,7 @@ export default function ResetPasswordPage() {
         return (
             <div className="space-y-4 max-w-sm mx-auto mt-10 text-center">
                 <div className="text-primary text-4xl mb-4">✓</div>
-                <h2 className="text-2xl font-semibold">{t("auth.reset-password.success.title")} </h2>
+                <h4 className="text-2xl font-semibold">{t("auth.reset-password.success.title")} </h4>
                 <Alert>
                     <AlertDescription>
                         {t("auth.reset-password.success.description")}

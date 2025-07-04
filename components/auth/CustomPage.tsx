@@ -28,9 +28,9 @@ export default function CustomPage({ email, icon, header, description, button, b
                         <Icon className="h-12 w-12 text-primary" />
                     )}
                 </div>
-                {header && <h1 className="text-2xl font-bold text-foreground">
+                {header && <h4 className="text-2xl font-bold text-foreground">
                     {header}
-                </h1>}
+                </h4>}
                 {description && <p className="text-muted-foreground">
                     {description}
                 </p>}

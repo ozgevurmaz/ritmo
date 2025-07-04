@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ritmo – Habit & Goal Tracker App
+Ritmo is a habit and goal tracking app built for people who want to grow intentionally, build better habits, and share their journey with others. It helps users turn goals into actionable habits, track progress, and stay motivated with a clean, gamified experience.
 
-## Getting Started
+## What Problem Does Ritmo Solve?
+- Most habit trackers treat goals and habits as isolated tasks. Ritmo connects them.
+- It lets you create goals with a clear motivation, time range, and related habits.
+- You can track your habits daily, see your progress, and reflect on your consistency.
+- You’ll soon be able to collaborate with friends, build streaks together, and join community challenges.
 
-First, run the development server:
+## Technologies Used
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Next.js 15 (App Router + Turbopack) – Framework for building full-stack web apps
+- React 19 – Component-based UI library
+- TypeScript – Strongly typed JavaScript
+- Tailwind CSS 4 – Utility-first styling system
+- Zod – Schema-based form validation
+- Supabase – Auth, Database, and Serverless Functions
+- Tanstack/react-query – Data fetching & caching
+- React Hook Form – Form management
+- next-intl – Multi-language (i18n) support
+- Radix UI – Accessible unstyled primitives (checkbox, dialog, tabs, etc.)
+- lucide-react – Icon library
+- Jest – Unit testing framework
+- React Testing Library – Component testing
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Current Features
+- Auth System (with Supabase)
+→ User login, role-based access (user/admin)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-  User Dashboard
+→ Clean interface to manage personal growth
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Habit Dashboard & Form
+→ Add, edit, and track habits
 
-## Learn More
+- Goal Dashboard & Form
+→ Create goals, attach related habits, and define motivations
 
-To learn more about Next.js, take a look at the following resources:
+- Habit-Goal Relationship
+→ Newly added habits through a goal inherit its category and date range
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- i18n Support
+→ Multilingual structure using next-intl (EN / TR)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Landing Page
+→ Header, features section, CTA, footer
 
-## Deploy on Vercel
+## In Development
+- Admin Dashboard
+→ Create global challenges, manage users & content
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Payment Integration
+→ For premium challenges or event entries
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Blog System
+→ Motivational content and weekly summaries
+
+- Gamification System
+→ Badges, streaks, levels
+
+- Social Features
+→ Add friends, track goals together, live chat while building habits

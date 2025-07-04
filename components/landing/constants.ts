@@ -5,19 +5,19 @@ export const features = [
         icon: Users,
         title: "Social Accountability",
         description: "Connect with friends and achieve goals together",
-        color: "var(--color-friends)"
+        color: "var(--chart-2)"
     },
     {
         icon: Target,
         title: "Smart Goal Setting",
         description: "Break down big dreams into actionable habits",
-        color: "var(--color-goals)"
+        color: "var(--chart-3)"
     },
     {
         icon: Calendar,
         title: "Daily Tracking",
         description: "Build momentum with streak tracking and rewards",
-        color: "var(--color-habits)"
+        color: "var(--chart-5)"
     }
 ];
 

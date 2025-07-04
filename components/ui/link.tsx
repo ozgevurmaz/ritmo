@@ -9,9 +9,9 @@ const linkVariants = cva(
         variants: {
             variant: {
                 navlink: "text-muted-foreground hover:text-foreground px-3 py-2 rounded-md text-sm font-medium transition-colors hover:bg-accent/50",
-                ctalink: "bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ",
+                ctalink: "bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-lg font-semibold shadow-sm hover:shadow-md transition-all duration-200 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ",
                 link: "items-center gap-2 px-3 py-1.5 text-sm font-medium underline-offset-4 hover:underline hover:text-muted-foreground transition-colors",
-                brand: "items-center gap-2 text-lg font-bold tracking-tight text-foreground hover:text-primary transition-all duration-300 group",
+                brand: "flex items-center space-x-2",
                 mobilenav: "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl hover:bg-gradient-to-r hover:from-primary/10 hover:to-accent/10 hover:text-primary transition-all duration-300 group border border-transparent hover:border-primary/20 hover:shadow-sm",
                 sidebarnav: "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 hover:bg-gradient-to-r hover:from-accent/50 hover:to-accent/20 hover:text-sidebar-accent-foreground group border border-transparent hover:shadow-sm relative overflow-hidden",
                 adminpanel: "flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-300 bg-gradient-to-r from-primary/5 to-accent/5 hover:from-primary/10 hover:to-accent/10 text-primary hover:text-primary-dark border border-primary/20 hover:border-primary/40 hover:shadow-lg group relative overflow-hidden"
