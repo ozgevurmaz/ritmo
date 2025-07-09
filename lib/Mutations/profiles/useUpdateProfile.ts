@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation } from "@tanstack/react-query"
 
 export const useUpdateProfile = (userId: string) => {
     const supabase = createClient();

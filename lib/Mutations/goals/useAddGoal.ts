@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/client";
+import { slugify } from "@/lib/utils/features/getSlug";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { slugify } from "@/lib/utils";
+
 import { toast } from "sonner";
 
 export const useAddGoal = (userId: string) => {

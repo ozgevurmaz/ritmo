@@ -5,7 +5,6 @@ import {
   BarChart3,
   Activity,
   Target,
-  CheckCircle,
   Zap,
   Trophy,
 } from "lucide-react";

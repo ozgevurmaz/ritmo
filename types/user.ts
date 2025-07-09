@@ -10,5 +10,7 @@ interface UserType {
     messages: number;
     lang: string;
     theme: string;
-    dashboardLayout : string;
+    timezone: string;
+    premium: boolean;
+    bio?: string
 }

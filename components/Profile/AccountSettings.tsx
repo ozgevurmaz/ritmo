@@ -13,8 +13,6 @@ import { InputElement } from '../Forms/Inputs/inputElement'
 import { profileSchema } from '@/lib/zod/client/profile'
 import { useState } from 'react'
 import { Label } from '../ui/label'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
-import { getInitials } from '@/lib/utils'
 import ProfilePhoto from '../shared/profilePhoto'
 import { useTranslations } from 'next-intl'
 

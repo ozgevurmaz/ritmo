@@ -52,10 +52,13 @@ export async function signup(formData: FormData) {
   if (authError) return { error: authError.message }
 
   const userId = authData.user?.id
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   if (userId) {
     const { error: profileError } = await supabase
       .from('profiles')
-      .insert({ id: userId, email, username: `user_${Math.floor(Math.random() * 100000)}` })
+      .insert({ id: userId, email, username: `user_${Math.floor(Math.random() * 100000)}`, timezone: timezone })
 
     if (profileError) {
       return { error: profileError.message }

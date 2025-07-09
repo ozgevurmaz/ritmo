@@ -1,4 +1,4 @@
-import { getStreakColor } from "@/lib/utils";
+import { getStreakColor } from "@/lib/utils/features/getStreakColor";
 import { Flame } from "lucide-react";
 import { useTranslations } from "next-intl";
 

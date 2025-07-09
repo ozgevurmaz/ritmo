@@ -8,11 +8,13 @@ import { useValidGoals } from "@/lib/Queries/goals/useValidGoals";
 import { useUpcomingGoals } from "@/lib/Queries/goals/useUpcomingGoals";
 import { useValidHabits } from "@/lib/Queries/habits/useValidHabits";
 import { useProfile } from "@/lib/Queries/useProfile";
-import { formatDateForQuery } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import LoadingScreen from "@/components/shared/pageStyles/Loading";
 import { useTranslations } from "next-intl";
+import { getTimezone } from "@/lib/utils/user/getTimeZone";
+import { formatDateForQuery } from "@/lib/utils/date/formatDate";
+import { useUpdateProfile } from "@/lib/Mutations/profiles/useUpdateProfile";
 
 export default function Home() {
   const t = useTranslations('auth');
@@ -26,12 +28,21 @@ export default function Home() {
   const { data: goals, isLoading: goalsLoading } = useValidGoals({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
   const { data: upcomingGoals, isLoading: upcomingGoalsLoading } = useUpcomingGoals({ userId: profile?.id || "", date: formatDateForQuery(currentDate) })
 
+  const updateProfile = useUpdateProfile(profile?.id || "")
+  const currentTimezone = getTimezone();
+  useEffect(() => {
+    if (profile && currentTimezone !== profile?.timezone) {
+      updateProfile.mutate({ updates: { timezone: currentTimezone } })
+    }
+  }, [profile, currentTimezone, updateProfile])
+
   useEffect(() => {
     if (isLoading) return
 
     if (!isLoading && !profile) {
       router.push("/auth")
     }
+
   }, [profile, router, isLoading])
 
   if (!profile) return null

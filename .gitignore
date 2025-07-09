@@ -19,6 +19,7 @@
 
 # production
 /build
+.swc/
 
 # misc
 .DS_Store
@@ -39,3 +40,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Supabase temporary and local-only files
+supabase/.output/
+supabase/.dev/
+supabase/.temp/
+supabase/.branches/
+supabase/logs/
+.vercel

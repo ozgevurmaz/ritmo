@@ -1,4 +1,5 @@
-import { formatDate } from '@/lib/utils'
+
+import { formatDate } from '@/lib/utils/date/formatDate'
 import { useTranslations } from 'next-intl'
 import React from 'react'
 

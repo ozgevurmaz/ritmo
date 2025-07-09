@@ -70,7 +70,7 @@ export const NAV_LINKS = [
 ];
 
 export const ADMIN_NAV_LINKS = [
-  { icon: LayoutDashboard, name: 'dashboard', href: '/admin/dashboard' },
+  { icon: LayoutDashboard, name: 'dashboard', href: '/admin/' },
   { icon: Users, name: 'users', href: '/admin/users' },
   { icon: FileText, name: 'content', href: '/admin/content' },
   { icon: Trophy, name: 'challenges', href: '/admin/challenges' },

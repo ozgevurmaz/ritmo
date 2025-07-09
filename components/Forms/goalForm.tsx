@@ -15,7 +15,6 @@ import { useAddGoal } from '@/lib/Mutations/goals/useAddGoal'
 import { useHabits } from '@/lib/Queries/habits/useHabit';
 import { useDeleteGoal } from '@/lib/Mutations/goals/useDeleteGoal';
 import { useUpdateGoal } from '@/lib/Mutations/goals/useUpdateGoal';
-import { formatDateForQuery } from '@/lib/utils';
 import { goalSchema } from '@/lib/zod/client/goal';
 import { FormWrapper } from './Wrapper/FormWrapper';
 import { TitleInput } from './Inputs/TitleInput';
@@ -27,6 +26,7 @@ import { PrivacyCard } from './Cards/PrivacyCard';
 import { FormActions } from './Cards/FormActions';
 import { DeleteConfirmDialog } from '../shared/DeleteConfirmDialog';
 import { useTranslations } from 'next-intl';
+import { formatDateForQuery } from '@/lib/utils/date/formatDate';
 
 type GoalFormData = z.infer<typeof goalSchema>;
 

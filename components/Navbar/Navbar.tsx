@@ -60,7 +60,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
         <div className="flex h-14 items-center justify-between px-3 lg:px-10">
 
           {/* Logo and Brand */}
-          <Link className="flex items-center gap-2" href="/">
+          <Link className="flex items-center gap-2" href={isAdmin ? "/admin" : "/"}>
             <Zap className="h-6 w-6 text-primary" />
             <span className="text-lg font-semibold tracking-tight">Ritmo {isAdmin && <span className='text-primary font-bold'>Admin</span>}</span>
           </Link>
@@ -114,7 +114,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
             <DropdownMenu>
               <DropdownMenuTrigger className='hover:bg-muted/70 p-0' asChild>
                 <Button variant="ghost" className="gap-1 p-1 md:p-2 rounded-lg cursor-pointer">
-                  <ProfilePhoto profile={profile} />
+                  <ProfilePhoto name={profile.name} avatarUrl={profile.avatar} />
                   <span className="hidden sm:inline-block text-sm font-medium">
                     {profile?.name}
                   </span>
@@ -209,7 +209,7 @@ export function Navbar({ isAdmin = false }: NavbarProps) {
             {/* Mobile User Info */}
             <div className="absolute bottom-0 left-0 right-0 p-4 border-t bg-background">
               <div className="flex items-center gap-3">
-                <ProfilePhoto profile={profile} size="sm"/>
+                <ProfilePhoto name={profile.name} avatarUrl={profile.avatar} size="sm" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium truncate">{profile?.name}</p>
                   <p className="text-xs text-muted-foreground truncate">

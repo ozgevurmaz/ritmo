@@ -3,68 +3,36 @@ interface DatabaseType {
         Tables: {
             profiles: {
                 Row: {
-                    id: string
-                    name: string
-                    surname: string
-                    email: string
-                    username: string
-                    role: string
-                    avatar: string | null
-                    streak: number
-                    notifications: number[]
-                    messages: number[]
-                }
-                Insert: {
-                    id: string
-                    name: string
-                    surname: string
-                    email: string
-                    username: string
-                    role: string
+                    id?: string
+                    name?: string
+                    surname?: string
+                    email?: string
+                    username?: string
+                    role?: string
                     avatar?: string | null
                     streak?: number
                     notifications?: number[]
                     messages?: number[]
-                }
-                Update: Partial<DatabaseType['public']['Tables']['profiles']['Insert']>
-            }
-
-            todos: {
-                Row: {
-                    id: string
-                    user_id: string
-                    title: string
-                    urgent: "High" | "Medium" | "Low"
-                    importance: "High" | "Medium" | "Low"
-                    deadline: string
-                    time: string
-                    notifyBefore: string
-                    completed: boolean
-                    repeat: "never" | "daily" | "weekly" | "monthly" | "yearly"
-                    tags: string[]
-                    category: string
-                    visibility: "public" | "private"
-                    sharedWith: string[] | null
-                    created_at: string
+                    timezone?: string | null
+                    premium?: boolean
+                    bio?: string
                 }
                 Insert: {
                     id?: string
-                    user_id: string
-                    title: string
-                    urgent: "High" | "Medium" | "Low"
-                    importance: "High" | "Medium" | "Low"
-                    deadline: string
-                    time: string
-                    notifyBefore: string
-                    completed?: boolean
-                    repeat?: "never" | "daily" | "weekly" | "monthly" | "yearly"
-                    tags?: string[]
-                    category: string
-                    visibility?: "public" | "private"
-                    sharedWith?: string[] | null
-                    created_at?: string
+                    name?: string
+                    surname?: string
+                    email?: string
+                    username?: string
+                    role?: string
+                    avatar?: string | null
+                    streak?: number
+                    notifications?: number[]
+                    messages?: number[]
+                    timezone?: string | null
+                    premium?: boolean
+                    bio?: string
                 }
-                Update: Partial<DatabaseType['public']['Tables']['todos']['Insert']>
+                Update: Partial<DatabaseType['public']['Tables']['profiles']['Insert']>
             }
 
             habits: {

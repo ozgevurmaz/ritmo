@@ -3,7 +3,8 @@
 import CustomCalendar from "@/components/custom/customCalendar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { formatDate, getGreetingKey } from "@/lib/utils";
+import { formatDate } from "@/lib/utils/date/formatDate";
+import { getGreetingKey } from "@/lib/utils/user/getGreeting";
 import { ChevronLeft, ChevronRight, PlusCircle, Calendar } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";

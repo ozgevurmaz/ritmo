@@ -20,7 +20,7 @@ import { toast } from 'sonner';
 import { useAddHabit } from '@/lib/Mutations/habits/useAddHabit';
 import { useDeleteHabit } from '@/lib/Mutations/habits/useDeleteHabit';
 import { useUpdateHabit } from '@/lib/Mutations/habits/useUpdateHabit';
-import { formatDateForQuery } from '@/lib/utils';
+import { formatDateForQuery } from '@/lib/utils/date/formatDate';
 import { PrivacyCard } from './Cards/PrivacyCard';
 import { CategorySelection } from './Selectors/CategorySelection';
 import { FormWrapper } from './Wrapper/FormWrapper';

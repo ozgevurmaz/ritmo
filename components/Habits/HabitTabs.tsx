@@ -2,8 +2,7 @@
 
 import React, { useMemo } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { PlayCircle, CheckCircle2, Timer, Calendar, Target } from "lucide-react";
-import { HabitsCard } from "./HabitsCard";
+import { PlayCircle, CheckCircle2, Timer } from "lucide-react";
 import { useGoals } from "@/lib/Queries/goals/useGoal";
 import { useTranslations } from "next-intl";
 import HabitsSection from "./habitsSection";

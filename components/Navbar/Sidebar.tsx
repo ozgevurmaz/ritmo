@@ -37,14 +37,14 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  if(isLoading) return <LoadingScreen/>
+  if (isLoading) return <LoadingScreen />
 
-  if(!profile){
+  if (!profile) {
     return
   }
 
   return (
-   <aside
+    <aside
       className={`hidden ${profile && "lg:flex"} relative flex-col h-full bg-sidebar border-r border-border text-sidebar-foreground transition-all duration-300 ${collapsed ? 'w-16' : 'w-50'}`}
     >
       {/* Toggle Button */}
@@ -88,11 +88,11 @@ export function Sidebar({ isAdmin = false }: { isAdmin?: boolean }) {
       <div className="px-4 py-1 border-t border-border">
         {collapsed ? (
           <div className="flex justify-center py-3">
-            <ProfilePhoto profile={profile} size="sm"/>
+            <ProfilePhoto name={profile.name} avatarUrl={profile.avatar} size="sm" />
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <ProfilePhoto profile={profile}  size="md"/>
+            <ProfilePhoto name={profile.name} avatarUrl={profile.avatar} size="md" />
             <div className="flex-1 flex flex-col items-center p-0 w-full">
               <p className="text-sm px-2 py-1">{profile?.name}</p>
               <SteakBadge streak={profile?.streak || 0} border={false} isTextShown />

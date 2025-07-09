@@ -1,9 +1,9 @@
-
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div>
-      Admin
+      <Link href="/admin/resets">Resets</Link>
     </div>
   );
 }
