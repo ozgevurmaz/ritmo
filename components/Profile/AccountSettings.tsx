@@ -69,7 +69,7 @@ export default function AccountSettingForm({ profile }: AccountSettingFormProps)
                 <div className="space-y-2">
                     <div className="flex items-center gap-6">
                         <div className="relative">
-                            <ProfilePhoto profile={profile} size="lg" />
+                            <ProfilePhoto name={profile.name} avatarUrl={profile.avatar} size="lg" />
                             <label
                                 htmlFor="avatar-upload"
                                 className="absolute -bottom-2 -right-2 bg-primary text-primary-foreground rounded-full p-2 cursor-pointer hover:bg-primary/90 transition-colors"
