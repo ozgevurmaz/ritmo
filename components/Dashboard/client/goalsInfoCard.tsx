@@ -40,7 +40,7 @@ export default function GoalsInfoCard(
                             {t("empty-description")}
                         </p>
 
-                        <Link href="/goals/add" className="text-primary">
+                        <Link href="/dashboard/goals/add" className="text-primary">
                             {t("add-first-goal")}
                         </Link>
                     </div>
@@ -70,7 +70,7 @@ export default function GoalsInfoCard(
                         </div>
 
                         <Link
-                            href="/goals"
+                            href="/dashboard/goals"
                             className="inline-flex items-center gap-1 mt-4 text-xs text-muted-foreground hover:text-foreground transition-colors"
                         >
                             <span>{t("view-all")}</span>
