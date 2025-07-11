@@ -27,7 +27,7 @@ export default function GoalsDashboard({ userId }: GoalsDashboardProps) {
                 definition={t("goals.definition")}
                 buttonText={t("goals.add-button")}
                 showButton
-                buttonAction={() => router.push(`/goals/add`)}
+                buttonAction={() => router.push(`/dashboard/goals/add`)}
                 textColor="text-goals"
                 buttonStyle="bg-goals hover:bg-goals/60"
             />

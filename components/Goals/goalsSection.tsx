@@ -69,7 +69,7 @@ export const GoalSection = ({
                                     <Button
                                         variant="ghost"
                                         size="sm"
-                                        onClick={() => router.push(`/goals/edit/${goal.slug}`)}
+                                        onClick={() => router.push(`/dashboard/goals/edit/${goal.slug}`)}
                                         className="ml-4 flex items-center gap-2 hover:bg-goals"
                                     >
                                         <Edit className="h-4 w-4" />
