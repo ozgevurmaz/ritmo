@@ -46,6 +46,7 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
     const t = useTranslations()
     const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId || "");
 
+    const completed = habit?.completedToday === habit?.frequencyPerDay
     const incrementHabit = (id: string) => {
         const habit = habits?.find(h => h.id === id);
         if (!habit) return;
@@ -68,13 +69,16 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
         }
     };
 
+    
+
     return (
-        <div className={`w-full flex items-center space-x-3 p-3 ${border ? "border" : ""} justify-between rounded-lg hover:bg-muted`}>
+        <div className={`w-full flex items-center space-x-3 py-3 px-1 ${border ? "border" : ""} ${completed ? "opacity-80": ""} justify-between rounded-lg hover:bg-muted`}>
             {habit && checkbox && (
                 <Checkbox
                     className="cursor-pointer"
                     id={`habit-${habit.id}`}
                     checked={checked}
+                    disabled={completed}
                     onCheckedChange={(checked) => {
                         if (checked && checkboxAction) {
                             checkboxAction(habit.id);
@@ -87,14 +91,16 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                 <div
                     className="text-sm font-muted-foreground"
                 >
-                    <span className="font-medium">{habit ? habit.title : newHabit ? newHabit.title : ""}</span>
-
+                    <span className={`font-medium ${completed ? "line-through" : ""}`}>
+                        {habit ? habit.title : newHabit ? newHabit.title : ""}
+                    </span>
+                    
                     {!goal && !decrementHabit && !incrementHabit &&
                         <span> • {habit ? habit.category : newHabit ? newHabit.category : ""} • {habit ? habit.frequencyPerDay : newHabit ? newHabit.frequencyPerDay : ""} x daily, {habit ? habit.weeklyFrequency : newHabit ? newHabit.weeklyFrequency : ""} days/week </span>}
 
                     {showGoal && goal && (
-                        <span className="text-xs text-goal bg-goal/10 px-2 py-0.5 rounded-full">
-                            <span className="text-goals font-semibold"> • {t("habits.goal")}: </span>
+                        <span className="text-xs text-secondary bg-secondary/10 px-2 py-0.5 rounded-full ml-2">
+                            <span className="text-secondary-foreground font-semibold">{t("habits.goal")}:</span>
                             {goal}
                         </span>
                     )}

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
@@ -6,92 +7,53 @@ const corsHeaders = {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-interface ResetSchedule {
-    user_id: string;
-    timezone: string;
-    reset_type: string;
-}
+const supabaseAdmin = createClient(
+    Deno.env.get("SUPABASE_URL")!,
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+);
 
-serve(async (req: Request) => {
-    // Handle CORS preflight requests
-    if (req.method === 'OPTIONS') {
-        return new Response('ok', { headers: corsHeaders })
-    }
-
+serve(async (req: any) => {
     try {
-        // Initialize Supabase client with service role
-        const supabaseAdmin = createClient(
-            Deno.env.get('SUPABASE_URL') ?? '',
-            Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
-            {
-                auth: {
-                    autoRefreshToken: false,
-                    persistSession: false
-                }
-            }
-        )
+        const { userIds, reset_type } = await req.json();
 
-        console.log('Starting daily reset process...')
-
-        // Get all pending resets
-        const { data: pendingResets, error: fetchError } = await supabaseAdmin
-            .rpc('process_pending_resets')
-
-        if (fetchError) {
-            console.error('Error fetching pending resets:', fetchError)
-            throw fetchError
+        if (!userIds || !Array.isArray(userIds)) {
+            return new Response("Invalid input", { status: 400 });
         }
 
-        if (!pendingResets || pendingResets.length === 0) {
-            console.log('No pending resets found')
-            return new Response(
-                JSON.stringify({
-                    success: true,
-                    message: 'No resets needed',
-                    processed: 0
-                }),
-                {
-                    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-                    status: 200
-                }
-            )
-        }
+        console.log(`Found ${userIds.length} pending resets`)
 
-        console.log(`Found ${pendingResets.length} pending resets`)
+        const { data: pendingResets, error } = await supabaseAdmin
+            .from("profiles")
+            .select("id, timezone")
+            .in("id", userIds);
+
+        if (error) throw error;
 
         // Process each reset
         const results: PromiseSettledResult<{ success: boolean; userId: string; error?: string }>[] = await Promise.allSettled(
-            pendingResets.map(async (reset: ResetSchedule) => {
-                pendingResets.map(async (reset: ResetSchedule) => {
-                    try {
-                        console.log(`Processing reset for user ${reset.user_id} in timezone ${reset.timezone}`)
+            pendingResets.map(async (pendingResets: { id: string, timezone: string }) => {
+                try {
+                    await processUserReset(supabaseAdmin, pendingResets.id, pendingResets.timezone, reset_type);
 
-                        // Call the actual reset functions
-                        await processUserReset(supabaseAdmin, reset.user_id, reset.timezone, reset.reset_type)
+                    const { error: markError } = await supabaseAdmin
+                        .rpc('mark_reset_completed', { p_user_id: pendingResets.id });
 
-                        // Mark reset as completed
-                        const { error: markError } = await supabaseAdmin
-                            .rpc('mark_reset_completed', {
-                                p_user_id: reset.user_id
-                            })
-
-                        if (markError) {
-                            console.error(`Error marking reset completed for user ${reset.user_id}:`, markError)
-                            throw markError
-                        }
-
-                        console.log(`Reset completed for user ${reset.user_id}`)
-                        return { success: true, userId: reset.user_id }
-
-                    } catch (error) {
-                        console.error(`Failed to reset for user ${reset.user_id}:`, error)
-                        const errorMessage =
-                            error instanceof Error ? error.message : String(error)
-                        return { success: false, userId: reset.user_id, error: errorMessage }
+                    if (markError) {
+                        console.error(`Error marking reset completed for user ${pendingResets.id}:`, markError);
+                        throw markError;
                     }
-                })
-            }))
 
+                    console.log(`Reset completed for user ${pendingResets.id} in ${pendingResets.timezone}`);
+
+
+                    return { success: true, userId: pendingResets.id };
+
+                } catch (error) {
+                    console.error(`Failed to reset for user ${pendingResets.id}:`, error);
+                    return { success: false, userId: pendingResets.id, error: String(error) };
+                }
+            })
+        );
 
         const successful = results.filter(r => r.status === 'fulfilled' && r.value.success).length
         const failed = results.length - successful
@@ -102,6 +64,7 @@ serve(async (req: Request) => {
             JSON.stringify({
                 success: true,
                 message: 'Reset processing completed',
+                reset_type: reset_type,
                 processed: results.length,
                 successful,
                 failed,
@@ -123,12 +86,12 @@ serve(async (req: Request) => {
                     ? error
                     : JSON.stringify(error);
 
-        console.error("❌ Daily reset function error:", message);
+        console.error("Daily reset function error:", message);
 
         return new Response(
             JSON.stringify({
                 success: false,
-                error: message,
+                message: message,
             }),
             {
                 headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -172,55 +135,52 @@ function isEndDate(endDate: string, timezone: string): boolean {
 function processHabitReset(habit: any, timezone: string): any {
     const updatedHabit = { ...habit };
 
-    // Check if weekly frequency is not 7 (not daily)
-    if (habit.weeklyFrequency !== 7) {
-        // Check if today is a selected day
-        if (!isTodaySelectedDay(habit.selectedDays, timezone)) {
-            console.log(`Habit ${habit.id}: Today is not a selected day, skipping reset`);
-            return updatedHabit; // Return without changes
-        }
+    const isResetDay = habit.weeklyFrequency === 7 || isTodaySelectedDay(habit.selectedDays, timezone);
+
+    if (!isResetDay) {
+        return updatedHabit;
     }
 
-    // Process streak logic
+    // Update expected count
+    updatedHabit.expected_count = (habit.expected_count || 0) + 1;
+
     if (habit.completedToday >= habit.frequencyPerDay) {
-        // Goal completed - increment streak
         updatedHabit.streak = habit.streak + 1;
-        console.log(`Habit ${habit.id}: Goal completed, streak incremented to ${updatedHabit.streak}`);
+        updatedHabit.total_completed = (habit.total_completed || 0) + 1;
     } else {
-        // Goal not completed
         if (habit.allowSkip) {
-            // Allow skip - streak remains the same
-            console.log(`Habit ${habit.id}: Goal not completed but skip allowed, streak remains ${habit.streak}`);
+
         } else {
-            // No skip allowed - reset streak to 0
             updatedHabit.streak = 0;
-            console.log(`Habit ${habit.id}: Goal not completed and no skip allowed, streak reset to 0`);
+            updatedHabit.total_missed = (habit.total_missed || 0) + 1;
         }
     }
 
-    // Reset daily completion count
+    // Recalculate completion rate
+    const completed = updatedHabit.total_completed || 0;
+    const expected = updatedHabit.expected_count || 0;
+    updatedHabit.completion_rate = expected > 0 ? Number(((completed / expected) * 100).toFixed(2)) : 0;
+
     updatedHabit.completedToday = 0;
 
     return updatedHabit;
 }
 
+
 async function resetUserHabits(
     supabase: any,
     userId: string,
-    timezone: string
+    timezone: string,
 ): Promise<{ processed: number; errors: string[] }> {
     const errors: string[] = [];
     let processed = 0;
 
     try {
-        console.log(`Starting habit reset for user ${userId} in timezone ${timezone}`);
-
         // Get all active habits for the user
         const { data: habits, error: fetchError } = await supabase
             .from('habits')
             .select('*')
             .eq('user_id', userId)
-            .is('deleted_at', null);
 
         if (fetchError) {
             console.error('Error fetching habits:', fetchError);
@@ -232,8 +192,6 @@ async function resetUserHabits(
             console.log(`No habits found for user ${userId}`);
             return { processed, errors };
         }
-
-        console.log(`Found ${habits.length} habits for user ${userId}`);
 
         // Process each habit
         for (const habit of habits) {
@@ -256,7 +214,6 @@ async function resetUserHabits(
                     errors.push(`Failed to update habit ${habit.title}: ${updateError.message}`);
                 } else {
                     processed++;
-                    console.log(`Successfully reset habit ${habit.id} (${habit.title})`);
                 }
 
             } catch (error) {
@@ -266,8 +223,6 @@ async function resetUserHabits(
                 errors.push(`Failed to process habit ${habit.title}: ${errorMessage}`);
             }
         }
-
-        console.log(`Completed habit reset for user ${userId}: ${processed} processed, ${errors.length} errors`);
         return { processed, errors };
 
     } catch (error) {
@@ -289,6 +244,7 @@ function processGoalReset(
     // Check if all habits under this goal are completed
     let allHabitsCompleted = true;
     let completedHabitsCount = 0;
+    let missedHabitsCount = 0;
 
     if (goal.habits && goal.habits.length > 0) {
         for (const habitId of goal.habits) {
@@ -297,6 +253,7 @@ function processGoalReset(
                 completedHabitsCount++;
             } else {
                 allHabitsCompleted = false;
+                missedHabitsCount++;
             }
         }
     } else {
@@ -306,20 +263,30 @@ function processGoalReset(
 
     // Update completed days if all habits are done
     if (allHabitsCompleted) {
-        updatedGoal.completedDays = goal.completedDays + 1;
-        console.log(`Goal ${goal.id}: All habits completed, completedDays incremented to ${updatedGoal.completedDays}`);
+        updatedGoal.perfect_days = (goal.perfect_days || 0) + 1;
+        updatedGoal.completedDays = (goal.completedDays || 0) + 1;
     } else {
-        console.log(`Goal ${goal.id}: Not all habits completed (${completedHabitsCount}/${goal.habits.length}), completedDays remains ${goal.completedDays}`);
+        updatedGoal.missed_days = (goal.missed_days || 0) + 1;
     }
+
+    updatedGoal.completion_rate =
+        goal.completedDays && (goal.completedDays + goal.missed_days) > 0
+            ? Number(
+                (
+                    (goal.completedDays / (goal.completedDays + goal.missed_days)) *
+                    100
+                ).toFixed(2)
+            )
+            : 0;
 
     // Check if it's the end date and mark as completed
     if (isEndDate(goal.endDate, timezone)) {
         updatedGoal.completed = true;
-        console.log(`Goal ${goal.id}: End date reached, marking as completed`);
     }
 
     return updatedGoal;
 }
+
 async function resetUserGoals(
     supabase: any,
     userId: string,
@@ -329,15 +296,12 @@ async function resetUserGoals(
     let processed = 0;
 
     try {
-        console.log(`Starting goal reset for user ${userId} in timezone ${timezone}`);
-
         // Get all active goals for the user
         const { data: goals, error: fetchError } = await supabase
             .from('goals')
             .select('*')
             .eq('user_id', userId)
             .eq('completed', false)
-            .is('deleted_at', null);
 
         if (fetchError) {
             console.error('Error fetching goals:', fetchError);
@@ -350,14 +314,11 @@ async function resetUserGoals(
             return { processed, errors };
         }
 
-        console.log(`Found ${goals.length} goals for user ${userId}`);
-
         // Get all habits for the user to check completion status
         const { data: userHabits, error: habitsError } = await supabase
             .from('habits')
             .select('id, completedToday, frequencyPerDay')
             .eq('user_id', userId)
-            .is('deleted_at', null);
 
         if (habitsError) {
             console.error('Error fetching user habits:', habitsError);
@@ -393,7 +354,6 @@ async function resetUserGoals(
                     errors.push(`Failed to update goal ${goal.title}: ${updateError.message}`);
                 } else {
                     processed++;
-                    console.log(`Successfully reset goal ${goal.id} (${goal.title})`);
                 }
 
             } catch (error) {
@@ -402,7 +362,6 @@ async function resetUserGoals(
             }
         }
 
-        console.log(`Completed goal reset for user ${userId}: ${processed} processed, ${errors.length} errors`);
         return { processed, errors };
 
     } catch (error) {
@@ -417,8 +376,6 @@ async function resetUserHabitsAndGoals(
     userId: string,
     timezone: string
 ) {
-    console.log(`Starting complete reset for user ${userId} in timezone ${timezone}`);
-
     const result = {
         success: true,
         habitsProcessed: 0,
@@ -427,21 +384,18 @@ async function resetUserHabitsAndGoals(
     };
 
     try {
-        // Reset habits first
-        const habitResult = await resetUserHabits(supabase, userId, timezone);
-        result.habitsProcessed = habitResult.processed;
-        result.errors.push(...habitResult.errors);
-
         // Reset goals
         const goalResult = await resetUserGoals(supabase, userId, timezone);
         result.goalsProcessed = goalResult.processed;
         result.errors.push(...goalResult.errors);
 
+        // Reset habits first
+        const habitResult = await resetUserHabits(supabase, userId, timezone);
+        result.habitsProcessed = habitResult.processed;
+        result.errors.push(...habitResult.errors);
+
         // Determine overall success
         result.success = result.errors.length === 0;
-
-        console.log(`Reset completed for user ${userId}: ${result.habitsProcessed} habits, ${result.goalsProcessed} goals, ${result.errors.length} errors`);
-
     } catch (error) {
         console.error(`Critical error in resetUserHabitsAndGoals for user ${userId}:`, error);
         result.errors.push(`Critical error: ${error.message}`);
@@ -459,13 +413,14 @@ async function processUserReset(
     resetType: string
 ) {
     const startTime = Date.now();
-    console.log(`Starting ${resetType} reset for user ${userId} in timezone ${timezone}`)
 
     try {
         // Call the main reset function
         const result = await resetUserHabitsAndGoals(supabase, userId, timezone);
 
         const executionTime = Date.now() - startTime;
+
+        await updateUserStats(supabase, userId)
 
         if (result.success) {
             await logResetActivity(
@@ -477,7 +432,6 @@ async function processUserReset(
                 executionTime,
                 `Habits: ${result.habitsProcessed}, Goals: ${result.goalsProcessed}`
             );
-            console.log(`Reset completed successfully for user ${userId}: ${result.habitsProcessed} habits, ${result.goalsProcessed} goals`);
         } else {
             const errorMessage = result.errors.join('; ');
             await logResetActivity(
@@ -512,7 +466,7 @@ async function logResetActivity(
     details?: string
 ) {
     try {
-        await supabase
+        const { data, error } = await supabase
             .from('reset_logs')
             .insert({
                 user_id: userId,
@@ -520,11 +474,88 @@ async function logResetActivity(
                 status,
                 error_message: errorMessage,
                 execution_time_ms: executionTimeMs,
-                details: details,
-                timestamp: new Date().toISOString()
-            })
+                details,
+                reset_timestamp: new Date().toISOString()
+            });
+
+        if (error) {
+            console.error('Failed to log reset activity:', error);
+        }
     } catch (error) {
         console.error('Failed to log reset activity:', error)
         // Don't throw here as logging failure shouldn't stop the reset process
     }
+}
+
+async function updateUserStats(supabase: any, userId: string) {
+    try {
+        const [habitsRes, goalsRes] = await Promise.all([
+            supabase.from("habits").select("*").eq("user_id", userId),
+            supabase.from("goals").select("*").eq("user_id", userId),
+        ]);
+
+        const habits = habitsRes.data || [];
+        const goals = goalsRes.data || [];
+
+        const habitsCount = habits.length;
+        const goalsCount = goals.length;
+
+        const completedHabits = habits.filter(h => h.total_completed).length;
+        const totalCompletedActivities = habits.reduce((acc, h) => acc + (h.total_completed || 0), 0);
+
+        const missedDays = habits.reduce((acc, h) => acc + (h.total_missed || 0), 0);
+        const perfectDays = goals.reduce((acc, g) => acc + (g.perfect_days || 0), 0);
+
+        const consistencyScore = habitsCount > 0
+            ? Math.floor((completedHabits / habitsCount) * 100)
+            : 0;
+
+        // category heat map
+        const categoryMap: Record<string, { completed: number; total: number }> = {};
+        for (const h of habits) {
+            if (!categoryMap[h.category]) {
+                categoryMap[h.category] = { completed: 0, total: 0 };
+            }
+            categoryMap[h.category].total += 1;
+            if ((h.total_completed || 0) > 0) categoryMap[h.category].completed += 1;
+        }
+        const category_success = Object.entries(categoryMap).reduce((acc, [cat, { completed, total }]) => {
+            acc[cat] = total > 0 ? Number(((completed / total) * 100).toFixed(1)) : 0;
+            return acc;
+        }, {} as Record<string, number>);
+
+        const habit_heatmap = await generateHabitHeatmap(supabase, userId);
+
+        const updateResult = await supabase.from("user_stats").update({
+            habits_count: habitsCount,
+            goals_count: goalsCount,
+            total_completed_activities: totalCompletedActivities,
+            consistency_score: consistencyScore,
+            perfect_days: perfectDays,
+            missed_days: missedDays,
+            category_success,
+            habit_heatmap,
+            updated_at: new Date().toISOString()
+        }).eq("user_id", userId);
+
+        if (updateResult.error) {
+            console.error("Failed to update user stats:", updateResult.error);
+        }
+
+    } catch (err) {
+        console.error("updateUserStats error:", err);
+    }
+}
+
+async function generateHabitHeatmap(supabase: any, userId: string) {
+    const { data, error } = await supabase.rpc("get_habit_heatmap", {
+        p_user_id: userId
+    });
+
+    if (error) {
+        console.error(`Heatmap fetch error for ${userId}:`, error);
+        return {};
+    }
+
+    return data || {};
 }

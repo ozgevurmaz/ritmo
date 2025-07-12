@@ -1,0 +1,6 @@
+supabase/functions
+supabase/.temp
+supabase/.output
+supabase/.branches
+supabase/.migrations
+supabase/schema

@@ -16,11 +16,11 @@ const ResetResultSchema = z.object({
 export type ResetResult = z.infer<typeof ResetResultSchema>;
 
 export const triggerManualReset = async () => {
-
     try {
-        const res = await fetch("/api/reset/manual", { method: "POST" });
+        const res = await fetch("/api/reset/manual", {
+            method: "POST",
+        });
         const json = await res.json();
-
         if (!res.ok) {
             console.error("Manual reset failed:", json);
             throw new Error(json.error || "Unexpected error");
@@ -29,8 +29,8 @@ export const triggerManualReset = async () => {
         const parsed = ResetResultSchema.parse(json);
 
         return {
-            data: parsed,
-            isPending: true
+            isPending: true,
+            data: parsed
         }
     } catch (error: any) {
         console.error("Manual reset error:", error);
@@ -39,4 +39,4 @@ export const triggerManualReset = async () => {
             error: error?.message || "Unexpected error",
         };
     }
-};
+}

@@ -24,6 +24,15 @@ export default function DailyCard({ className, habits, userId }: DailyCardProps)
 
     const overallProgress = (completedHabitsToday / totalHabitsToday) * 100;
 
+    const sortedHabits = [...habits].sort((a, b) => {
+        const aCompleted = a.completedToday === a.frequencyPerDay;
+        const bCompleted = b.completedToday === b.frequencyPerDay;
+
+        if (aCompleted && !bCompleted) return 1;
+        if (!aCompleted && bCompleted) return -1;
+        return 0;
+    });
+
     return (
         <Card className={`border-primary ${className}`}>
             <CardHeader>
@@ -39,7 +48,7 @@ export default function DailyCard({ className, habits, userId }: DailyCardProps)
             </CardHeader>
 
             <CardContent className="grid grid-cols-1 gap-2 h-full">
-                {habits.map((habit) => (
+                {sortedHabits.map((habit) => (
                     <HabitsCard
                         userId={userId}
                         key={habit.id}
@@ -49,6 +58,7 @@ export default function DailyCard({ className, habits, userId }: DailyCardProps)
                         border={false}
                         habits={habits}
                         showProccess
+                        showStreak
                     />
                 ))}
             </CardContent>

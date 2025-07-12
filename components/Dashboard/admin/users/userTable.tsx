@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { getStatusColor } from "@/lib/utils/admin/userManagment/statusColor";
 import { getDaysAgo } from "@/lib/utils/date/daysago";
 import { formatSupabaseDate } from "@/lib/utils/date/formatDate";
-import { Activity, Ban, CheckCircle, Eye, Logs, Trash2, UserCheck } from "lucide-react";
+import { Activity, Eye} from "lucide-react";
 
 interface TableColumn<T = any> {
     key: string;

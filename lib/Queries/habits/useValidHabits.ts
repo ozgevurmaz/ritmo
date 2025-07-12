@@ -13,7 +13,7 @@ export const useValidHabits = ({ userId, date }: { userId: string; date: string 
         .select("*")
         .eq("user_id", userId)
         .or(`endDate.gte.${date},endDate.is.null`)
-        .order("streak", { ascending: false });
+        .order("title", { ascending: false });
 
       if (error) throw new Error(error.message);
       return data as HabitType[];
