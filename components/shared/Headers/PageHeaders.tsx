@@ -8,8 +8,6 @@ interface PageHeadersProps {
     definition: string
     showButton?: boolean
     buttonAction?: () => void
-    textColor?: string
-    buttonStyle?: string
     buttonText?: string
 }
 
@@ -18,8 +16,6 @@ const PageHeaders = ({
     definition,
     showButton = false,
     buttonAction,
-    textColor,
-    buttonStyle,
     buttonText ,
 }
     : PageHeadersProps
@@ -28,12 +24,12 @@ const PageHeaders = ({
     return (
         <div className="flex items-center justify-between">
             <div>
-                <h1 className={`text-3xl font-bold ${textColor}`}>{title}</h1>
+                <h1 className="text-2xl md:text-3xl xl:text-4xl font-bold text-primary">{title}</h1>
                 <p className="text-muted-foreground">{definition}</p>
             </div>
             {
                 showButton &&
-                <Button onClick={buttonAction} className={`${buttonStyle}`}>
+                <Button onClick={buttonAction} variant="default">
                     <Plus className="h-4 w-4 mr-2" />
                     {buttonText || t('common.add-button')}
                 </Button>

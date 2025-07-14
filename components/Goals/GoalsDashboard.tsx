@@ -28,8 +28,6 @@ export default function GoalsDashboard({ userId }: GoalsDashboardProps) {
                 buttonText={t("goals.add-button")}
                 showButton
                 buttonAction={() => router.push(`/dashboard/goals/add`)}
-                textColor="text-goals"
-                buttonStyle="bg-goals hover:bg-goals/60"
             />
 
             <AnalyticsCard data={analyticsData} />

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { LucideIcon } from 'lucide-react';
-import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
-import { DialogHeader } from '@/components/ui/dialog';
+import { DialogHeader, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 
 interface FormWrapperProps {
     title: string;
@@ -19,7 +19,7 @@ export const FormWrapper = ({
     children,
     description,
     variant = "dialog",
-    textColor,
+    textColor
 }: FormWrapperProps) => {
     const WrapperHeader = variant === "dialog" ? DialogHeader : CardHeader;
     const WrapperTitle = variant === "dialog" ? DialogTitle : CardTitle;

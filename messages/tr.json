@@ -111,65 +111,65 @@
     "user-error": "Kullanıcı bulunamadı",
     "unexpected": "Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin."
   },
- "account": {
-  "profile": {
-    "title": "Profil Bilgileri",
-    "description": "Kişisel bilgilerinizi ve kullanıcı adınızı güncelleyin",
-    "profile-picture": "Profil Fotoğrafı",
-    "profile-picture-description": "Yeni bir profil fotoğrafı yüklemek için kamera simgesine tıklayın",
-    "email-description": "E-posta adresinizi buradan değiştiremezsiniz."
-  },
-  "security": {
-    "title": "Güvenlik",
-    "description": "Şifrenizi ve güvenlik ayarlarınızı yönetin"
-  },
-  "appearance": {
-    "title": "Tema ve Görünüm",
-    "description": "Görsel tercihlerinizi özelleştirin"
-  },
-  "toasts": {
-    "user-error": "Kullanıcı bilgileri yüklenemedi. Lütfen tekrar deneyin.",
-    "success": "Profil başarıyla güncellendi",
-    "update-error": "Profil güncellenirken hata oluştu. Lütfen tekrar deneyin.",
-    "username-error": "Bu kullanıcı adı zaten kullanılıyor"
-  },
-  "visibility": {
-    "title": "Gizlilik ve Görünürlük",
-    "description": "Hesabınızı kimlerin bulabileceğini ve sizinle nasıl etkileşim kurabileceğini kontrol edin",
-    "visibility": {
-      "private_account": "Gizli Hesap",
-      "private_account_description": "Yalnızca onaylı arkadaşlar alışkanlıklarınızı, hedeflerinizi ve etkinliklerinizi görebilir",
-      "allow_friend_requests": "Arkadaşlık İsteklerine İzin Ver",
-      "allow_friend_requests_description": "Diğer kullanıcılar size arkadaşlık isteği gönderebilir",
-      "discoverable": "Aramalarda Görünsün",
-      "discoverable_description": "Diğer kullanıcılar sizi arama yoluyla bulabilir",
-      "updated": "Görünürlük ayarları başarıyla güncellendi",
-      "error": "Görünürlük ayarları güncellenemedi"
-    }
-  },
-  "danger": {
-    "title": "Tehlikeli Alan",
-    "description": "Hesabınızdan çıkış yapın veya hesabınızı silin",
-    "logout": "Çıkış Yap",
-    "logout_description": "Bu cihazdan hesabınızdan çıkış yapın",
-    "delete_account": "Hesabı Sil",
-    "delete_account_description": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin",
-    "delete": "Sil",
-    "confirm_delete_title": "Hesabı Sil",
-    "confirm_delete_description": "Bu işlem geri alınamaz. Hesabınız, tüm alışkanlıklarınız, hedefleriniz silinecek ve tüm arkadaş bağlantılarınız kaldırılacaktır.",
-    "cancel": "İptal",
-    "delete_permanently": "Kalıcı Olarak Sil",
-    "deleting": "Siliniyor...",
-    "logged_out": "Başarıyla çıkış yapıldı",
-    "logout_error": "Çıkış yapılamadı",
-    "account_deleted": "Hesap başarıyla silindi",
-    "delete_error": "Hesap silinirken hata oluştu",
+  "account": {
+    "profile": {
+      "title": "Profil Bilgileri",
+      "description": "Kişisel bilgilerinizi ve kullanıcı adınızı güncelleyin",
+      "profile-picture": "Profil Fotoğrafı",
+      "profile-picture-description": "Yeni bir profil fotoğrafı yüklemek için kamera simgesine tıklayın",
+      "email-description": "E-posta adresinizi buradan değiştiremezsiniz."
+    },
     "security": {
-      "confirm_delete_title": "Hesabı Kalıcı Olarak Sil",
-      "confirm_delete_description": "Bu işlem hesabınızı, alışkanlıklarınızı, hedeflerinizi kalıcı olarak silecek ve tüm arkadaş bağlantılarınızı kaldıracaktır. Bu işlem geri alınamaz."
+      "title": "Güvenlik",
+      "description": "Şifrenizi ve güvenlik ayarlarınızı yönetin"
+    },
+    "appearance": {
+      "title": "Tema ve Görünüm",
+      "description": "Görsel tercihlerinizi özelleştirin"
+    },
+    "toasts": {
+      "user-error": "Kullanıcı bilgileri yüklenemedi. Lütfen tekrar deneyin.",
+      "success": "Profil başarıyla güncellendi",
+      "update-error": "Profil güncellenirken hata oluştu. Lütfen tekrar deneyin.",
+      "username-error": "Bu kullanıcı adı zaten kullanılıyor"
+    },
+    "visibility": {
+      "title": "Gizlilik ve Görünürlük",
+      "description": "Hesabınızı kimlerin bulabileceğini ve sizinle nasıl etkileşim kurabileceğini kontrol edin",
+      "visibility": {
+        "private_account": "Gizli Hesap",
+        "private_account_description": "Yalnızca onaylı arkadaşlar alışkanlıklarınızı, hedeflerinizi ve etkinliklerinizi görebilir",
+        "allow_friend_requests": "Arkadaşlık İsteklerine İzin Ver",
+        "allow_friend_requests_description": "Diğer kullanıcılar size arkadaşlık isteği gönderebilir",
+        "discoverable": "Aramalarda Görünsün",
+        "discoverable_description": "Diğer kullanıcılar sizi arama yoluyla bulabilir",
+        "updated": "Görünürlük ayarları başarıyla güncellendi",
+        "error": "Görünürlük ayarları güncellenemedi"
+      }
+    },
+    "danger": {
+      "title": "Tehlikeli Alan",
+      "description": "Hesabınızdan çıkış yapın veya hesabınızı silin",
+      "logout": "Çıkış Yap",
+      "logout_description": "Bu cihazdan hesabınızdan çıkış yapın",
+      "delete_account": "Hesabı Sil",
+      "delete_account_description": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin",
+      "delete": "Sil",
+      "confirm_delete_title": "Hesabı Sil",
+      "confirm_delete_description": "Bu işlem geri alınamaz. Hesabınız, tüm alışkanlıklarınız, hedefleriniz silinecek ve tüm arkadaş bağlantılarınız kaldırılacaktır.",
+      "cancel": "İptal",
+      "delete_permanently": "Kalıcı Olarak Sil",
+      "deleting": "Siliniyor...",
+      "logged_out": "Başarıyla çıkış yapıldı",
+      "logout_error": "Çıkış yapılamadı",
+      "account_deleted": "Hesap başarıyla silindi",
+      "delete_error": "Hesap silinirken hata oluştu",
+      "security": {
+        "confirm_delete_title": "Hesabı Kalıcı Olarak Sil",
+        "confirm_delete_description": "Bu işlem hesabınızı, alışkanlıklarınızı, hedeflerinizi kalıcı olarak silecek ve tüm arkadaş bağlantılarınızı kaldıracaktır. Bu işlem geri alınamaz."
+      }
     }
-  }
-},  
+  },
   "buttons": {
     "updating": "Güncelleniyor",
     "update": "Güncelle",
@@ -186,7 +186,9 @@
     "cancel": "İptal Et",
     "confirm": "Onayla",
     "delete": "Sil",
-    "yes-delete": "Evet, Sil"
+    "yes-delete": "Evet, Sil",
+    "edit": "Düzenle",
+    "remove": "Kaldır"
   },
   "forms": {
     "email": {
@@ -297,6 +299,12 @@
       "quick-select": "Hızlı Seçim",
       "selected": "Seçilenler"
     },
+    "reminders-times": {
+      "label": "Hatırlatıcı Saatleri (Opsiyonel)",
+      "placeholder": "Hatırlatıcı saat ekle",
+      "max":"Maksimum hatırlatıcı sayısına ulaştın",
+      "set": "hatırlatıcı ekle"
+    },
     "repeat": {
       "label": "Tekrar",
       "placeholder": "Tekrar seçeneği seçin",
@@ -306,7 +314,9 @@
         "weekly": "Haftalık",
         "monthly": "Aylık",
         "yearly": "Yıllık"
-      }
+      },
+      "daily": "günde {count}xy",
+      "weekly-count": "{count}x/hafta"
     },
     "days-selection": {
       "days-label": "Günleri Seç",
@@ -345,6 +355,7 @@
     },
     "notifications": {
       "label": "Bildirim",
+      "reminders": "Hatırlatmalar",
       "placeholder": "Bildirim zamanını seçin",
       "options": {
         "never": "Bildirim yok",
@@ -386,7 +397,13 @@
       "habit-management": {
         "title": "Alışkanlık Yönetimi",
         "add-button": "Yeni Alışkanlık Ekle",
+        "link-habit-title": "Bağlantılı Alışkanlık Ekle",
+        "link-habit": "Var olanı ekle",
+        "new-count": "{new} alışkanlık seçili",
+        "new-habit": "yeni",
+        "selected habit": "seçili",
         "alert": {
+          "no-info": "Lütfen yukardaki bilgileri doldurun",
           "no-habit": "Lütfen en az bir alışkanlık seçin."
         },
         "section": {
@@ -425,6 +442,8 @@
           "helper": "Haftada kaç gün?"
         },
         "allow-skip": {
+          "skip-ok": "Atla OK",
+          "skip-allow": "Atlama izni",
           "label": "Atlanmasına izin ver",
           "description": "Ara sıra atlamak sorun değilse etkinleştirin"
         },
@@ -531,7 +550,7 @@
       "system": "System"
     }
   },
-    "languages": {
+  "languages": {
     "placeholder": "Uygulama Dili"
   },
   "nav": {

@@ -1,4 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
+import { formatDateForQuery } from "@/lib/utils/date/formatDate";
+import { HabitData } from "@/lib/zod/client/goal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -15,9 +17,16 @@ export const useUpdateGoal = (userId: string) => {
     }: {
       updatedGoal: GoalType;
       currentLinkedHabits: HabitType[];
-      newaddedHabits: Omit<HabitType, "id" | "created_at" | "weeklyCompleted" | "completedToday" | "streak">[],
+      newaddedHabits: Omit<HabitData, "id" | "created_at" | "weeklyCompleted" | "completedToday" | "streak" | "customMessage" | "endDate" | "startDate" | "goal" | "category" | "visibility" | "sharedWith">[],
     }) => {
       const { id: goalId, ...restGoal } = updatedGoal;
+      const goalStart = new Date(restGoal.startDate);
+      const now = new Date();
+
+      const startDate =
+        goalStart instanceof Date && !isNaN(goalStart.getTime()) && goalStart > now
+          ? restGoal.startDate
+          : formatDateForQuery(now);
 
       // 1. Get the original goal (basic goal data)
       const { data: originalGoal, error: goalError } = await supabase
@@ -42,7 +51,6 @@ export const useUpdateGoal = (userId: string) => {
       // 3. Diff
       const added = newHabitIds.filter(id => !oldHabitIds.includes(id));
       const removed = oldHabitIds.filter(id => !newHabitIds.includes(id));
-
       // 4. Update goal
       const { error: updateGoalError } = await supabase
         .from("goals")
@@ -78,9 +86,16 @@ export const useUpdateGoal = (userId: string) => {
               completedToday: 0,
               weeklyCompleted: 0,
               streak: 0,
+              visibility: restGoal.visibility,
+              sharedWith: restGoal.sharedWith,
+              customMessage: "",
+              startDate: startDate,
+              endDate: restGoal.endDate,
+              category:originalGoal.category
             }))
           )
           .select();
+
         if (quickHabitError) throw new Error("Failed to add quick habits.");
         insertedHabitIds = insertedHabits.map(h => h.id)
       }
@@ -112,7 +127,6 @@ export const useUpdateGoal = (userId: string) => {
             throw new Error(`Failed to update habit ${habit.id}`);
         }
       }
-
       const habitIds = [...insertedHabitIds, ...currentLinkedHabits.map(h => h.id)]
 
       if (habitIds.length > 0) {
@@ -123,15 +137,15 @@ export const useUpdateGoal = (userId: string) => {
       }
     },
     onSuccess: () => {
-       const queries = [
+      const queries = [
         ["goals", userId],
-        ["validGoals", userId], 
+        ["validGoals", userId],
         ["upcomingGoals", userId],
         ["habits", userId],
         ["availableHabits", userId],
         ["validHabits", userId]
       ];
-      
+
       queries.forEach(queryKey => {
         queryClient.invalidateQueries({ queryKey });
       });

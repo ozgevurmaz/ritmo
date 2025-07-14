@@ -24,8 +24,7 @@ interface RelatedGoalSelectionProps<T extends FieldValues> {
     control: Control<T>;
     setValue: UseFormSetValue<T>;
     name: Path<T>;
-    userId: string;
-    goalTitle?: string;
+    userId: string
     disabled: boolean
 }
 
@@ -34,7 +33,6 @@ export const RelatedGoalSelection = <T extends FieldValues>({
     setValue,
     name,
     userId,
-    goalTitle,
     disabled
 }: RelatedGoalSelectionProps<T>) => {
     const t = useTranslations()
@@ -46,7 +44,6 @@ export const RelatedGoalSelection = <T extends FieldValues>({
             <div className="text-sm font-medium">{t("forms.habit.fields.goal-selection.label")}</div>
 
             <Controller
-                disabled={!!goalTitle}
                 name={name}
                 control={control}
                 render={({ field }) => (
@@ -84,14 +81,6 @@ export const RelatedGoalSelection = <T extends FieldValues>({
                 </Alert>
             )}
 
-            {goalTitle && (
-                <Alert className="border-goals bg-goals/20">
-                    <Link className="h-4 w-4 text-goals/90" />
-                    <AlertDescription className="text-goals">
-                        <strong>{t("forms.habit.fields.goal-selection.linked-label")}</strong> {goalTitle}
-                    </AlertDescription>
-                </Alert>
-            )}
         </div>
     );
 };

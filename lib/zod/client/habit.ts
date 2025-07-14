@@ -1,13 +1,13 @@
 import z from "zod";
 
-export const habitSchema = z.object({
+export const createGoalSchema = (isEdit: boolean) => z.object({
     title: z.string()
         .min(1, "Habit title is required")
         .max(60, "Title must be less than 60 characters"),
     goal: z.string().nullable(),
     frequencyPerDay: z.number()
         .min(1, "Frequency must be at least 1")
-        .max(20, "Maximum 20 times per day"),
+        .max(20, "Maximum 24 times per day"),
     customMessage: z.string()
         .max(200, "Message must be less than 200 characters")
         .optional(),
@@ -22,7 +22,7 @@ export const habitSchema = z.object({
     selectedDays: z.array(z.string())
 }).refine((data) => {
     // Check if start date is provided and valid
-    if (data.startDate) {
+    if (data.startDate && !isEdit) {
         const startDate = new Date(data.startDate);
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -49,11 +49,11 @@ export const habitSchema = z.object({
     if (data.startDate && data.endDate) {
         const startDate = new Date(data.startDate);
         const endDate = new Date(data.endDate);
-        
+
         // Normalize dates to avoid time zone issues
         startDate.setHours(0, 0, 0, 0);
         endDate.setHours(0, 0, 0, 0);
-        
+
         return endDate > startDate;
     }
     return true;

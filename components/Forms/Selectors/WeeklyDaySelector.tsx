@@ -61,7 +61,7 @@ export const WeeklyDaySelector = <T extends FieldValues>({
                             className="border-foreground/70"
                         />
                         <Label htmlFor={t(`days.${day}.short`)} className="cursor-pointer font-medium">
-                            {t(`days.${day}.full`)}
+                            {t(`days.${day}.short`)}
                         </Label>
                     </div>
                 ))}

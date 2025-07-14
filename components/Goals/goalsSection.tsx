@@ -10,6 +10,7 @@ import { HabitsCard } from "../Habits/HabitsCard"
 import { useState } from "react"
 import HabitsForm from "../Forms/habitForm"
 import { useTranslations } from "next-intl"
+import GoalHabitCard from "./GoalHabitCard"
 
 export const GoalSection = ({
     goals,
@@ -94,15 +95,25 @@ export const GoalSection = ({
                                             {habits
                                                 .filter(habit => goal.habits.includes(habit.id))
                                                 .map((habit) => (
-                                                    <HabitsCard
+                                                    <GoalHabitCard
                                                         key={habit.id}
-                                                        habit={habit}
-                                                        showEdit={true}
-                                                        showDelete={true}
+                                                        title={habit.title}
+                                                        frequencyPerDay={habit.frequencyPerDay}
+                                                        allowSkip={habit.allowSkip}
+                                                        weeklyFrequency={habit.weeklyFrequency}
+                                                        selectedDays={habit.selectedDays}
+                                                        reminderTimes={habit.reminderTimes}
+                                                        id={habit.id}
+                                                        category={habit.category}
+                                                        showActions
+                                                        deleteAction={() => {
+
+                                                        }}
                                                         editAction={() => {
                                                             setEditingHabit(habit)
                                                             setShowHabitEdit(true)
                                                         }}
+                                                        variant="compact"
                                                     />
                                                 ))
                                             }

@@ -15,7 +15,7 @@ import {
     Sparkles,
     WandSparkles
 } from 'lucide-react';
-import { habitSchema } from '@/lib/zod/client/habit';
+import { createGoalSchema } from '@/lib/zod/client/habit';
 import { toast } from 'sonner';
 import { useAddHabit } from '@/lib/Mutations/habits/useAddHabit';
 import { useDeleteHabit } from '@/lib/Mutations/habits/useDeleteHabit';
@@ -36,30 +36,22 @@ import { ReminderTimeInput } from './Inputs/ReminderTimes';
 import { CheckboxCard } from './Cards/CheckedBoxCard';
 import { useTranslations } from 'next-intl';
 
-type HabitFormData = z.infer<typeof habitSchema>;
+
 
 interface HabitsFormProps {
     isOpen: boolean;
     setIsOpen: () => void;
     editingHabit?: HabitType | null;
-    editingGoalHabit?: HabitFormData | null;
     userId: string;
-    fromGoal?: boolean;
-    setGoalHabits?: (habitData: any) => void;
-    goalTitle?: string
 }
+
 
 const HabitsForm: React.FC<HabitsFormProps> = ({
     isOpen,
     setIsOpen,
     editingHabit = null,
-    editingGoalHabit = null,
     userId,
-    fromGoal = false,
-    setGoalHabits,
-    goalTitle
 }) => {
-
     const t = useTranslations();
 
     const { mutateAsync: addHabit } = useAddHabit(userId);
@@ -73,6 +65,8 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
 
 
     const isEditing = Boolean(editingHabit);
+    const habitSchema = createGoalSchema(isEditing);
+    type HabitFormData = z.infer<typeof habitSchema>;
 
     const {
         handleSubmit,
@@ -84,18 +78,18 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     } = useForm<HabitFormData>({
         resolver: zodResolver(habitSchema),
         defaultValues: {
-            title: editingGoalHabit?.title || editingHabit?.title || '',
-            goal: editingGoalHabit?.goal || editingHabit?.goal || null,
-            frequencyPerDay: editingGoalHabit?.frequencyPerDay || editingHabit?.frequencyPerDay || 1,
-            customMessage: editingGoalHabit?.customMessage || editingHabit?.customMessage || '',
-            allowSkip: editingGoalHabit?.allowSkip || editingHabit?.allowSkip || false,
-            category: editingGoalHabit?.category || editingHabit?.category || '',
-            startDate: editingGoalHabit?.startDate || editingHabit?.startDate || formatDateForQuery(new Date()),
-            endDate: editingGoalHabit?.endDate || editingHabit?.endDate || '',
-            visibility: editingGoalHabit?.visibility || editingHabit?.visibility || 'private',
-            sharedWith: editingGoalHabit?.sharedWith || editingHabit?.sharedWith || [],
-            weeklyFrequency: editingGoalHabit?.weeklyFrequency || editingHabit?.weeklyFrequency || 7,
-            selectedDays: editingGoalHabit?.selectedDays || editingHabit?.selectedDays || []
+            title: editingHabit?.title || '',
+            goal: editingHabit?.goal || null,
+            frequencyPerDay: editingHabit?.frequencyPerDay || 1,
+            customMessage: editingHabit?.customMessage || '',
+            allowSkip: editingHabit?.allowSkip || false,
+            category: editingHabit?.category || '',
+            startDate: editingHabit?.startDate || formatDateForQuery(new Date()),
+            endDate: editingHabit?.endDate || '',
+            visibility: editingHabit?.visibility || 'private',
+            sharedWith: editingHabit?.sharedWith || [],
+            weeklyFrequency: editingHabit?.weeklyFrequency || 7,
+            selectedDays: editingHabit?.selectedDays || []
         }
     });
 
@@ -129,6 +123,23 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
             setSelectedContacts(editingHabit.sharedWith || []);
         }
     }, [editingHabit, isOpen, reset]);
+    
+    const resetForm = () => {
+        reset({
+            title: '',
+            goal: null,
+            frequencyPerDay: 1,
+            customMessage: '',
+            allowSkip: false,
+            category: '',
+            startDate: formatDateForQuery(new Date()),
+            endDate: '',
+            visibility: 'private',
+            sharedWith: [],
+            weeklyFrequency: 7,
+            selectedDays: [],
+        });
+    }
 
     const onSubmit = async (data: HabitFormData) => {
 
@@ -147,13 +158,6 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                 sharedWith: selectedContacts
             };
 
-            if (fromGoal && setGoalHabits) {
-                setGoalHabits(habitData);
-                handleClose();
-                toast.success(t("forms.habit.toasts.with-goal"));
-                return;
-            }
-
             if (isEditing) {
                 await updateHabit({ habitId: editingHabit!.id, updates: habitData });
                 toast.success(t("forms.habit.toasts.create-success"));
@@ -170,7 +174,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
     };
 
     const handleClose = () => {
-        reset();
+        resetForm();
         setTimesList([]);
         setSelectedContacts([]);
         setShowDeleteConfirm(false);
@@ -214,11 +218,9 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                         : t("forms.habit.create-description")
                     }
                 >
+                    <button onClick={() => resetForm()}>Reset</button>
                     <form
                         className="space-y-8 py-6" onSubmit={(e) => {
-                            if (fromGoal) {
-                                e.stopPropagation();
-                            }
                             handleSubmit(onSubmit)(e);
                         }}>
                         {/* Basic Information */}
@@ -240,6 +242,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                                     control={control}
                                     controlName="category"
                                     errors={errors}
+                                    disabled={isEditing}
                                 />
                             </div>
 
@@ -249,8 +252,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                                 setValue={setValue}
                                 name="goal"
                                 userId={userId}
-                                goalTitle={goalTitle}
-                                disabled={fromGoal}
+                                disabled={isEditing}
                             />
 
                         </FormWrapper>
@@ -317,6 +319,7 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                                 errors={errors}
                                 name="customMessage"
                                 setValue={setValue}
+                                showPredefinedMessages={false}
                             />
 
                             {/* Allow Skip Option */}
@@ -343,20 +346,18 @@ const HabitsForm: React.FC<HabitsFormProps> = ({
                             isSubmitting={isSubmitting}
                             submitLabel={t("forms.habit.actions.save")}
                             editLabel={t("forms.habit.actions.edit")}
-                            onCancel={() => setIsOpen}
+                            onCancel={handleClose}
                             onDelete={handleDelete}
-                            showDelete={!!editingHabit && !fromGoal}
+                            showDelete={!!editingHabit}
                         />
 
-                        {!fromGoal && (
-                            <DeleteConfirmDialog
-                                open={showDeleteConfirm}
-                                onClose={cancelDelete}
-                                onConfirm={confirmDelete}
-                                title={t("forms.habit.delete.title")}
-                                description={t("forms.habit.delete.description")}
-                            />
-                        )}
+                        <DeleteConfirmDialog
+                            open={showDeleteConfirm}
+                            onClose={cancelDelete}
+                            onConfirm={confirmDelete}
+                            title={t("forms.habit.delete.title")}
+                            description={t("forms.habit.delete.description")}
+                        />
 
                     </form>
                 </FormWrapper>

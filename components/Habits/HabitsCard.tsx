@@ -69,10 +69,8 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
         }
     };
 
-    
-
     return (
-        <div className={`w-full flex items-center space-x-3 py-3 px-1 ${border ? "border" : ""} ${completed ? "opacity-80": ""} justify-between rounded-lg hover:bg-muted`}>
+        <div className={`w-full flex items-center space-x-3 py-3 px-6 ${border ? "border" : ""} ${completed ? "opacity-80" : ""} justify-between rounded-lg hover:bg-muted`}>
             {habit && checkbox && (
                 <Checkbox
                     className="cursor-pointer"
@@ -94,7 +92,7 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                     <span className={`font-medium ${completed ? "line-through" : ""}`}>
                         {habit ? habit.title : newHabit ? newHabit.title : ""}
                     </span>
-                    
+
                     {!goal && !decrementHabit && !incrementHabit &&
                         <span> • {habit ? habit.category : newHabit ? newHabit.category : ""} • {habit ? habit.frequencyPerDay : newHabit ? newHabit.frequencyPerDay : ""} x daily, {habit ? habit.weeklyFrequency : newHabit ? newHabit.weeklyFrequency : ""} days/week </span>}
 
@@ -108,7 +106,7 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                 </div>
 
                 <div className="flex items-center gap-2 mt-1">
-                    {showProccess && habit &&
+                    {(showProccess && habit) &&
                         <div>
                             <div className="flex items-center gap-1">
                                 {Array.from({ length: habit.frequencyPerDay }).map((_, index) => (
@@ -157,7 +155,6 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                     </Button>
                 )}
             </div>
-
 
         </div>
     );

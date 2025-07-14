@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/client";
 import { slugify } from "@/lib/utils/features/getSlug";
+import { HabitData } from "@/lib/zod/client/goal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "sonner";
@@ -15,7 +16,7 @@ export const useAddGoal = (userId: string) => {
             linkedHabits
         }: {
             goalData: Omit<GoalType, "id" | "created_at" | "completed" | "completedDays" | "slug">,
-            newHabits: Omit<HabitType, "id" | "created_at" | "weeklyCompleted" | "completedToday" | "streak">[],
+            newHabits: Omit<HabitData, "id" | "created_at" | "weeklyCompleted" | "completedToday" | "streak" | "customMessage" | "endDate" | "startDate" | "goal" | "category" | "visibility" | "sharedWith">[],
             linkedHabits: { id: string, updates: Partial<HabitType> }[]
         }) => {
             const { data: goal, error: goalError } = await supabase
@@ -47,7 +48,11 @@ export const useAddGoal = (userId: string) => {
                             user_id: userId,
                             completedToday: 0,
                             weeklyCompleted: 0,
-                            streak: 0
+                            streak: 0,
+                            category: goal.category,
+                            visibility: goal.visibility,
+                            sharedWith: goal.sharedWith,
+                            customMessage: ""
                         }))
                     )
                     .select();;
@@ -62,7 +67,8 @@ export const useAddGoal = (userId: string) => {
                     .from("habits")
                     .update({
                         ...habit.updates,
-                        goal: goalId
+                        goal: goalId,
+                        endDate:goal.endDate
                     })
                     .eq("id", habit.id);
 

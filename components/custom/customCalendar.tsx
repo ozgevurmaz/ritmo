@@ -20,7 +20,7 @@ export default function CustomCalendar({
     minDate?: string
     maxDate?: string
 }) {
-     const t = useTranslations("forms.date")
+    const t = useTranslations("forms.date")
     const calendarRef = useRef<HTMLDivElement>(null);
     const [currentMonth, setCurrentMonth] = useState(selectedDate || new Date());
     const today = new Date();
@@ -76,7 +76,7 @@ export default function CustomCalendar({
                 isPreviousMonth: true,
             });
         }
-        
+
         // Add current month's days
         for (let day = 1; day <= lastDayOfMonth.getDate(); day++) {
             const date = createSafeDate(year, month, day);
@@ -124,8 +124,8 @@ export default function CustomCalendar({
         if (onDateSelect) {
             // Create a clean date object for the selected date
             const cleanDate = createSafeDate(
-                date.getFullYear(), 
-                date.getMonth(), 
+                date.getFullYear(),
+                date.getMonth(),
                 date.getDate()
             );
             onDateSelect(cleanDate);
@@ -144,18 +144,18 @@ export default function CustomCalendar({
         });
     };
 
-    const monthNames : string[] = t.raw("monthNames")
+    const monthNames: string[] = t.raw("monthNames")
 
     const calendarDays = generateCalendarDays();
 
     const isDisabledDate = (date: Date) => {
         const normalizedDate = normalizeDate(date);
-        
+
         if (minDate) {
             const min = normalizeDate(new Date(minDate));
             if (normalizedDate.getTime() < min.getTime()) return true;
         }
-        
+
         if (maxDate) {
             const max = normalizeDate(new Date(maxDate));
             if (normalizedDate.getTime() > max.getTime()) return true;
@@ -172,6 +172,7 @@ export default function CustomCalendar({
             {/* Month Navigation */}
             <div className="flex items-center justify-between mb-4">
                 <Button
+                    type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => navigateMonth(-1)}
@@ -185,6 +186,7 @@ export default function CustomCalendar({
                 </h3>
 
                 <Button
+                    type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => navigateMonth(1)}

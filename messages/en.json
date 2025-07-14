@@ -186,7 +186,9 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "delete": "Delete",
-    "yes-delete": "Yes Delete"
+    "yes-delete": "Yes Delete",
+    "edit": "Edit",
+    "remove": "Remove"
   },
   "forms": {
     "email": {
@@ -297,6 +299,12 @@
       "quick-select": "Quick Select",
       "selected": "Selected"
     },
+    "reminders-times": {
+      "label": "Reminder Times (Optional)",
+      "placeholder": "Set reminder time",
+      "max": "Maximum reminders reached",
+      "set": "reminder times set"
+    },
     "repeat": {
       "label": "Repeat",
       "placeholder": "Select repeat option",
@@ -306,7 +314,9 @@
         "weekly": "Weekly",
         "monthly": "Monthly",
         "yearly": "Yearly"
-      }
+      },
+      "daily": "{count}x daily",
+      "weekly-count": "{count}x/week"
     },
     "days-selection": {
       "days-label": "Select Specific Days",
@@ -345,6 +355,7 @@
     },
     "notifications": {
       "label": "Notification",
+      "reminders": "Reminders",
       "placeholder": "Select notification time",
       "options": {
         "never": "No notification",
@@ -386,7 +397,13 @@
       "habit-management": {
         "title": "Habit Management",
         "add-button": "Add New Habit",
+        "link-habit-title": "Add Realted Habit",
+        "link-habit": "Link Existing",
+        "new-count": "{new, plural, one {# new habit selected} other {# new habits selected}}",
+        "new-habit": "new",
+        "selected-habit": "selected",
         "alert": {
+          "no-info": "Complete the goal details above to add habits",
           "no-habit": "Please select at least one habit to link with this goal."
         },
         "section": {
@@ -425,6 +442,8 @@
           "helper": "How many days a week?"
         },
         "allow-skip": {
+          "skip-ok": "SKIP OK",
+          "skip-allow": "Skip allowed",
           "label": "Allow skipping this habit",
           "description": "Enable this if it's okay to skip this habit occasionally without breaking your streak"
         },

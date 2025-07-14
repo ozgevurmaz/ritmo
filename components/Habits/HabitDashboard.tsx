@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import HabitForm from "../Forms/habitForm";
 import PageHeaders from "../shared/Headers/PageHeaders";
 import { useHabits } from "@/lib/Queries/habits/useHabit";
@@ -25,6 +25,8 @@ export const HabitDashboard: React.FC<HabitDashboardProps> = ({
 
   const analyticsData = useHabitsAnalytics(habits)
 
+  useEffect(() => { setEditingHabit(null) }, [showHabitForm])
+
   return (
     <div className="space-y-6 p-6">
       {/* Header */}
@@ -37,16 +39,28 @@ export const HabitDashboard: React.FC<HabitDashboardProps> = ({
           setEditingHabit(null)
           setShowHabitForm(true)
         }}
-        textColor="text-habits"
-        buttonStyle="bg-habits hover:bg-habits/60"
         buttonText={t("add-button")}
       />
 
       <AnalyticsCard data={analyticsData} />
 
-      <HabitTabs habits={habits} userId={userId} />
+      <HabitTabs
+        habits={habits}
+        userId={userId}
+        onEditHabit={(thisHabit: HabitType) => {
+          setEditingHabit(thisHabit)
+          setShowHabitForm(true)
+        }}
+      />
 
-      <HabitForm isOpen={showHabitForm} setIsOpen={() => setShowHabitForm(false)} userId={userId} editingHabit={editingHabit} />
+      <HabitForm
+        isOpen={showHabitForm}
+        setIsOpen={() => {
+          setShowHabitForm(false)
+        }}
+        userId={userId}
+        editingHabit={editingHabit}
+      />
     </div>
   );
 };

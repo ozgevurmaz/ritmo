@@ -27,6 +27,7 @@ import { FormActions } from './Cards/FormActions';
 import { DeleteConfirmDialog } from '../shared/DeleteConfirmDialog';
 import { useTranslations } from 'next-intl';
 import { formatDateForQuery } from '@/lib/utils/date/formatDate';
+import { HabitData } from './quickHabitForm';
 
 type GoalFormData = z.infer<typeof goalSchema>;
 
@@ -34,16 +35,6 @@ interface GoalFormProps {
   editingGoal?: GoalType | null;
   userId: string;
 }
-
-const DEFAULT_HABIT_BASE: Omit<HabitFormValues, 'id' | 'startDate' | 'endDate' | 'customMessage' | 'category' | 'visibility' | 'sharedWith'> = {
-  title: '',
-  goal: null,
-  frequencyPerDay: 1,
-  reminderTimes: [],
-  allowSkip: false,
-  weeklyFrequency: 7,
-  selectedDays: []
-};
 
 const GoalForm: React.FC<GoalFormProps> = ({
   editingGoal = null,
@@ -81,7 +72,8 @@ const GoalForm: React.FC<GoalFormProps> = ({
     setValue,
     reset,
     watch,
-    control
+    control,
+    getValues
   } = useForm<GoalFormData>({
     resolver: zodResolver(goalSchema),
     defaultValues: getDefaultValues()
@@ -90,19 +82,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
   const watchedValues = watch();
   const { visibility, sharedWith, category, startDate, endDate, motivation, title: GoalTitle } = watchedValues;
 
-  const [addedHabits, setAddedHabits] = useState<HabitFormValues[]>([])
-
-  const defaultHabit = useMemo(() => ({
-    ...DEFAULT_HABIT_BASE,
-    id: addedHabits.length.toString(),
-    customMessage: motivation || "",
-    category: category || '',
-    startDate: startDate || formatDateForQuery(new Date()),
-    endDate: endDate || '',
-    visibility: visibility || 'private',
-    sharedWith: sharedWith || [],
-  }), [addedHabits.length, motivation, category, startDate, endDate, visibility, sharedWith]);
-
+  const [addedHabits, setAddedHabits] = useState<HabitData[]>([])
 
   const [selectedHabits, setSelectedHabits] = useState<HabitType[]>([]);
 
@@ -119,17 +99,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
     return !!(endDate && startDate && GoalTitle && category);
   }, [endDate, startDate, GoalTitle, category]);
 
-  const editingHabit = useMemo(() => ({
-    ...defaultHabit,
-    startDate: startDate || formatDateForQuery(new Date()),
-    endDate: endDate || '',
-    visibility: visibility || 'private',
-    sharedWith: sharedWith || [],
-    category: category || '',
-    customMessage: motivation || ""
-  }), [startDate, endDate, visibility, sharedWith, category, motivation]);
-
-  const handleNewHabitSave = (habitData: HabitFormValues) => {
+  const handleNewHabitSave = (habitData: HabitData) => {
     setAddedHabits(prev => [...prev, habitData]);
     toast.success(t("forms.habit.toasts.create-success"));
   };
@@ -172,6 +142,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
       }));
 
       if (editingGoal) {
+        setValue("category", editingGoal.category)
         const updatedGoal = {
           ...editingGoal,
           ...data,
@@ -183,27 +154,26 @@ const GoalForm: React.FC<GoalFormProps> = ({
           newaddedHabits: addedHabits,
         });
 
-        toast.success(t("forms.goal.update-success"));
+        toast.success(t("forms.goal.toasts.update-success"));
       } else {
         await addGoal({
           goalData: goalPayload,
           newHabits: newQuickHabits,
           linkedHabits: updatedExistingHabits,
         });
-        toast.success(t("forms.goal.create-success"));
+        toast.success(t("forms.goal.toasts.create-success"));
       }
-
 
       handleClose();
     } catch (err) {
       const errorMessage = err instanceof Error
         ? err.message
-        : t("forms.goal.create-error");
+        : t("forms.goal.toasts.create-error");
       toast.error(errorMessage);
       console.error('Goal save error:', err);
     }
 
-    router.push("/goals")
+    router.push("/dashboard/goals")
   };
 
   const handleContactChange = (contact: string, checked: boolean) => {
@@ -228,11 +198,11 @@ const GoalForm: React.FC<GoalFormProps> = ({
 
     try {
       await deleteGoal(editingGoal.id);
-      toast.success(t("forms.goal.delete-success"));
+      toast.success(t("forms.goal.toasts.delete-success"));
       handleClose();
-      router.push("/goals");
+      router.push("/dashboard/goals");
     } catch (err) {
-      toast.error(t("forms.goal.delete-error"));
+      toast.error(t("forms.goal.toasts.delete-error"));
       console.error('Delete error:', err);
     }
   }, [editingGoal, deleteGoal, handleClose, router]);
@@ -297,6 +267,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
                 control={control}
                 controlName="category"
                 errors={errors}
+                disabled={isEditing}
               />
               <div className='col-span-2'>
                 {/*Dates */}
@@ -319,9 +290,7 @@ const GoalForm: React.FC<GoalFormProps> = ({
             handleSelectExistingHabit={handleSelectExistingHabit}
             handleRemoveNewHabit={handleRemoveNewHabit}
             handleRemoveExistingHabit={handleRemoveExistingHabit}
-            goalTitle={GoalTitle}
             enableAddHabit={enableAddHabit}
-            defaultGoalHabit={editingHabit}
           />
 
           {/* Privacy & Sharing */}

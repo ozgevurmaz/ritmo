@@ -50,3 +50,4 @@ supabase/logs/
 .vercel
 supabase/.migrations
 supabase/schema
+.vercel

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Bell, Plus, X, Clock } from "lucide-react";
 import React, { useState } from "react";
 import CustomTimePicker from "../../custom/CustomTimePicker";
+import { useTranslations } from "next-intl";
 
 interface ReminderTimeInputProps {
   timeInput: string;
@@ -23,6 +24,7 @@ export const ReminderTimeInput: React.FC<ReminderTimeInputProps> = ({
   frequencyPerDay,
   use24Hour = true
 }) => {
+  const t = useTranslations("forms.reminders-times")
   const [showTimePicker, setShowTimePicker] = useState(false);
 
   const addTime = () => {
@@ -54,7 +56,7 @@ export const ReminderTimeInput: React.FC<ReminderTimeInputProps> = ({
     <div className="space-y-3">
       <div className="text-sm font-medium flex items-center gap-1">
         <Bell className="h-4 w-4" />
-        Reminder Times (Optional)
+      {t("label")}
       </div>
 
       <div className="flex gap-2">
@@ -67,7 +69,7 @@ export const ReminderTimeInput: React.FC<ReminderTimeInputProps> = ({
             disabled={timesList.length >= frequencyPerDay}
           >
             <span className="flex-1 text-left">
-              {timeInput ? formatDisplayTime(timeInput) : "Set reminder time"}
+              {timeInput ? formatDisplayTime(timeInput) : t("placeholder")}
             </span>
             <Clock className="h-4 w-4 ml-2" />
           </Button>
@@ -116,9 +118,9 @@ export const ReminderTimeInput: React.FC<ReminderTimeInputProps> = ({
       )}
 
       <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>{timesList.length}/{frequencyPerDay} reminder times set</span>
+        <span>{timesList.length}/{frequencyPerDay} {t("set")}</span>
         {timesList.length >= frequencyPerDay && (
-          <span className="text-amber-600">Maximum reminders reached</span>
+          <span className="text-amber-600">{t("max")}</span>
         )}
       </div>
     </div>

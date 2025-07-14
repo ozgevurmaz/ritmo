@@ -8,9 +8,10 @@ interface CategorySelectionProps<T extends FieldValues> {
     control: Control<T>,
     controlName: Path<T>
     errors: FieldErrors<T>
+    disabled: boolean
 }
 
-export const CategorySelection = <T extends FieldValues>({ control, errors, controlName }: CategorySelectionProps<T>) => {
+export const CategorySelection = <T extends FieldValues>({ control, errors, controlName, disabled }: CategorySelectionProps<T>) => {
 
     const t = useTranslations("forms.category")
 
@@ -24,9 +25,10 @@ export const CategorySelection = <T extends FieldValues>({ control, errors, cont
             </div>
             <Controller
                 name={controlName}
+                disabled={disabled}
                 control={control}
                 render={({ field }) => (
-                    <Select onValueChange={field.onChange} value={field.value} >
+                    <Select onValueChange={field.onChange} value={field.value} disabled={disabled}>
                         <SelectTrigger className={errors.category ? "border-destructive" : ""}>
                             <SelectValue placeholder={t("placeholder")} />
                         </SelectTrigger>
