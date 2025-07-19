@@ -24,13 +24,13 @@ type Props = {
     category?: string;
     status?: 'active' | 'paused' | 'completed';
 
-    variant?: 'default' | 'compact' ;
+    variant?: 'default' | 'compact';
     showActions?: boolean;
     showCheckbox?: boolean;
     showStatus?: boolean;
 
-    editAction?: () => void;
-    deleteAction?: () => void;
+    editAction?: (id: string) => void;
+    deleteAction?: (id: string) => void;
     checkboxAction?: (checked: boolean) => void;
     onStatusChange?: (status: 'active' | 'paused' | 'completed') => void;
 }
@@ -112,14 +112,14 @@ const GoalHabitCard = (props: Props) => {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className='bg-card'>
                                 {props.editAction && (
-                                    <DropdownMenuItem onClick={props.editAction}>
+                                    <DropdownMenuItem onClick={() => props.editAction?.(props.id!)}>
                                         <Edit3 className='h-4 w-4 mr-2' />
                                         {t("buttons.edit")}
                                     </DropdownMenuItem>
                                 )}
                                 {props.deleteAction && (
                                     <DropdownMenuItem
-                                        onClick={props.deleteAction}
+                                        onClick={() => props.deleteAction?.(props.id!)}
                                         className='text-destructive focus:text-destructive'
                                     >
                                         <Trash2 className='h-4 w-4 mr-2' />
@@ -134,7 +134,6 @@ const GoalHabitCard = (props: Props) => {
         );
     }
 
-    // Default variant (the one we created earlier)
     return (
         <div className='bg-card border border-border rounded-lg p-3 hover:shadow-sm transition-shadow'>
             {/* Header with title and actions */}
@@ -169,14 +168,14 @@ const GoalHabitCard = (props: Props) => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className='bg-card'>
                             {props.editAction && (
-                                <DropdownMenuItem onClick={props.editAction}>
+                                <DropdownMenuItem onClick={() => props.editAction?.(props.id!)}>
                                     <Edit3 className='h-4 w-4 mr-2' />
                                     {t("buttons.edit")}
                                 </DropdownMenuItem>
                             )}
                             {props.deleteAction && (
                                 <DropdownMenuItem
-                                    onClick={props.deleteAction}
+                                    onClick={() => props.deleteAction?.(props.id!)}
                                     className='text-destructive focus:text-destructive'
                                 >
                                     <Trash2 className='h-4 w-4 mr-2' />

@@ -1,12 +1,15 @@
 "use client"
 
-import React from "react";
+import React, { useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, Circle, Edit, Trash2 } from "lucide-react";
 import StreakBadge from "@/components/custom/StreakBadge";
 import { useUpdateHabitProgress } from "@/lib/Mutations/habits/useUpdateHabitProgress";
 import { useTranslations } from "next-intl";
+import { DeleteConfirmDialog } from "../shared/DeleteConfirmDialog";
+import { toast } from "sonner";
+import { useDeleteHabit } from "@/lib/Mutations/habits/useDeleteHabit";
 
 interface HabitsCardProps {
     habit?: HabitType
@@ -22,7 +25,7 @@ interface HabitsCardProps {
     showStreak?: boolean
     border?: boolean
     showGoal?: boolean
-    userId?: string,
+    userId: string,
     habits?: HabitType[],
     showProccess?: boolean
 }
@@ -41,10 +44,14 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
     border = true,
     userId,
     habits,
-    showProccess = false
+    showProccess = false,
+    showDelete
 }) => {
     const t = useTranslations()
-    const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId || "");
+    const { mutate: updateHabitProgress } = useUpdateHabitProgress(userId);
+    const { mutate: deleteHabit } = useDeleteHabit(userId);
+
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
     const completed = habit?.completedToday === habit?.frequencyPerDay
     const incrementHabit = (id: string) => {
@@ -66,6 +73,23 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
 
         if (nextCount <= habit.frequencyPerDay) {
             updateHabitProgress({ habitId: id, completedToday: nextCount });
+        }
+    };
+
+    const handleClose = () => {
+        setShowDeleteConfirm(false);
+    };
+
+    const handleDelete = () => {
+        setShowDeleteConfirm(true);
+    };
+
+    const confirmDelete = () => {
+        if (habit) {
+            deleteHabit(habit.id || "");
+            toast.success(t("forms.habit.toasts.delete-success"));
+            setShowDeleteConfirm(false);
+            handleClose();
         }
     };
 
@@ -154,7 +178,21 @@ export const HabitsCard: React.FC<HabitsCardProps> = ({
                         <Trash2 className="h-4 w-4" />
                     </Button>
                 )}
+
+                {(showDelete && !deleteAction) && (
+                    <Button variant="destructive" size="sm" onClick={handleDelete}>
+                        <Trash2 className="h-4 w-4" />
+                    </Button>
+                )}
             </div>
+
+            <DeleteConfirmDialog
+                open={showDeleteConfirm}
+                onClose={handleClose}
+                onConfirm={confirmDelete}
+                title={t("forms.habit.delete.title")}
+                description={t("forms.habit.delete.description")}
+            />
 
         </div>
     );

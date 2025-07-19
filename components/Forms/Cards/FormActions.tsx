@@ -36,7 +36,7 @@ export const FormActions = ({
 
   return (
     <div className="flex flex-wrap justify-between items-center gap-4 pt-6 border-t mt-6">
-      {showDelete && onDelete && (
+      {(showDelete && onDelete) && (
         <Button
           type="button"
           variant="destructive"

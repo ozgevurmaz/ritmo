@@ -11,14 +11,12 @@ interface HabitTabsProps {
     habits: HabitType[]
     userId: string
     onEditHabit?: (habit: HabitType) => void
-    onDeleteHabit?: (habitId: string) => void
 }
 
 export default function HabitTabs({
     habits,
     userId,
     onEditHabit,
-    onDeleteHabit
 }: HabitTabsProps) {
     const t = useTranslations("common")
 
@@ -133,7 +131,6 @@ export default function HabitTabs({
                         userId={userId}
                         habits={habits}
                         onEditHabit={onEditHabit}
-                        onDeleteHabit={onDeleteHabit}
                     />
                 </TabsContent>
 
@@ -145,7 +142,6 @@ export default function HabitTabs({
                         userId={userId}
                         habits={habits}
                         onEditHabit={onEditHabit}
-                        onDeleteHabit={onDeleteHabit}
                     />
                 </TabsContent>
 
@@ -157,7 +153,6 @@ export default function HabitTabs({
                         userId={userId}
                         habits={habits}
                         onEditHabit={onEditHabit}
-                        onDeleteHabit={onDeleteHabit}
                     />
                 </TabsContent>
 

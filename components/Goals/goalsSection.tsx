@@ -11,6 +11,7 @@ import { useState } from "react"
 import HabitsForm from "../Forms/habitForm"
 import { useTranslations } from "next-intl"
 import GoalHabitCard from "./GoalHabitCard"
+import { useRemoveHabit } from "@/lib/Mutations/goals/useRemoveHabit"
 
 export const GoalSection = ({
     goals,
@@ -32,8 +33,10 @@ export const GoalSection = ({
 
     const t = useTranslations()
     const router = useRouter();
-    const [editingHabit, setEditingHabit] = useState<HabitType | []>([])
+    const [editingHabit, setEditingHabit] = useState<HabitType | null>(null)
     const [showHabitEdit, setShowHabitEdit] = useState<boolean>(false)
+    const { mutate: removeHabit, error } = useRemoveHabit(userId)
+
 
     return (
         <div className="space-y-4">
@@ -106,11 +109,14 @@ export const GoalSection = ({
                                                         id={habit.id}
                                                         category={habit.category}
                                                         showActions
-                                                        deleteAction={() => {
-
+                                                        deleteAction={(id: string) => {
+                                                            const habit = habits.find(habit => habit.id === id)
+                                                            const goalId = habit?.goal
+                                                            if (habit?.id && goalId) removeHabit({ goalId: goalId, habitId: habit.id })
                                                         }}
-                                                        editAction={() => {
-                                                            setEditingHabit(habit)
+                                                        editAction={(id: string) => {
+                                                            const habit = habits.find(habit => habit.id === id)
+                                                            habit && setEditingHabit(habit)
                                                             setShowHabitEdit(true)
                                                         }}
                                                         variant="compact"
@@ -125,11 +131,13 @@ export const GoalSection = ({
                     ))}
                 </div>
             )}
-            <HabitsForm isOpen={showHabitEdit} setIsOpen={() => {
-                setShowHabitEdit(false)
-                setEditingHabit([])
-            }}
+            <HabitsForm
+                isOpen={showHabitEdit}
+                setIsOpen={() => {
+                    setShowHabitEdit(false)
+                }}
                 userId={userId}
+                editingHabit={editingHabit}
             />
         </div>
     )

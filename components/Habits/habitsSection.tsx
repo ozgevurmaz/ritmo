@@ -13,7 +13,6 @@ interface HabitsSectionProps {
   userId: string;
   habits: HabitType[];
   onEditHabit?: (habit: HabitType) => void;
-  onDeleteHabit?: (habitId: string) => void;
 }
 
 const HabitsSection = ({
@@ -23,7 +22,6 @@ const HabitsSection = ({
   userId,
   habits,
   onEditHabit,
-  onDeleteHabit,
 }: HabitsSectionProps) => {
   const t = useTranslations("common.empty-states.habits");
 
@@ -55,7 +53,7 @@ const HabitsSection = ({
                 showGoal={false}
                 showProccess={true}
                 editAction={() => onEditHabit?.(habit)}
-                deleteAction={() => onDeleteHabit?.(habit.id)}
+                showDelete
               />
             </div>
           ))}
@@ -78,7 +76,7 @@ const HabitsSection = ({
                 showStreak={true}
                 showProccess={true}
                 editAction={() => onEditHabit?.(habit)}
-                deleteAction={() => onDeleteHabit?.(habit.id)}
+                showDelete
               />
             </div>
           ))}

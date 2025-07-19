@@ -8,6 +8,7 @@ import AnalyticsCard from "../shared/AnalyticsCard";
 import { useHabitsAnalytics } from "@/hooks/analytics";
 import HabitTabs from "./HabitTabs";
 import { useTranslations } from "next-intl";
+import { DeleteConfirmDialog } from "../shared/DeleteConfirmDialog";
 
 interface HabitDashboardProps {
   userId: string
@@ -61,6 +62,8 @@ export const HabitDashboard: React.FC<HabitDashboardProps> = ({
         userId={userId}
         editingHabit={editingHabit}
       />
+
+ 
     </div>
   );
 };
